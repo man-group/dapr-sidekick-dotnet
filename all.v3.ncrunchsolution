@@ -1,0 +1,20 @@
+﻿<SolutionConfiguration>
+  <Settings>
+    <AdditionalFilesToIncludeForSolution>
+      <Value>.editorconfig</Value>
+    </AdditionalFilesToIncludeForSolution>
+    <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <AutoEnable>True</AutoEnable>
+    <CurrentEngineMode>Run Solution Unit Tests automatically [SnapshotShared]</CurrentEngineMode>
+    <InstrumentationMode>Optimised</InstrumentationMode>
+    <SolutionConfigured>True</SolutionConfigured>
+  </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>Run Solution Unit Tests automatically</Name>
+      <Settings>
+        <TestsToExecuteAutomatically>(DoesNotHaveCategory 'Component' AND DoesNotHaveCategory 'Database' AND DoesNotHaveCategory 'Integration')</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
+</SolutionConfiguration>

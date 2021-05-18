@@ -1,0 +1,24 @@
+<Project>
+  <!-- Nuget package properties when packed using dotnet pack. -->
+  <PropertyGroup>
+    <Authors>Man Group</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>images\dapr_sidekick_package_icon.png</PackageIcon>
+    <PackageTags>Dapr;Sidekick</PackageTags>
+    <RepositoryUrl>https://github.com/man-group/dapr-sidekick-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageOutputPath>$(RepoRoot)bin\$(Configuration)\nugets</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Icon for nuget packages -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\properties\dapr_sidekick_package_icon.png" Pack="true" Visible="false" PackagePath="images" />
+  </ItemGroup>
+
+  <!-- Enable symbols package generation. https://docs.microsoft.com/nuget/create-packages/symbol-packages-snupkg -->
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+</Project>

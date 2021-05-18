@@ -1,0 +1,10 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\properties\dapr_sidekick_csharp.props" />
+
+  <PropertyGroup>
+    <!-- Set Output Path for samples-->
+    <OutputPath>$(RepoRoot)bin\$(Configuration)\samples\$(MSBuildProjectName)\</OutputPath>
+	<IsPackable>false</IsPackable>
+  </PropertyGroup>
+  
+</Project>

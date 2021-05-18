@@ -1,0 +1,16 @@
+﻿<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\properties\dapr_sidekick_csharp.props" />
+
+  <PropertyGroup>
+    <!-- Set Output Path for tests-->
+    <OutputPath>$(RepoRoot)bin\$(Configuration)\test\$(MSBuildProjectName)\</OutputPath>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!-- Used to annotate PR with test failures: https://github.com/Tyrrrz/GitHubActionsTestLogger -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="GitHubActionsTestLogger" Version="1.1.2" />
+  </ItemGroup>
+
+</Project>
