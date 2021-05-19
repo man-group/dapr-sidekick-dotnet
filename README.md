@@ -1,8 +1,8 @@
 # Dapr Sidekick for .NET
 
-[![Build Status](https://github.com/man-group/dapr-sidekick-dotnet/workflows/dapr-sidekick-dotnet/badge.svg?event=push&branch=master)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=dapr-sidekick-dotnet)
-[![Unit Tests](https://github.com/man-group/dapr-sidekick-dotnet/workflows/dapr-sidekick-dotnet-test/badge.svg?event=schedule)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=dapr-sidekick-dotnet-test)
-[![codecov](https://codecov.io/gh/man-group/dapr-sidekick-dotnet/branch/master/graph/badge.svg)](https://codecov.io/gh/man-group/dapr-sidekick-dotnet)
+[![Build Status](https://github.com/man-group/dapr-sidekick-dotnet/workflows/build/badge.svg?event=push&branch=master)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=build)
+[![Unit Tests](https://github.com/man-group/dapr-sidekick-dotnet/workflows/build/badge.svg?event=schedule)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=build)
+[![codecov](https://codecov.io/gh/man-group/dapr-sidekick-dotnet/branch/main/graph/badge.svg?token=y7Uq2TIAuI)](https://codecov.io/gh/man-group/dapr-sidekick-dotnet)
 [![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/ManGroup.svg?style=social&logo=twitter)](https://twitter.com/intent/follow?screen_name=ManGroup)
 
@@ -38,7 +38,7 @@ Dapr Sidekick requires a local installation of Dapr, the recommended approach is
 
 > By default the `dapr init` command will install additional development components such as a Redis docker container. If you do not need these you can instead initialize Dapr using the [slim init mode](https://docs.dapr.io/operations/hosting/self-hosted/self-hosted-no-docker/) command `dapr init --slim`.
 
-Each project in this repository is a normal C# project. At minimum, you need [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet/3.1) to build, test, and generate NuGet packages.
+Each project in this repository is a normal C# project. At minimum, you need the [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/5.0) to build, test, and generate NuGet packages.
 
 On Windows, we recommend installing [the latest Visual Studio 2019](https://www.visualstudio.com/vs/) which will set you up with all the .NET build tools and allow you to open the solution files. Community Edition is free and can be used to build everything here.
 

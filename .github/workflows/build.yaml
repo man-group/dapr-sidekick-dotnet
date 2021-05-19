@@ -1,0 +1,70 @@
+name: build
+
+on: 
+  push:
+    branches:
+      - main
+      - release-*
+      - feature-*
+    tags:
+      - v*
+    
+  pull_request:
+    branches: 
+    - main
+    - release-*
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Parse release version
+        run: python ./.github/scripts/get_release_version.py
+      - name: Build
+        run: dotnet build --configuration release
+      - name: Generate Packages
+        run: dotnet pack --configuration release
+
+  test:
+    name: Unit Tests
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet-version: ['net35', 'net48', 'netcoreapp31']
+        include:
+        - dotnet-version: 'net35'
+          display-name: '.NET Framework 3.5'
+          framework: 'net35'
+          logger: '--logger="trx"'
+        - dotnet-version: 'net48'
+          display-name: '.NET Framework 4.8'
+          framework: 'net48'
+          logger: '--logger="GitHubActions;report-warnings=false" --logger="trx"'
+        - dotnet-version: 'netcoreapp31'
+          display-name: '.NET Core 3.1'
+          framework: 'netcoreapp3.1'
+          logger: '--logger="GitHubActions;report-warnings=false" --logger="trx"'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Parse release version
+        run: python ./.github/scripts/get_release_version.py
+      - name: Build
+        # disable deterministic builds, just for test run. Deterministic builds break coverage for some reason
+        run: dotnet build --configuration release /p:GITHUB_ACTIONS=false
+      - name: Test
+        continue-on-error: true # proceed if tests fail, the report step will report the failure with more details.
+        run: dotnet test -c release --no-build --no-restore -f ${{ matrix.framework }} ${{ matrix.logger }} -r "${{ github.workspace }}/TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:GITHUB_ACTIONS=false
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          flags: ${{ matrix.framework }}
+      - name: Parse Trx files
+        uses: NasAmin/trx-parser@v0.1.0
+        id: trx-parser
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository # does not work on PRs from forks
+        with:
+          TRX_PATH: ${{ github.workspace }}/TestResults
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
