@@ -1,6 +1,6 @@
 ﻿#if !NET35
 // Original source : https://github.com/dapr/dotnet-sdk/blob/master/src/Dapr.Client/DaprClient.cs
-// See LICENSE.txt in root folder
+// See DAPR_DOTNET_SDK_LICENSE in this directory for license information.
 
 // IMPORTANT : This class has been modified to allow injection of the createInvocationHandler() method.
 

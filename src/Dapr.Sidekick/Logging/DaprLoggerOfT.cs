@@ -1,7 +1,7 @@
 ﻿#pragma warning disable SA1649 // File name should match first type name
 // Based on https://github.com/dotnet/extensions/blob/release/2.1/src/Logging/Logging.Abstractions/src/LoggerOfT.cs
 // Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Licensed under the Apache License, Version 2.0. See NET_EXTENSIONS_LICENSE in this directory for license information.
 
 using System;
 

@@ -1,6 +1,6 @@
 ﻿// This implementation is based on the approach used by prometheus-net.
 // See https://github.com/prometheus-net/prometheus-net/blob/master/Prometheus.NetStandard/TextSerializer.cs
-// and PROMETHEUS_LICENSE in this folder.
+// See PROMETHEUS_LICENSE in this directory for license information.
 
 using System;
 using System.IO;
