@@ -19,7 +19,7 @@ jobs:
     name: Build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Parse release version
         run: python ./.github/scripts/get_release_version.py
       - name: Build
@@ -32,7 +32,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        dotnet-version: ['net35', 'net48', 'netcoreapp31']
+        dotnet-version: ['net35', 'net48', 'net50']
         include:
         - dotnet-version: 'net35'
           display-name: '.NET Framework 3.5'
@@ -42,12 +42,12 @@ jobs:
           display-name: '.NET Framework 4.8'
           framework: 'net48'
           logger: '--logger="GitHubActions;report-warnings=false" --logger="trx"'
-        - dotnet-version: 'netcoreapp31'
-          display-name: '.NET Core 3.1'
-          framework: 'netcoreapp3.1'
+        - dotnet-version: 'net50'
+          display-name: '.NET 5.0'
+          framework: 'net5.0'
           logger: '--logger="GitHubActions;report-warnings=false" --logger="trx"'
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Parse release version
         run: python ./.github/scripts/get_release_version.py
       - name: Build

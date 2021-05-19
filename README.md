@@ -1,8 +1,8 @@
 # Dapr Sidekick for .NET
 
 [![Build Status](https://github.com/man-group/dapr-sidekick-dotnet/workflows/build/badge.svg?event=push&branch=master)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=build)
-[![Unit Tests](https://github.com/man-group/dapr-sidekick-dotnet/workflows/build/badge.svg?event=schedule)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=build)
 [![codecov](https://codecov.io/gh/man-group/dapr-sidekick-dotnet/branch/main/graph/badge.svg?token=y7Uq2TIAuI)](https://codecov.io/gh/man-group/dapr-sidekick-dotnet)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0c79d186a9b733579ae8/maintainability)](https://codeclimate.com/github/man-group/dapr-sidekick-dotnet/maintainability)
 [![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/ManGroup.svg?style=social&logo=twitter)](https://twitter.com/intent/follow?screen_name=ManGroup)
 
@@ -25,11 +25,11 @@ Visit the [samples folder](./samples) for examples of how you can get up and run
 
 This repository builds the following packages:
 
-| Package                           | Description                                   | Compatibility                                           |
-| --------------------------------- | --------------------------------------------- | ------------------------------------------------------- |
-| Dapr.Sidekick                     | Core features                                 | .NET Framework 3.5+, .NET Core 3.1, .NET Standard 2.0   |
-| Dapr.Sidekick.AspNetCore          | ASP.NET Core extensions                       | .NET Framework 4.6.2+, .NET Core 3.1, .NET Standard 2.0 |
-| Dapr.Sidekick.Extensions.Logging  | Integrations for Microsoft Extensions Logging | .NET Framework 4.5+, .NET Core 3.1, .NET Standard 2.0   |
+| Package                           | Description                                   | Compatibility                                                     |
+| --------------------------------- | --------------------------------------------- | ----------------------------------------------------------------- |
+| `Dapr.Sidekick`                     | Core features                                 | .NET Framework 3.5+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0   |
+| `Dapr.Sidekick.AspNetCore`          | ASP.NET Core extensions                       | .NET Framework 4.6.2+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0 |
+| `Dapr.Sidekick.Extensions.Logging`  | Integrations for Microsoft Extensions Logging | .NET Framework 4.5+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0   |
 
 
 ### Prerequisites
@@ -91,3 +91,19 @@ public void ConfigureServices(IServiceCollection services)
 When you run the application Dapr Sidekick will attempt to discover the Dapr sidecar in the default initialization folder, dynamically assign all required ports then launch and manage the lifetime of the runtime process. Detailed diagnostic log messages from both Dapr Sidekick and the Dapr sidecar are pumped through the standard Microsoft Extensions Logging framework. When the application is terminated Dapr Sidekick will shut down the Dapr sidecar.
 
 Dapr Sidekick includes extensive configuration options for the Dapr Sidecar, Placement and Sentry processes - see the [Options](./src/Dapr.Sidekick/Options) code for for more details.
+
+## Acknowledgements
+
+Dapr Sidekick has been under active development at [Man Group](http://www.man.com/) since 2020.
+
+Original concept and implementation: [Simon Jones](https://github.com/badgeratu)
+
+Contributors:
+
+ * ... be the first! ...
+ 
+Contributions welcome!
+
+## License
+
+Dapr Sidekick is licensed under Apache 2.0, a copy of which is included in [LICENSE](LICENSE).

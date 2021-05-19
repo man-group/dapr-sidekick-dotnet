@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net45;net461;netcoreapp3.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net35;net45;net461;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>This package contains the reference assemblies for developing services using Dapr Sidekick.</Description>
   </PropertyGroup>

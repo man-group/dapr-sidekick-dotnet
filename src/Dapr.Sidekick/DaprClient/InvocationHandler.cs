@@ -96,7 +96,7 @@ namespace Dapr.Sidekick.DaprClient
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var original = request.RequestUri;
-            if (!this.TryRewriteUri(request.RequestUri, out var rewritten))
+            if (!this.TryRewriteUri(original, out var rewritten))
             {
                 throw new ArgumentException($"The request URI '{original}' is not a valid Dapr service invocation destination.", nameof(request));
             }
@@ -108,7 +108,9 @@ namespace Dapr.Sidekick.DaprClient
             {
                 if (isValidToken)
                 {
+#pragma warning disable CS8604 // Possible null reference argument.
                     request.Headers.Add(apiTokenHeader.Key, apiTokenHeader.Value);
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 request.RequestUri = rewritten;
 
@@ -135,7 +137,7 @@ namespace Dapr.Sidekick.DaprClient
         }
 
         // Internal for testing
-        internal bool TryRewriteUri(Uri uri, out Uri? rewritten)
+        internal bool TryRewriteUri(Uri? uri, out Uri? rewritten)
         {
             // For now the only invalid cases are when the request URI is missing or just silly.
             // We may support additional cases for validation in the future (like an allow-list of App-Ids).
