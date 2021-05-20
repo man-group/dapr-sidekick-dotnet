@@ -16,7 +16,7 @@ namespace Dapr.Sidekick.Options
         /// <summary>
         /// Gets or sets a value that determines if the Dapr process binary is copied to <see cref="BinDirectory"/> from <see cref="InitialDirectory"/> when different.
         /// This allows new versions of binaries to be deployed to <see cref="InitialDirectory"/> while an application is running, such that on restart the application picks up the new version.
-        /// Default is <c>true</c>.
+        /// Default is <c>false</c>.
         /// </summary>
         public bool? CopyProcessFile { get; set; }
 

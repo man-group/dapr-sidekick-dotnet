@@ -56,7 +56,7 @@ namespace Dapr.Sidekick
 
         /// <summary>
         /// Gets or sets the path to the Dapr configuration file. If a filename is not specified the default value "config.yaml" will be used.
-        /// If a directory is not specified a directory called "dapr" under the current executing assembly location will be assumed.
+        /// If not specified this will default to the "config.yaml" file in the current dapr folder.
         /// </summary>
         public string ConfigFile { get; set; }
 

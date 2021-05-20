@@ -1,0 +1,18 @@
+﻿apiVersion: dapr.io/v1alpha1
+kind: Configuration
+spec:
+  nameResolution:
+    component: "consul"
+    configuration:
+      selfRegister: true
+      tags: 
+        - "dapr"
+      checks:
+        - name: "Service Health Status"
+          checkID: "serviceHealth:${APP_ID}"
+          interval: "5s"
+          http: "http://127.0.0.1:${APP_PORT}/health"
+      meta:
+        DAPR_HTTP_PORT: "${DAPR_HTTP_PORT}"
+        DAPR_GRPC_PORT: "${DAPR_GRPC_PORT}"
+        DAPR_METRICS_PORT: "${DAPR_METRICS_PORT}"

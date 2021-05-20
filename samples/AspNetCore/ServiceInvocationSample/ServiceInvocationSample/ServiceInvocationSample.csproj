@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Dapr.Sidekick.AspNetCore\Dapr.Sidekick.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Dapr.Sidekick.AspNetCore\Dapr.Sidekick.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -388,13 +388,18 @@ namespace Dapr.Sidekick.Process
                 proposedOptions.BinDirectory = Path.Combine(proposedOptions.RuntimeDirectory, DaprConstants.DaprBinDirectory);
             }
 
+            // If the path is rooted then return it else calculate the path relative to the working directory
+            var workingDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string GetFullPath(string path) => Path.IsPathRooted(path) ? path : Path.GetFullPath(Path.Combine(workingDirectory, path));
+
             // Normalize all paths
-            proposedOptions.InitialDirectory = Path.GetFullPath(proposedOptions.InitialDirectory);
-            proposedOptions.RuntimeDirectory = Path.GetFullPath(proposedOptions.RuntimeDirectory);
-            proposedOptions.BinDirectory = Path.GetFullPath(proposedOptions.BinDirectory);
+            proposedOptions.InitialDirectory = GetFullPath(proposedOptions.InitialDirectory);
+            proposedOptions.RuntimeDirectory = GetFullPath(proposedOptions.RuntimeDirectory);
+            proposedOptions.BinDirectory = GetFullPath(proposedOptions.BinDirectory);
 
             // Set the Process File name
             var exeName = Environment.OSVersion.Platform == PlatformID.Win32NT ? proposedOptions.ProcessName + DaprConstants.ExeExtension : proposedOptions.ProcessName;
+            var initialFile = Path.Combine(Path.Combine(proposedOptions.InitialDirectory, DaprConstants.DaprBinDirectory), exeName);
             if (string.IsNullOrEmpty(proposedOptions.ProcessFile))
             {
                 proposedOptions.ProcessFile = Path.Combine(proposedOptions.BinDirectory, exeName);
@@ -410,54 +415,54 @@ namespace Dapr.Sidekick.Process
                     Directory.CreateDirectory(proposedOptions.RuntimeDirectory);
                 }
 
-                if (!Directory.Exists(proposedOptions.BinDirectory))
+                // Log out the expected locations
+                Logger.LogInformation("Dapr initial directory: {DaprInitialDirectory}", proposedOptions.InitialDirectory);
+                Logger.LogInformation("Dapr runtime directory: {DaprRuntimeDirectory}", proposedOptions.RuntimeDirectory);
+
+                // Copy the process file if necessary
+                var initialFileInfo = new FileInfo(initialFile);
+                var runtimeFileInfo = new FileInfo(proposedOptions.ProcessFile);
+                if (proposedOptions.CopyProcessFile == true && initialFileInfo.Exists)
                 {
-                    // Create the target directory
-                    Logger.LogInformation("Creating directory: {DaprBinDirectory}", proposedOptions.BinDirectory);
-                    Directory.CreateDirectory(proposedOptions.BinDirectory);
+                    Logger.LogDebug("CopyProcessFile is set, process file will be copied from initial directory");
+
+                    if (!Directory.Exists(proposedOptions.BinDirectory))
+                    {
+                        // Create the target directory
+                        Logger.LogInformation("Creating directory: {DaprBinDirectory}", proposedOptions.BinDirectory);
+                        Directory.CreateDirectory(proposedOptions.BinDirectory);
+                    }
+
+                    if (string.Equals(runtimeFileInfo.FullName, initialFileInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Path is the same as the runtime file, nothing to copy.
+                        Logger.LogDebug("Not copying process file from {DaprProcessInitialFile} to {DaprProcessRuntimeFile} because files appear to be the same path", initialFile, proposedOptions.ProcessFile);
+                    }
+                    else if (
+                        runtimeFileInfo.Exists &&
+                        initialFileInfo.LastWriteTime == runtimeFileInfo.LastWriteTime &&
+                        initialFileInfo.Length == runtimeFileInfo.Length)
+                    {
+                        // Initial file is considered same as runtime file, nothing to copy.
+                        Logger.LogDebug("Not copying process file from {DaprProcessInitialFile} to {DaprProcessRuntimeFile} because files appear to be the same version", initialFile, proposedOptions.ProcessFile);
+                    }
+                    else
+                    {
+                        // Copy the file
+                        Logger.LogInformation("Copying process file from {DaprProcessInitialFile} to {DaprProcessRuntimeFile}", initialFile, proposedOptions.ProcessFile);
+                        File.Copy(initialFile, proposedOptions.ProcessFile, true);
+                    }
+                }
+
+                // If the proposed file still does not exist, revert to initial file
+                if (!File.Exists(proposedOptions.ProcessFile))
+                {
+                    Logger.LogDebug("Process file {DaprProcessRuntimeFile} does not exist at expected location. Reverting to initial location {DaprProcessInitialFile}", proposedOptions.ProcessFile, initialFile);
+                    proposedOptions.ProcessFile = initialFile;
                 }
 
                 // Log out the expected location
-                Logger.LogInformation("Dapr initial directory: {DaprInitialDirectory}", proposedOptions.InitialDirectory);
-                Logger.LogInformation("Dapr runtime directory: {DaprRuntimeDirectory}", proposedOptions.RuntimeDirectory);
                 Logger.LogInformation("Dapr process binary: {DaprProcessFile}", proposedOptions.ProcessFile);
-
-                // If CopyProcessFile is disabled then exit
-                if (proposedOptions.CopyProcessFile == false)
-                {
-                    Logger.LogDebug("CopyProcessFile is set to false, process file not copied from initial directory");
-                    return;
-                }
-
-                // If initial (source) dapr process file does not exist then exit as nothing to copy.
-                var initialFile = Path.Combine(Path.Combine(proposedOptions.InitialDirectory, DaprConstants.DaprBinDirectory), exeName);
-                if (!File.Exists(initialFile))
-                {
-                    Logger.LogWarning("Unable to copy process file because initial file does not exist: {DaprProcessInitialFile}", initialFile);
-                    return;
-                }
-
-                // We have the initial file. If the path is the same as the runtime file then exit as nothing to copy.
-                var initialFileInfo = new FileInfo(initialFile);
-                var runtimeFileInfo = new FileInfo(proposedOptions.ProcessFile);
-                if (string.Equals(runtimeFileInfo.FullName, initialFileInfo.FullName, StringComparison.OrdinalIgnoreCase))
-                {
-                    Logger.LogDebug("Not copying process file from {DaprProcessInitialFile} to {DaprProcessRuntimeFile} because files appear to be the same path", initialFile, proposedOptions.ProcessFile);
-                    return;
-                }
-
-                // If initial file is considered same as runtime file then exit as nothing to copy.
-                if (runtimeFileInfo.Exists &&
-                    initialFileInfo.LastWriteTime == runtimeFileInfo.LastWriteTime &&
-                    initialFileInfo.Length == runtimeFileInfo.Length)
-                {
-                    Logger.LogDebug("Not copying process file from {DaprProcessInitialFile} to {DaprProcessRuntimeFile} because files appear to be the same version", initialFile, proposedOptions.ProcessFile);
-                    return;
-                }
-
-                // Copy the file
-                Logger.LogInformation("Copying process file from {DaprProcessInitialFile} to {DaprProcessRuntimeFile}", initialFile, proposedOptions.ProcessFile);
-                File.Copy(initialFile, proposedOptions.ProcessFile, true);
             }
             catch (Exception ex)
             {
