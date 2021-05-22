@@ -20,8 +20,8 @@ namespace ServiceInvocationSample
         {
             services.AddControllers();
 
-            // Add the Dapr Sidecar
-            services.AddDaprSidecar(Configuration);
+            // Add Dapr Sidekick
+            services.AddDaprSidekick(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

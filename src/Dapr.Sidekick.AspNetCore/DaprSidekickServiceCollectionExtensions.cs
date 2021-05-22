@@ -1,5 +1,6 @@
 ﻿using System;
 using Dapr.Sidekick;
+using Dapr.Sidekick.AspNetCore;
 using Dapr.Sidekick.AspNetCore.Metrics;
 using Dapr.Sidekick.AspNetCore.Sidecar;
 using Dapr.Sidekick.Http;
@@ -12,17 +13,17 @@ using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DaprSidecarServiceCollectionExtensions
+    public static class DaprSidekickServiceCollectionExtensions
     {
         /// <summary>
         /// Adds the Dapr Sidecar process to the service container.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="configureAction">An optional action to configure the component.</param>
-        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddDaprSidecar(this IServiceCollection services, Action<DaprOptions> configureAction = null)
+        /// <returns>A <see cref="IDaprSidekickBuilder"/> for further configuration.</returns>
+        public static IDaprSidekickBuilder AddDaprSidekick(this IServiceCollection services, Action<DaprOptions> configureAction = null)
         {
-            AddCoreServices(services);
+            var builder = AddCoreServices(services);
 
             // Configure the options
             if (configureAction != null)
@@ -34,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.AddOptions<DaprOptions>();
             }
 
-            return services;
+            return builder;
         }
 
         /// <summary>
@@ -43,9 +44,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The service collection.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance for configuring the component.</param>
         /// <param name="postConfigureAction">An optional action to configure the component after initial configuration is applied.</param>
-        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddDaprSidecar(this IServiceCollection services, IConfiguration configuration, Action<DaprOptions> postConfigureAction = null) =>
-            AddDaprSidecar(services, DaprOptions.SectionName, configuration, postConfigureAction);
+        /// <returns>A <see cref="IDaprSidekickBuilder"/> for further configuration.</returns>
+        public static IDaprSidekickBuilder AddDaprSidekick(this IServiceCollection services, IConfiguration configuration, Action<DaprOptions> postConfigureAction = null) =>
+            AddDaprSidekick(services, DaprOptions.SectionName, configuration, postConfigureAction);
 
         /// <summary>
         /// Adds the Dapr Sidecar process to the service container using the configuration section specified by <paramref name="name"/>.
@@ -54,15 +55,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="name">The name of the configuration section containing the settings in <paramref name="configuration"/>.</param>
         /// <param name="configuration">A <see cref="IConfiguration"/> instance for configuring the component.</param>
         /// <param name="postConfigureAction">An optional action to configure the component after initial configuration is applied.</param>
-        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-        public static IServiceCollection AddDaprSidecar(this IServiceCollection services, string name, IConfiguration configuration, Action<DaprOptions> postConfigureAction = null)
+        /// <returns>A <see cref="IDaprSidekickBuilder"/> for further configuration.</returns>
+        public static IDaprSidekickBuilder AddDaprSidekick(this IServiceCollection services, string name, IConfiguration configuration, Action<DaprOptions> postConfigureAction = null)
         {
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            AddCoreServices(services);
+            var builder = AddCoreServices(services);
 
             services.Configure<DaprOptions>(configuration.GetSection(name));
 
@@ -76,10 +77,10 @@ namespace Microsoft.Extensions.DependencyInjection
             // See https://andrewlock.net/extending-the-shutdown-timeout-setting-to-ensure-graceful-ihostedservice-shutdown/
             services.Configure<HostOptions>(opts => opts.ShutdownTimeout = System.TimeSpan.FromSeconds(10));
 
-            return services;
+            return builder;
         }
 
-        private static void AddCoreServices(IServiceCollection services)
+        private static IDaprSidekickBuilder AddCoreServices(IServiceCollection services)
         {
             // Logging
             services.AddLogging().TryAddSingleton<IDaprLoggerFactory, Dapr.Sidekick.Extensions.Logging.DaprLoggerFactory>();
@@ -102,6 +103,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IPrometheusCollector, DaprSidecarMetricsCollector>();
             services.AddSingleton<IPrometheusMetricFilter, DaprSidecarMetricFilter>();
             services.TryAddSingleton<IDaprMetricsCollectorRegistry, PrometheusCollectorRegistry>();
+
+            // Return the builder
+            return new Dapr.Sidekick.AspNetCore.DaprSidekickBuilder(services);
         }
     }
 }

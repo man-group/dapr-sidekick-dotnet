@@ -28,8 +28,8 @@ The main change to the template code to add Dapr support can be found in the `Co
 public void ConfigureServices(IServiceCollection services)
 {
     ...
-    // Add the Dapr Sidecar
-    services.AddDaprSidecar(Configuration);
+    // Add Dapr Sidekick
+    services.AddDaprSidekick(Configuration);
 }
 ```
 

@@ -25,8 +25,8 @@ namespace ConsulSample.Receiver
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ConsulSample.Receiver", Version = "v1" });
             });
 
-            // Add the Dapr Sidecar
-            services.AddDaprSidecar(Configuration);
+            // Add Dapr Sidekick
+            services.AddDaprSidekick(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

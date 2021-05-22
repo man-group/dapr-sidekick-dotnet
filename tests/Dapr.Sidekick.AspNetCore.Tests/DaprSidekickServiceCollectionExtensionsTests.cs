@@ -14,15 +14,15 @@ using NUnit.Framework;
 
 namespace Dapr.Sidekick.AspNetCore.Sidecar
 {
-    public class DaprSidecarServiceCollectionExtensionsTests
+    public class DaprSidekickServiceCollectionExtensionsTests
     {
-        public class AddDaprSidecar
+        public class AddDaprSidekick
         {
             [Test]
             public void Should_add_core_services()
             {
                 var services = new ServiceCollection();
-                Assert.That(services.AddDaprSidecar(), Is.SameAs(services));
+                Assert.That(services.AddDaprSidekick(), Is.InstanceOf<IDaprSidekickBuilder>());
 
                 var provider = services.BuildServiceProvider();
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();
@@ -52,10 +52,10 @@ namespace Dapr.Sidekick.AspNetCore.Sidecar
             {
                 var services = new ServiceCollection();
                 Assert.That(
-                    services.AddDaprSidecar(options =>
+                    services.AddDaprSidekick(options =>
                     {
                         options.ProcessName = "PROCESS_NAME";
-                    }), Is.SameAs(services));
+                    }), Is.InstanceOf<IDaprSidekickBuilder>());
 
                 var provider = services.BuildServiceProvider();
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();
@@ -69,7 +69,7 @@ namespace Dapr.Sidekick.AspNetCore.Sidecar
                 var services = new ServiceCollection();
                 Assert.Throws(
                     Is.InstanceOf<ArgumentNullException>().With.Message.Contains("configuration"),
-                    () => services.AddDaprSidecar(null, _ => { }));
+                    () => services.AddDaprSidekick(null, _ => { }));
             }
 
             [Test]
@@ -78,10 +78,10 @@ namespace Dapr.Sidekick.AspNetCore.Sidecar
                 var configuration = Substitute.For<IConfiguration>();
                 var services = new ServiceCollection();
                 Assert.That(
-                    services.AddDaprSidecar(configuration, options =>
+                    services.AddDaprSidekick(configuration, options =>
                     {
                         options.ProcessName = "PROCESS_NAME";
-                    }), Is.SameAs(services));
+                    }), Is.InstanceOf<IDaprSidekickBuilder>());
 
                 var provider = services.BuildServiceProvider();
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();

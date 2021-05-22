@@ -44,8 +44,8 @@ public void ConfigureServices(IServiceCollection services)
 {
     services.AddControllers();
 
-    // Add the Dapr Sidecar
-    services.AddDaprSidecar(Configuration);
+    // Add Dapr Sidekick
+    services.AddDaprSidekick(Configuration);
 }
 ```
 

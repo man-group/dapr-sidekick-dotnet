@@ -2,15 +2,15 @@
 
 This example provides a simple WCF HTTP service implementation to demonstrate the Service Invocation feature of Dapr under .NET Framework.
 
-The WCF HTTP service is exposed on port 8500. The sample uses `DaprSidekickBuilder` to create an instance of `DaprSidekick` which is used to start/stop the Dapr Sidecar and provide access to the `IDaprSidecarHttpClientFactory` for creating `HttpClient` instances able to invoke other Dapr services by their `AppId`.
+The WCF HTTP service is exposed on port 8500. The sample uses `DaprSidekickBuilder` to create an instance of `DaprSidekick` which is used to start/stop the Dapr sidecar and provide access to the `IDaprSidecarHttpClientFactory` for creating `HttpClient` instances able to invoke other Dapr services by their `AppId`.
 
 The WCF service is implemented in `WeatherForecastService` which exposes the following methods:
 
 | Method            | Description                                                                  |
 | ----------------- | ---------------------------------------------------------------------------- |
-| `/Health`         | Returns the health check response from the Dapr Sidecar                      |
-| `/Metadata`       | Returns the metadata response from the Dapr Sidecar                          |
-| `/Metrics`        | Returns the metrics response from the Dapr Sidecar                           |
+| `/Health`         | Returns the health check response from the Dapr sidecar                      |
+| `/Metadata`       | Returns the metadata response from the Dapr sidecar                          |
+| `/Metrics`        | Returns the metrics response from the Dapr sidecar                           |
 | `/Status`         | Returns information about the Dapr sidecar status and its startup parameters |
 | `/Weather`        | Returns a list of weather forecast results                                   |
 | `/WeatherSidecar` | Invokes the `/Weather` method via the Dapr sidecar                           |

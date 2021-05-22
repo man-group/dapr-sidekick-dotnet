@@ -64,7 +64,7 @@ namespace WcfSample
 
             // Invoke the relative endpoint on target service
             // In this case it will invoke the default Get method on this controller
-            var result = httpClient.GetStringAsync("/GetWeather").Result;
+            var result = httpClient.GetStringAsync("/Weather").Result;
 
             // Return the result
             return WebOperationContext.Current.CreateTextResponse(result, DaprConstants.ContentTypeApplicationJson);
