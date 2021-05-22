@@ -369,7 +369,7 @@ namespace Dapr.Sidekick.Process
             {
                 // Not specified, set to the default "dapr init" location %USERPROFILE%/.dapr ($HOME/.dapr on Linux)
 #if NET35
-                var profilePath = Native.NativeMethods.GetUserProfileFolder();
+                var profilePath = Environment.GetEnvironmentVariable("USERPROFILE");
 #else
                 var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 #endif

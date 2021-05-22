@@ -4,6 +4,7 @@
     {
         public const string ContentTypeApplicationJson = "application/json";
         public const string ContentTypeApplicationGrpc = "application/grpc";
+        public const string ContentTypeTextPlain = "text/plain";
         public const string DefaultNamespace = "default";
 
         // File System

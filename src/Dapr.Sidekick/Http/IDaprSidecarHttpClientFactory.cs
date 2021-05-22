@@ -1,6 +1,6 @@
 ﻿namespace Dapr.Sidekick.Http
 {
-    public interface IDaprSidecarHttpClientFactory
+    public interface IDaprSidecarHttpClientFactory : IDaprProcessHttpClientFactory
     {
 #if NET35
         /// <summary>
