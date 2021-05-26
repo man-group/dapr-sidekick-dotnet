@@ -8,22 +8,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A985DBAA-87F
 		src\Directory.build.props = src\Directory.build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapr.Sidekick", "src\Dapr.Sidekick\Dapr.Sidekick.csproj", "{44CD6153-947F-4D38-AE2A-2D0A0B44CDDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick", "src\Man.Dapr.Sidekick\Man.Dapr.Sidekick.csproj", "{44CD6153-947F-4D38-AE2A-2D0A0B44CDDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapr.Sidekick.Extensions.Logging", "src\Dapr.Sidekick.Extensions.Logging\Dapr.Sidekick.Extensions.Logging.csproj", "{845A9724-8122-4E83-8F67-FE0AF32461EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick.Extensions.Logging", "src\Man.Dapr.Sidekick.Extensions.Logging\Man.Dapr.Sidekick.Extensions.Logging.csproj", "{845A9724-8122-4E83-8F67-FE0AF32461EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapr.Sidekick.AspNetCore", "src\Dapr.Sidekick.AspNetCore\Dapr.Sidekick.AspNetCore.csproj", "{3C5D5C14-E46C-4132-AAE9-5E28045E30AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick.AspNetCore", "src\Man.Dapr.Sidekick.AspNetCore\Man.Dapr.Sidekick.AspNetCore.csproj", "{3C5D5C14-E46C-4132-AAE9-5E28045E30AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BF24E9B9-7B14-4741-B11E-AABE0DEC3729}"
 	ProjectSection(SolutionItems) = preProject
 		tests\Directory.build.props = tests\Directory.build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapr.Sidekick.Tests", "tests\Dapr.Sidekick.Tests\Dapr.Sidekick.Tests.csproj", "{76433DEA-4EFA-4F38-960F-CC68BC531E32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick.Tests", "tests\Man.Dapr.Sidekick.Tests\Man.Dapr.Sidekick.Tests.csproj", "{76433DEA-4EFA-4F38-960F-CC68BC531E32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapr.Sidekick.Extensions.Logging.Tests", "tests\Dapr.Sidekick.Extensions.Logging.Tests\Dapr.Sidekick.Extensions.Logging.Tests.csproj", "{3955C37D-3C3B-44E0-8398-539D35675A58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick.Extensions.Logging.Tests", "tests\Man.Dapr.Sidekick.Extensions.Logging.Tests\Man.Dapr.Sidekick.Extensions.Logging.Tests.csproj", "{3955C37D-3C3B-44E0-8398-539D35675A58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapr.Sidekick.AspNetCore.Tests", "tests\Dapr.Sidekick.AspNetCore.Tests\Dapr.Sidekick.AspNetCore.Tests.csproj", "{F513F641-20E2-4C47-8F57-95664383004E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick.AspNetCore.Tests", "tests\Man.Dapr.Sidekick.AspNetCore.Tests\Man.Dapr.Sidekick.AspNetCore.Tests.csproj", "{F513F641-20E2-4C47-8F57-95664383004E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6481CB38-F5E9-4CB4-8E5D-AB3114186E7D}"
 EndProject

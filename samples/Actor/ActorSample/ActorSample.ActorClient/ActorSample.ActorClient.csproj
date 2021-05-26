@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Dapr.Sidekick\Dapr.Sidekick.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Man.Dapr.Sidekick\Man.Dapr.Sidekick.csproj" />
     <ProjectReference Include="..\ActorSample.IDemoActor\ActorSample.IDemoActor.csproj" />
   </ItemGroup>
 

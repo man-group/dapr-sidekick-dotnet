@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Dapr.Sidekick.AspNetCore\Dapr.Sidekick.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Man.Dapr.Sidekick.AspNetCore\Man.Dapr.Sidekick.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

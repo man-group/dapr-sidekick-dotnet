@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Man.Dapr.Sidekick.Extensions.Logging</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Man.Dapr.Sidekick.Extensions.Logging\Man.Dapr.Sidekick.Extensions.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

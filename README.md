@@ -29,11 +29,11 @@ Dapr Sidekick requires a local installation of Dapr, the recommended approach is
 
 > By default the `dapr init` command will install additional development components such as a Redis docker container. If you do not need these you can instead initialize Dapr using the [slim init mode](https://docs.dapr.io/operations/hosting/self-hosted/self-hosted-no-docker/) command `dapr init --slim`.
 
-Once Dapr is installed, Dapr Sidekick can be used to manage the [Dapr Sidecar](https://docs.dapr.io/concepts/overview/) runtime process `daprd`. For example, in an ASP.NET Core application add the `Dapr.Sidekick.AspNetCore` NuGet package to the project file:
+Once Dapr is installed, Dapr Sidekick can be used to manage the [Dapr Sidecar](https://docs.dapr.io/concepts/overview/) runtime process `daprd`. For example, in an ASP.NET Core application add the `Man.Dapr.Sidekick.AspNetCore` NuGet package to the project file:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="Dapr.Sidekick.AspNetCore" Version="1.0.0" />
+  <PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.0.0" />
 </ItemGroup>
 ```  
 
@@ -51,17 +51,17 @@ public void ConfigureServices(IServiceCollection services)
 
 That's it! When you run the application Dapr Sidekick will discover the Dapr sidecar in the default installation folder, dynamically assign all required ports then launch and manage the lifetime of the runtime process. Detailed diagnostic log messages from both Dapr Sidekick and the Dapr sidecar are pumped through the standard Microsoft Extensions Logging framework. When the application is terminated Dapr Sidekick will shut down the Dapr sidecar.
 
-Dapr Sidekick includes extensive configuration options for the Dapr Sidecar, Placement and Sentry processes - see the [Options](./src/Dapr.Sidekick/Options) code for for more details.
+Dapr Sidekick includes extensive configuration options for the Dapr Sidecar, Placement and Sentry processes - see the [Options](./src/Man.Dapr.Sidekick/Options) code for for more details.
 
 ## Building the repository
 
 This repository builds the following packages:
 
-| Package                            | Description                                   | Compatibility                                                     |
-| ---------------------------------- | --------------------------------------------- | ----------------------------------------------------------------- |
-| `Dapr.Sidekick`                    | Core features                                 | .NET Framework 3.5+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0   |
-| `Dapr.Sidekick.AspNetCore`         | ASP.NET Core extensions                       | .NET Framework 4.6.2+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0 |
-| `Dapr.Sidekick.Extensions.Logging` | Integrations for Microsoft Extensions Logging | .NET Framework 4.5+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0   |
+| Package                                | Description                                   | Compatibility                                                     |
+| -------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------- |
+| `Man.Dapr.Sidekick`                    | Core features                                 | .NET Framework 3.5+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0   |
+| `Man.Dapr.Sidekick.AspNetCore`         | ASP.NET Core extensions                       | .NET Framework 4.6.2+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0 |
+| `Man.Dapr.Sidekick.Extensions.Logging` | Integrations for Microsoft Extensions Logging | .NET Framework 4.5+, .NET Standard 2.0, .NET Core 3.1, .NET 5.0   |
 
 ### Prerequisites
 
@@ -96,11 +96,11 @@ Nuget packages are dropped under `<RepoRoot>/bin/<Debug|Release>/nugets` when yo
 
 In order to target as many possible .NET platforms as possible with minimal external dependencies, Dapr Sidekick gratefully includes source code from a number of external open-source projects. Where appropriate code files are annotated with the original source link and LICENSE file included. The following are the main sources of external code:
 
-| Name                                                                         | License                                                                         | Local Source                                      |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [Dapr SDK for .NET](https://github.com/dapr/dotnet-sdk)                      | [MIT](https://github.com/dapr/dotnet-sdk/blob/master/LICENSE)                   | [DaprClient](./src/Dapr.Sidekick/DaprClient)      |
-| [.NET Extensions 2.1](https://github.com/dotnet/extensions/tree/release/2.1) | [Apache 2.0](https://github.com/dotnet/extensions/blob/release/2.1/LICENSE.txt) | [Logging](./src/Dapr.Sidekick/Logging)            |
-| [Prometheus .NET](https://github.com/prometheus-net/prometheus-net)          | [MIT](https://github.com/prometheus-net/prometheus-net/blob/master/LICENSE)     | [Metrics](./src/Dapr.Sidekick.AspNetCore/Metrics) |
+| Name                                                                         | License                                                                         | Local Source                                          |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [Dapr SDK for .NET](https://github.com/dapr/dotnet-sdk)                      | [MIT](https://github.com/dapr/dotnet-sdk/blob/master/LICENSE)                   | [DaprClient](./src/Man.Dapr.Sidekick/DaprClient)      |
+| [.NET Extensions 2.1](https://github.com/dotnet/extensions/tree/release/2.1) | [Apache 2.0](https://github.com/dotnet/extensions/blob/release/2.1/LICENSE.txt) | [Logging](./src/Man.Dapr.Sidekick/Logging)            |
+| [Prometheus .NET](https://github.com/prometheus-net/prometheus-net)          | [MIT](https://github.com/prometheus-net/prometheus-net/blob/master/LICENSE)     | [Metrics](./src/Man.Dapr.Sidekick.AspNetCore/Metrics) |
 
 Dapr Sidekick also includes a package reference to [Newtonsoft Json.NET](https://github.com/JamesNK/Newtonsoft.Json) for parsing JSON log messages from Dapr.
 

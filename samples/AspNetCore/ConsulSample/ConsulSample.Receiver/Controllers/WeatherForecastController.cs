@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dapr.Sidekick;
+using Man.Dapr.Sidekick;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

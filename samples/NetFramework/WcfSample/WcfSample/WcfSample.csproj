@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Dapr.Sidekick\Dapr.Sidekick.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Man.Dapr.Sidekick\Man.Dapr.Sidekick.csproj" />
   </ItemGroup>
 
   <ItemGroup>

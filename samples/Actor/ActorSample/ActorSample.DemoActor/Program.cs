@@ -17,7 +17,7 @@ namespace DaprDemoActor
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Scope} {Message:lj}{NewLine}{Exception}")
-                .MinimumLevel.Override("Dapr.Sidekick", Serilog.Events.LogEventLevel.Debug)
+                .MinimumLevel.Override("Man.Dapr.Sidekick", Serilog.Events.LogEventLevel.Debug)
                 .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
                 .CreateLogger();
 

@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.Threading;
-using Dapr.Sidekick;
+using Man.Dapr.Sidekick;
 using Newtonsoft.Json;
 
 namespace WcfSample

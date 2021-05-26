@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dapr.Sidekick;
-using Dapr.Sidekick.Http;
+using Man.Dapr.Sidekick;
+using Man.Dapr.Sidekick.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

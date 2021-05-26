@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using Dapr.Sidekick;
-using Dapr.Sidekick.Threading;
+using Man.Dapr.Sidekick;
+using Man.Dapr.Sidekick.Threading;
 
 namespace WcfSample
 {
