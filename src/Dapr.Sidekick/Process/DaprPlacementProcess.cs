@@ -42,7 +42,7 @@ namespace Dapr.Sidekick.Process
             builder
                 .Add(x => x.HealthPort, 8081)
                 .Add(x => x.MetricsPort, 9091)
-                .Add(x => x.Port, 50005);
+                .Add(x => x.Port, DaprConstants.IsWindows ? 6050 : 50005);
 
         protected override void AssignLocations(DaprPlacementOptions options, string daprFolder)
         {

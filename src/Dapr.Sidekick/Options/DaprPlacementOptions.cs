@@ -51,7 +51,7 @@ namespace Dapr.Sidekick
         public bool? Mtls { get; set; }
 
         /// <summary>
-        /// Gets or sets the gRPC port for the placement service (default 50005).
+        /// Gets or sets the gRPC port for the placement service (defaults to 6050 on Windows and 50005 on other platforms).
         /// </summary>
         public int? Port { get; set; }
 

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapr.Actors" Version="1.2.0-rc01" />
+    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.2.0-rc01" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Dapr.Sidekick.AspNetCore\Dapr.Sidekick.AspNetCore.csproj" />
+    <ProjectReference Include="..\ActorSample.IDemoActor\ActorSample.IDemoActor.csproj" />
+  </ItemGroup>
+
+</Project>

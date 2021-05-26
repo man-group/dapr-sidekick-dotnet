@@ -19,19 +19,23 @@ namespace Dapr.Sidekick
         {
             try
             {
-                // Check to see if the process is running
+                // Make sure the process is enabled
                 var processInfo = _daprProcessHost.GetProcessInfo();
-                if (!processInfo.IsRunning)
+                if (processInfo.Status != DaprProcessStatus.Disabled)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: processInfo.Description);
-                }
+                    // Check to see if the process is running
+                    if (!processInfo.IsRunning)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: processInfo.Description);
+                    }
 
-                // Check the endpoint
-                var result = await _daprProcessHost.GetHealthAsync(cancellationToken);
-                if (!result.IsHealthy)
-                {
-                    // Not Healthy
-                    return new HealthCheckResult(context.Registration.FailureStatus, "Dapr process health check endpoint reports Unhealthy (" + result.StatusCode + ")");
+                    // Check the endpoint
+                    var result = await _daprProcessHost.GetHealthAsync(cancellationToken);
+                    if (!result.IsHealthy)
+                    {
+                        // Not Healthy
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Dapr process health check endpoint reports Unhealthy (" + result.StatusCode + ")");
+                    }
                 }
 
                 return HealthCheckResult.Healthy(description: processInfo.Description);

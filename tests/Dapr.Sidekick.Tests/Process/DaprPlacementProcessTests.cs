@@ -55,7 +55,7 @@ namespace Dapr.Sidekick.Process
                 builder.Build(options, new DaprPlacementOptions(), logger);
                 Assert.That(options.HealthPort, Is.EqualTo(8081));
                 Assert.That(options.MetricsPort, Is.EqualTo(9091));
-                Assert.That(options.Port, Is.EqualTo(50005));
+                Assert.That(options.Port, Is.EqualTo(DaprConstants.IsWindows ? 6050 : 50005));
             }
         }
 

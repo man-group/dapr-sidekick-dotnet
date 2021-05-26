@@ -7,7 +7,7 @@
 root = true
 
 # Treat all cs files in this folder as generated code
-[{**/Samples,**/DaprClient,**/Native,**/Log4Net,**/Logging/Internal}/**.cs]
+[{**/samples/**,**/DaprClient,**/Native,**/Log4Net,**/Logging/Internal}/**.cs]
 generated_code = true
 
 # Don't use tabs for indentation.

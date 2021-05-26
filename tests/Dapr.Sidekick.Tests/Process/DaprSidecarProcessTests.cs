@@ -195,7 +195,8 @@ namespace Dapr.Sidekick.Process
                     Profiling = true,
                     ProfilePort = 3456,
                     TrustAnchorsCertificate = "TrustAnchorsCertificate",
-                    Namespace = "Namespace"
+                    Namespace = "Namespace",
+                    Mtls = true
                 };
 
                 p.AddEnvironmentVariables(options, builder);
@@ -210,6 +211,23 @@ namespace Dapr.Sidekick.Process
                 Assert.That(values["DAPR_HTTP_PORT"], Is.EqualTo(2345));
                 Assert.That(values["DAPR_PROFILE_PORT"], Is.EqualTo(3456));
                 Assert.That(values["NAMESPACE"], Is.EqualTo("Namespace"));
+            }
+
+            [Test]
+            public void Should_not_add_predicated_values()
+            {
+                var p = new MockDaprSidecarProcess();
+                var builder = new EnvironmentVariableBuilder();
+                var options = new DaprSidecarOptions
+                {
+                    ProfilePort = 3456,
+                    Namespace = "Namespace",
+                };
+
+                p.AddEnvironmentVariables(options, builder);
+
+                var values = builder.ToDictionary();
+                Assert.That(values, Is.Empty);
             }
         }
 

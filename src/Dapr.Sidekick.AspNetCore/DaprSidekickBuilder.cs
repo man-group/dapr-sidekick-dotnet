@@ -1,8 +1,10 @@
-﻿using Dapr.Sidekick.AspNetCore.Metrics;
+﻿using System.Linq;
+using Dapr.Sidekick.AspNetCore.Metrics;
 using Dapr.Sidekick.AspNetCore.Placement;
 using Dapr.Sidekick.AspNetCore.Sentry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 
 namespace Dapr.Sidekick.AspNetCore
 {
@@ -25,8 +27,8 @@ namespace Dapr.Sidekick.AspNetCore
             _services.AddHealthChecks().AddDaprPlacement();
             _services.AddSingleton<IPrometheusCollector, DaprPlacementMetricsCollector>();
 
-            // Override the default sidecar hosted service, to one that only starts when the placement service is available.
-            _services.TryAddHostedService<DaprPlacementSidecarHostedService>();
+            // Override the default sidecar hosted service, to one that only starts when the Placement service is available.
+            ReplaceSidecarHostedService<DaprPlacementSidecarHostedService>();
 
             return this;
         }
@@ -42,9 +44,20 @@ namespace Dapr.Sidekick.AspNetCore
             _services.AddSingleton<IPrometheusCollector, DaprSentryMetricsCollector>();
 
             // Override the default sidecar hosted service, to one that only starts when the Sentry service is available.
-            _services.TryAddHostedService<DaprSentrySidecarHostedService>();
+            ReplaceSidecarHostedService<DaprSentrySidecarHostedService>();
 
             return this;
+        }
+
+        private void ReplaceSidecarHostedService<TImplementation>()
+            where TImplementation : class, IHostedService
+        {
+            var sidecarHostedServiceDescriptor = _services.FirstOrDefault(x => x.ServiceType == typeof(Microsoft.Extensions.Hosting.IHostedService) && x.ImplementationType == typeof(Sidecar.DaprSidecarHostedService));
+            if (sidecarHostedServiceDescriptor != null)
+            {
+                _services.Remove(sidecarHostedServiceDescriptor);
+                _services.AddHostedService<TImplementation>();
+            }
         }
     }
 }

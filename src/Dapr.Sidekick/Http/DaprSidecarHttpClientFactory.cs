@@ -12,7 +12,7 @@ namespace Dapr.Sidekick.Http
 
             // Since we're dealing with environment variables, treat empty the same as null.
             port = port?.Length == 0 ? DefaultDaprHttpPort : port;
-            return $"http://127.0.0.1:{port}";
+            return $"http://{DaprConstants.LocalhostAddress}:{port}";
         }
     }
 }

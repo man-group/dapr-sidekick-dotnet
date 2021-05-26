@@ -50,6 +50,16 @@ namespace Dapr.Sidekick.Process
                 Logger?.LogInformation("AppId not specified, assigning default value: {DaprSidecarAppId}", options.AppId);
             }
 
+            // Set local placement information
+            if (string.IsNullOrEmpty(options.PlacementHostAddress))
+            {
+                // If we have a local enabled placement running in this solution, then use that port
+                // else use the defaults from the Dapr CLI - 6050 (Windows) or 50005 (Non-Windows)
+                var port = daprOptions.Placement?.Enabled != false && daprOptions.Placement?.Port != null ? daprOptions.Placement?.Port.Value :
+                    DaprConstants.IsWindows ? 6050 : 50005;
+                options.PlacementHostAddress = $"{DaprConstants.LocalhostAddress}:{port}";
+            }
+
             // Make sure we have a namespace
             options.Namespace ??= DaprConstants.DefaultNamespace;
 
@@ -102,7 +112,7 @@ namespace Dapr.Sidekick.Process
             .Add(MetricsPortArgument, source.MetricsPort)
             .Add(ModeArgument, source.Mode)
             .Add(PlacementHostAddressArgument, source.PlacementHostAddress)
-            .Add(ProfilePortArgument, source.ProfilePort)
+            .Add(ProfilePortArgument, source.ProfilePort, predicate: () => source.Profiling == true)
             .Add(SentryAddressArgument, source.SentryAddress)
             .Add(ConfigFileArgument, source.ConfigFile, predicate: () => File.Exists(source.ConfigFile))
             .Add(ComponentsPathArgument, source.ComponentsDirectory, predicate: () => Directory.Exists(source.ComponentsDirectory))
@@ -117,7 +127,7 @@ namespace Dapr.Sidekick.Process
             .Add(DaprConstants.DaprHttpPortEnvironmentVariable, source.DaprHttpPort)
             .Add(DaprConstants.DaprProfilePortEnvironmentVariable, source.ProfilePort, () => source.Profiling == true)
             .Add(DaprConstants.DaprTrustAnchorsEnvironmentVariable, source.TrustAnchorsCertificate)
-            .Add(DaprConstants.NamespaceEnvironmentVariable, source.Namespace);
+            .Add(DaprConstants.NamespaceEnvironmentVariable, source.Namespace, () => source.Mtls == true);
 
         protected override void ParseCommandLineArgument(DaprSidecarOptions target, string name, string value)
         {

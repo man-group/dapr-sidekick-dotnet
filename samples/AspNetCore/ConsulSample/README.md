@@ -6,7 +6,7 @@ This example is based on the standard ASP.NET Core 5.0 Web API WeatherForecast t
 
 This sample demonstrates the following key features:
 
-* A local Dapr `config.yaml` file is included in both services to configure Consul service discovery. The `Dapr::RuntimeDirectory` configuration property in `appsettings.json` instructs Dapr Sidekick to use this file to configure Dapr.
+* A local Dapr `config.yaml` file is included in both services to configure Consul service discovery. The `Dapr:RuntimeDirectory` configuration property in `appsettings.json` instructs Dapr Sidekick to use this file to configure Dapr.
 * A `/health` endpoint is exposed on both services which aggregates both the service and daprd health checks.  On startup Dapr registers the service `/health` endpoint with Consul which then polls it every 5 seconds for health.
 * If you kill either `daprd` process the service will report unhealthy in Consul, within 5 seconds Dapr will restart and the service will again report healthy.
 * Using the standard `properties\launchsettings.json` file the app ports are set to 5000 for Sender service and 5001 for Receiver service which Dapr Sidekick uses to configure the Dapr sidecar.

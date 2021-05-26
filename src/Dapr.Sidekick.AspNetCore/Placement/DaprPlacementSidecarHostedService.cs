@@ -34,7 +34,8 @@ namespace Dapr.Sidekick.AspNetCore.Placement
             await Task.Run(
                 async () =>
                 {
-                    while (!_daprPlacementHost.GetProcessInfo().IsRunning)
+                    var processInfo = _daprPlacementHost.GetProcessInfo();
+                    while (!processInfo.IsRunning && processInfo.Status != Process.DaprProcessStatus.Disabled)
                     {
                         _logger.LogInformation("Dapr Sidecar process is waiting for the Dapr Placement process to finish starting up...");
                         await Task.Delay(250);
@@ -42,6 +43,8 @@ namespace Dapr.Sidekick.AspNetCore.Placement
                         {
                             break;
                         }
+
+                        processInfo = _daprPlacementHost.GetProcessInfo();
                     }
                 }, cancellationToken)
                 .ContinueWith(_ => base.StartAsync(cancellationToken));

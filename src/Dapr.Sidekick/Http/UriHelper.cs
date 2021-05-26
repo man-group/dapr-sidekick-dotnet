@@ -13,11 +13,11 @@ namespace Dapr.Sidekick.Http
         {
             if (uri.Contains("*:"))
             {
-                return uri.Replace("*:", "127.0.0.1:");
+                return uri.Replace("*:", $"{DaprConstants.LocalhostAddress}:");
             }
             else if (uri.Contains("+:"))
             {
-                return uri.Replace("+:", "127.0.0.1:");
+                return uri.Replace("+:", $"{DaprConstants.LocalhostAddress}:");
             }
             else
             {

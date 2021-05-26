@@ -6,7 +6,8 @@
         Initializing = 1,
         Starting = 2,
         Started = 3,
-        Stopping = 4
+        Stopping = 4,
+        Disabled = 5
     }
 
     internal enum ProcessComparison

@@ -118,6 +118,7 @@ namespace Dapr.Sidekick.Options
 
             Assert.That(target.BinDirectory, Is.EqualTo(source.BinDirectory));
             Assert.That(target.CopyProcessFile, Is.EqualTo(source.CopyProcessFile));
+            Assert.That(target.Enabled, Is.EqualTo(source.Enabled));
             Assert.That(target.InitialDirectory, Is.EqualTo(source.InitialDirectory));
             Assert.That(target.IssuerCertificate, Is.EqualTo(source.IssuerCertificate));
             Assert.That(target.IssuerKey, Is.EqualTo(source.IssuerKey));
@@ -136,6 +137,7 @@ namespace Dapr.Sidekick.Options
         {
             BinDirectory = "BinDirectory",
             CopyProcessFile = true,
+            Enabled = false,
             InitialDirectory = "InitialDirectory",
             IssuerCertificate = "IssuerCertificate",
             IssuerKey = "IssuerKey",

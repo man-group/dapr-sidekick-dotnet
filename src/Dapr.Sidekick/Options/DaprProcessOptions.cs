@@ -21,6 +21,13 @@ namespace Dapr.Sidekick.Options
         public bool? CopyProcessFile { get; set; }
 
         /// <summary>
+        /// Gets or sets a value that determines if the Dapr process is enabled. If <c>false</c> the Dapr process binary will not be launched or managed on startup.
+        /// This allows an application to use Dapr Sidekick for development but leverage standard Dapr runtime mechanisms for deployments.
+        /// Defaults to <c>true</c>.
+        /// </summary>
+        public bool? Enabled { get; set; }
+
+        /// <summary>
         /// Gets or sets the full path to the initial directory containing the Dapr components.
         /// Typically this is the directory created by the "dapr init" command containing
         /// the config.yaml file and the bin, components and certs subdirectories.
@@ -114,6 +121,7 @@ namespace Dapr.Sidekick.Options
 
             BinDirectory ??= source.BinDirectory;
             CopyProcessFile ??= source.CopyProcessFile;
+            Enabled ??= source.Enabled;
             InitialDirectory ??= source.InitialDirectory;
             IssuerCertificate ??= source.IssuerCertificate;
             IssuerKey ??= source.IssuerKey;
@@ -147,7 +155,7 @@ namespace Dapr.Sidekick.Options
 
         protected Uri GetLocalUri(Func<UriBuilder, bool> configure)
         {
-            var builder = new UriBuilder("http", "127.0.0.1");
+            var builder = new UriBuilder("http", DaprConstants.LocalhostAddress);
             if (configure(builder))
             {
                 return builder.Uri;

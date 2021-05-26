@@ -18,10 +18,12 @@ including dynamic port assignments.
 In the browser navigate to the `/weatherforecast` method which will return random weather forecast results. Now navigate to `/weatherforecast/sidecar` which will return similar results but this time the call is looped back via the Dapr sidecar to illustrate Dapr service invocation.
 
 ## Stopping the application and Dapr
+
 To stop the application and terminate Dapr you can enter `CTRL-C` in the console window which will invoke the Dapr Shutdown API to perform a clean shutdown. Alternative close the browser window or stop the debug session directly
 and the Dapr process will be immediately terminated.
 
 ## How Dapr was added
+
 The main change to the template code to add Dapr support can be found in the `ConfigureServices` method in `Startup.cs`:
 
 ```csharp
@@ -34,4 +36,3 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 Additional code has also been included to add enhanced logging via Serilog for improved diagnostics.
-

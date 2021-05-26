@@ -11,6 +11,74 @@ namespace Dapr.Sidekick.Process
         public class Start
         {
             [Test]
+            public void Should_not_start_when_not_enabled()
+            {
+                var logger = Substitute.For<IDaprLogger>();
+                var filename = TestResourceHelper.CompileTestSystemProcessExe();
+                var p = new MockDaprProcess()
+                {
+                    ProcessFinder = Substitute.For<IProcessFinder>()
+                };
+
+                var options = new DaprOptions()
+                {
+                    Enabled = false
+                };
+
+                try
+                {
+                    // Start (asynchronous) and wait for started
+                    p.Start(() => options, logger);
+                    var loopCount = 0;
+                    do
+                    {
+                        loopCount++;
+                        var pi = p.GetProcessInfo();
+                        if (pi.Status == DaprProcessStatus.Disabled)
+                        {
+                            break;
+                        }
+
+                        System.Threading.Thread.Sleep(10);
+                    }
+                    while (loopCount < 100); // 1 second
+
+                    // Assert running
+                    Assert.That(p.GetProcessInfo().Status, Is.EqualTo(DaprProcessStatus.Disabled));
+                    var loggerCalls = logger.ReceivedLoggerCalls();
+                }
+                finally
+                {
+                    try
+                    {
+                        // Stop the process and wait for exit
+                        var loopCount = 0;
+                        do
+                        {
+                            var pi = p.GetProcessInfo();
+                            if (pi.Id is null)
+                            {
+                                break;
+                            }
+
+                            loopCount++;
+                            p.Stop();
+                            System.Threading.Thread.Sleep(100);
+                        }
+                        while (loopCount < 10); // 1 second
+
+                        // Assert stopped
+                        Assert.That(p.GetProcessInfo().Status, Is.EqualTo(DaprProcessStatus.Disabled));
+                    }
+                    finally
+                    {
+                        // Delete the resource file
+                        TestResourceHelper.DeleteTestProcess(filename);
+                    }
+                }
+            }
+
+            [Test]
             public void Should_start_and_stop_managed_process()
             {
                 var logger = Substitute.For<IDaprLogger>();

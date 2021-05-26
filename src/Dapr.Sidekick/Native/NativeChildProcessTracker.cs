@@ -28,7 +28,7 @@ namespace Dapr.Sidekick.Native
                 return;
             }
 
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (!DaprConstants.IsWindows)
             {
                 // Only on Windows
                 return;

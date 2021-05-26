@@ -216,6 +216,15 @@ namespace Dapr.Sidekick.Process
                 // Start with a new instance
                 var proposedOptions = GetProcessOptions(_startOptionsAccessor?.Invoke() ?? new DaprOptions());
                 proposedOptions.ProcessName ??= _defaultProcessName;
+
+                // If not enabled then exit
+                if (proposedOptions.Enabled == false)
+                {
+                    UpdateStatus(DaprProcessStatus.Disabled);
+                    Logger.LogInformation("Dapr Sidekick is disabled for {DaprProcessName}, Dapr process will not be launched", proposedOptions.ProcessName);
+                    return;
+                }
+
                 Logger.LogInformation("Dapr expected process name set to {DaprProcessName}", proposedOptions.ProcessName);
 
                 // Assign ports, retaining any from last used options if required.
@@ -398,7 +407,7 @@ namespace Dapr.Sidekick.Process
             proposedOptions.BinDirectory = GetFullPath(proposedOptions.BinDirectory);
 
             // Set the Process File name
-            var exeName = Environment.OSVersion.Platform == PlatformID.Win32NT ? proposedOptions.ProcessName + DaprConstants.ExeExtension : proposedOptions.ProcessName;
+            var exeName = DaprConstants.IsWindows ? proposedOptions.ProcessName + DaprConstants.ExeExtension : proposedOptions.ProcessName;
             var initialFile = Path.Combine(Path.Combine(proposedOptions.InitialDirectory, DaprConstants.DaprBinDirectory), exeName);
             if (string.IsNullOrEmpty(proposedOptions.ProcessFile))
             {

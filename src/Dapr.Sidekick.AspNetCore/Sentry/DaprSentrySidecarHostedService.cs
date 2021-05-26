@@ -34,7 +34,8 @@ namespace Dapr.Sidekick.AspNetCore.Sentry
             await Task.Run(
                 async () =>
                 {
-                    while (!_daprSentryHost.GetProcessInfo().IsRunning)
+                    var processInfo = _daprSentryHost.GetProcessInfo();
+                    while (!processInfo.IsRunning && processInfo.Status != Process.DaprProcessStatus.Disabled)
                     {
                         _logger.LogInformation("Dapr Sidecar process is waiting for the Dapr Sentry process to finish starting up...");
                         await Task.Delay(250);
@@ -42,6 +43,8 @@ namespace Dapr.Sidekick.AspNetCore.Sentry
                         {
                             break;
                         }
+
+                        processInfo = _daprSentryHost.GetProcessInfo();
                     }
                 }, cancellationToken)
                 .ContinueWith(_ => base.StartAsync(cancellationToken));

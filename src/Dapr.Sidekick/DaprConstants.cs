@@ -1,4 +1,6 @@
-﻿namespace Dapr.Sidekick
+﻿using System;
+
+namespace Dapr.Sidekick
 {
     public class DaprConstants
     {
@@ -6,6 +8,7 @@
         public const string ContentTypeApplicationGrpc = "application/grpc";
         public const string ContentTypeTextPlain = "text/plain";
         public const string DefaultNamespace = "default";
+        public const string LocalhostAddress = "127.0.0.1";
 
         // File System
         public const string DaprBinDirectory = "bin";
@@ -39,5 +42,7 @@
         public const string DaprSidecarProcessName = "daprd";
         public const string DaprSentryProcessName = "sentry";
         public const string DaprPlacementProcessName = "placement";
+
+        public static bool IsWindows => Environment.OSVersion.Platform == PlatformID.Win32NT;
     }
 }
