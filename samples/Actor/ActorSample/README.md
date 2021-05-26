@@ -1,6 +1,8 @@
 # Actor Sample
 
-The Actor sample shows how to create a virtual actor (`DemoActor`) and invoke its methods on the client application. The sample is a copy of the [Dapr .NET SDK Actor Sample](https://github.com/dapr/dotnet-sdk/tree/master/examples/Actor), but modified to include Dapr Sidekick integration for launching a Dapr sidecar and optionally the Dapr Placement service. See the original source for more information on the purpose of the sample.
+The Actor sample shows how to create a virtual actor (`DemoActor`) and invoke its methods on the client application. The sample is a copy of the [Dapr .NET SDK Actor Sample](https://github.com/dapr/dotnet-sdk/tree/master/examples/Actor), but modified to include Dapr Sidekick integration for launching a Dapr sidecar and optionally the Dapr Placement service.
+
+> See the [original source](https://github.com/dapr/dotnet-sdk/tree/master/examples/Actor) for more information on the purpose of the sample.
 
 ## How Dapr Sidekick was added
 
