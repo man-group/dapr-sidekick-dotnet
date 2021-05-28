@@ -19,6 +19,8 @@ The WCF service is implemented in `WeatherForecastService` which exposes the fol
 
 Set this project as the Startup Project in Visual Studio 2019 and run it. A console window appears with diagnostic startup messages. Dapr Sidekick looks for Dapr in the default `dapr init` installation location `%USERPROFILE%/.dapr` (`$HOME/.dapr` on Linux). Monitor the logs in the console window until Dapr enters the `Started` state.
 
+> If you get an access error when starting the WCF Host you may need to add a [URL ACL](https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/configuring-http-and-https?redirectedfrom=MSDN) for this port. You can do this by running the following as an Administrator: `netsh http add urlacl url=http://+:8500/ user=Everyone`
+
 In a browser navigate to the `/Status` method (default <http://127.0.0.1:8500/Status>) to view the Dapr sidecar process status and all the startup details including dynamic port assignments. Navigate in turn to the `/Health`, `/Metadata` and `/Metrics` methods to view additional information from the sidecar.
 
 Navigate to the `/Weather` method which will return random weather forecast results. Now navigate to `/WeatherSidecar` which will return similar results but this time the call is looped back via the Dapr sidecar to illustrate Dapr service invocation.
