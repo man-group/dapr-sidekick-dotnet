@@ -112,9 +112,9 @@ Original concept and implementation: [Simon Jones](https://github.com/badgeratu)
 
 Contributors:
 
-* ... be the first! ...
+* [Abdulaziz Elsheikh](https://github.com/a-elsheikh)
 
-Contributions welcome!
+Contributions welcome! Please review the [Contribution Guidelines](CONTRIBUTING.md).
 
 ## License
 

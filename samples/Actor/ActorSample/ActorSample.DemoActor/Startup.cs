@@ -29,7 +29,7 @@ namespace DaprDemoActor
             });
 
             // Add Dapr Sidekick
-            services.AddDaprSidekick(Configuration).AddPlacement();
+            services.AddDaprSidekick(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
