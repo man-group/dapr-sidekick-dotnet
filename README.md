@@ -114,7 +114,7 @@ Contributors:
 
 * [Abdulaziz Elsheikh](https://github.com/a-elsheikh)
 
-Contributions welcome!
+Contributions welcome! Please review the [Contribution Guidelines](CONTRIBUTING.md).
 
 ## License
 
