@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Man.Dapr.Sidekick.Logging;
-using Newtonsoft.Json.Linq;
 
 namespace Man.Dapr.Sidekick.Process
 {
@@ -45,37 +44,44 @@ namespace Man.Dapr.Sidekick.Process
             var logLevel = DaprLogLevel.Information;
             try
             {
-                // Parse the log json text
-                var daprLog = JObject.Parse(data);
+#if NETCOREAPP
+                // Parse the log json text using System.Text.Json
+                var logRecord = System.Text.Json.JsonSerializer.Deserialize<DaprProcessLogRecord>(
+                    data,
+                    new System.Text.Json.JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+#else
+                // Parse the log json text using Newtonsoft Json
+                var logRecord = Newtonsoft.Json.JsonConvert.DeserializeObject<DaprProcessLogRecord>(data);
+#endif
 
-                // Extract the message. If not available then continue.
-                message = Convert.ToString(daprLog["msg"]);
-                if (string.IsNullOrEmpty(message))
+                // Extract the message.
+                if (!string.IsNullOrEmpty(logRecord.Msg))
                 {
-                    return;
+                    message = logRecord.Msg;
                 }
 
                 // Log Level
-                var daprDaprLogLevel = Convert.ToString(daprLog["level"]);
-                if (!string.IsNullOrEmpty(daprDaprLogLevel))
+                if (!string.IsNullOrEmpty(logRecord.Level))
                 {
-                    logLevel = ToDaprLogLevel(daprDaprLogLevel);
+                    logLevel = ToDaprLogLevel(logRecord.Level);
                 }
 
                 // Extract the version
-                var version = Convert.ToString(daprLog["ver"]);
-                if (!string.IsNullOrEmpty(version))
+                if (!string.IsNullOrEmpty(logRecord.Ver))
                 {
-                    AddProperty(properties, "DaprVersion", version);
-                    _processUpdater.UpdateVersion(version);
+                    AddProperty(properties, "DaprVersion", logRecord.Ver);
+                    _processUpdater.UpdateVersion(logRecord.Ver);
                 }
 
                 // Extract known additional properties
-                AddProperty(properties, "DaprAppId", daprLog["app_id"]);
-                AddProperty(properties, "DaprInstance", daprLog["instance"]);
-                AddProperty(properties, "DaprScope", daprLog["scope"]);
-                AddProperty(properties, "DaprTime", daprLog["time"]);
-                AddProperty(properties, "DaprType", daprLog["type"]);
+                AddProperty(properties, "DaprAppId", logRecord.App_id);
+                AddProperty(properties, "DaprInstance", logRecord.Instance);
+                AddProperty(properties, "DaprScope", logRecord.Scope);
+                AddProperty(properties, "DaprTime", logRecord.Time);
+                AddProperty(properties, "DaprType", logRecord.Type);
             }
             catch
             {
@@ -103,12 +109,11 @@ namespace Man.Dapr.Sidekick.Process
             }
         }
 
-        private void AddProperty(Dictionary<string, object> values, string key, object value)
+        private void AddProperty(Dictionary<string, object> values, string key, string value)
         {
-            var text = Convert.ToString(value);
-            if (!text.IsNullOrWhiteSpaceEx())
+            if (!value.IsNullOrWhiteSpaceEx())
             {
-                values.Add(key, text);
+                values.Add(key, value);
             }
         }
 
