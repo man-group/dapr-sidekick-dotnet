@@ -16,9 +16,9 @@
     <AssemblyClsCompliant>true</AssemblyClsCompliant>
   </PropertyGroup>
 
-  <!-- set DebugType to full -->
+  <!-- set DebugType to portable -->
   <PropertyGroup>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <!-- Set AllowUnsafeBlocks to false -->

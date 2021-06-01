@@ -36,7 +36,8 @@ namespace Man.Dapr.Sidekick.Process
                 processLogger.LogData("{ No: \"Data\"}");
 
                 var loggerCalls = logger.ReceivedLoggerCalls();
-                Assert.That(loggerCalls.Length, Is.Zero);
+                Assert.That(loggerCalls.Length, Is.EqualTo(1));
+                Assert.That(loggerCalls[0].Message, Is.EqualTo("{ No: \"Data\"}"));
             }
 
             [Test]

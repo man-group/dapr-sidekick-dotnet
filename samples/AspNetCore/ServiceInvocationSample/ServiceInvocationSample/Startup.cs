@@ -39,6 +39,9 @@ namespace ServiceInvocationSample
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                // For Dapr
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

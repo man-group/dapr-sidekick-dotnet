@@ -34,6 +34,13 @@ namespace Man.Dapr.Sidekick.Process
         {
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the starting port is always used.
+        /// If <c>true</c> the starting port will be assigned, if <c>false</c> the specified <see cref="PortAvailabilityChecker"/> will be used to obtain an available port.
+        /// Defaults to <c>false</c>.
+        /// </summary>
+        public bool AlwaysUseStartingPort { get; set; }
+
         // For testing
         internal IPortAvailabilityChecker PortAvailabilityChecker { get; }
 
@@ -75,11 +82,19 @@ namespace Man.Dapr.Sidekick.Process
                     continue;
                 }
 
-                // Assign a new port
-                var newPort = PortAvailabilityChecker.GetAvailablePort(port.StartingPort, reservedPorts);
-                propertyInfo.SetValue(proposedOptions, newPort, null);
-                reservedPorts.Add(newPort);
-                logger.LogDebug("Reserving new port {DaprPortNumber} for option {DaprPortName}", newPort, propertyName);
+                if (AlwaysUseStartingPort || PortAvailabilityChecker == null)
+                {
+                    logger.LogDebug("Assigning default port {DaprPortNumber} for option {DaprPortName}", port.StartingPort, propertyName);
+                    propertyInfo.SetValue(proposedOptions, port.StartingPort, null);
+                }
+                else
+                {
+                    // Assign a new port
+                    var newPort = PortAvailabilityChecker.GetAvailablePort(port.StartingPort, reservedPorts);
+                    propertyInfo.SetValue(proposedOptions, newPort, null);
+                    reservedPorts.Add(newPort);
+                    logger.LogDebug("Reserving new port {DaprPortNumber} for option {DaprPortName}", newPort, propertyName);
+                }
             }
         }
     }
