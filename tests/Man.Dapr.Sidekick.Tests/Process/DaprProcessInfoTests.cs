@@ -70,12 +70,23 @@ namespace Man.Dapr.Sidekick.Process
             }
         }
 
+        public class IsAttached
+        {
+            [Test]
+            public void Should_return_expected_values()
+            {
+                Assert.That(new DaprProcessInfo("TEST", 100, null, DaprProcessStatus.Started).IsAttached, Is.False);
+                Assert.That(new DaprProcessInfo("TEST", 100, null, DaprProcessStatus.Started, false).IsAttached, Is.False);
+                Assert.That(new DaprProcessInfo("TEST", 100, null, DaprProcessStatus.Started, true).IsAttached, Is.True);
+            }
+        }
+
         public class ToStringMethod
         {
             [Test]
             public void Should_return_description()
             {
-                var pi = new DaprProcessInfo("TEST", 100, "VERSION", DaprProcessStatus.Started);
+                var pi = new DaprProcessInfo("TEST", 100, "VERSION", DaprProcessStatus.Started, false);
                 Assert.That(pi.ToString(), Is.EqualTo(pi.Description));
             }
         }

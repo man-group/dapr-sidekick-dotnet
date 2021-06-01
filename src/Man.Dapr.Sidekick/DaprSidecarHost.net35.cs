@@ -49,6 +49,13 @@ namespace Man.Dapr.Sidekick
 
         protected override void OnProcessStopping(DaprProcessStoppingEventArgs args)
         {
+            // If running in attached mode, do not send the shutdown command
+            var processInfo = Process?.GetProcessInfo();
+            if (processInfo?.IsAttached == true)
+            {
+                return;
+            }
+
             // Send the shutdown command to the sidecar
             var client = DaprHttpClientFactory.CreateDaprWebClient();
             var uri = Process?.LastSuccessfulOptions?.GetShutdownUri();
