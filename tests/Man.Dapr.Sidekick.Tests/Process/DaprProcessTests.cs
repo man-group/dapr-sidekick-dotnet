@@ -116,7 +116,9 @@ namespace Man.Dapr.Sidekick.Process
                     while (loopCount < 100); // 1 second
 
                     // Assert running
-                    Assert.That(p.GetProcessInfo().IsRunning, Is.True);
+                    var processInfo = p.GetProcessInfo();
+                    Assert.That(processInfo.IsRunning, Is.True);
+                    Assert.That(processInfo.IsAttached, Is.False);
                 }
                 finally
                 {
@@ -185,7 +187,9 @@ namespace Man.Dapr.Sidekick.Process
                     while (loopCount < 100); // 1 second
 
                     // Assert attached and we have a logger call
-                    Assert.That(p.GetProcessInfo().IsRunning, Is.True);
+                    var processInfo = p.GetProcessInfo();
+                    Assert.That(processInfo.IsRunning, Is.True);
+                    Assert.That(processInfo.IsAttached, Is.True);
                     var loggerCalls = logger.ReceivedLoggerCalls();
                     Assert.That(
                         System.Array.Find(loggerCalls, x => x.Message == "Attached to existing Dapr Process Mock PID:1234"),

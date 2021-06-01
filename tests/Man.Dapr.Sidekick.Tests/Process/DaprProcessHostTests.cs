@@ -13,7 +13,7 @@ namespace Man.Dapr.Sidekick.Process
         public void Should_start_and_stop()
         {
             var process = Substitute.For<IDaprProcess<MockDaprProcessOptions>>();
-            var processInfo = new DaprProcessInfo("NAME", 1234, "VERSION", DaprProcessStatus.Started);
+            var processInfo = new DaprProcessInfo("NAME", 1234, "VERSION", DaprProcessStatus.Started, false);
             var processHost = new MockDaprProcessHost(process);
             var options = new DaprOptions();
             var mockOptions = new MockDaprProcessOptions();

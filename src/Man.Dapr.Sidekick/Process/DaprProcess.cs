@@ -36,7 +36,7 @@ namespace Man.Dapr.Sidekick.Process
         // For testing
         internal IProcessFinder ProcessFinder { get; set; } = new ProcessFinder();
 
-        public DaprProcessInfo GetProcessInfo() => new DaprProcessInfo(Name, Id, Version, Status);
+        public DaprProcessInfo GetProcessInfo() => new DaprProcessInfo(Name, Id, Version, Status, _underlyingProcess is AttachedProcess);
 
         public event EventHandler<DaprProcessStartingEventArgs<TOptions>> Starting;
 

@@ -2,14 +2,20 @@
 {
     public class DaprProcessInfo
     {
-        public static DaprProcessInfo Unknown => new DaprProcessInfo("unknown", null, null, DaprProcessStatus.Stopped);
+        public static DaprProcessInfo Unknown => new DaprProcessInfo("unknown", null, null, DaprProcessStatus.Stopped, false);
 
         public DaprProcessInfo(string name, int? id, string version, DaprProcessStatus status)
+            : this(name, id, version, status, false)
+        {
+        }
+
+        public DaprProcessInfo(string name, int? id, string version, DaprProcessStatus status, bool isAttached)
         {
             Name = name;
             Id = id;
             Version = version;
             Status = status;
+            IsAttached = isAttached;
         }
 
         public string Name { get; }
@@ -21,6 +27,8 @@
         public DaprProcessStatus Status { get; }
 
         public bool IsRunning => Status == DaprProcessStatus.Started;
+
+        public bool IsAttached { get; }
 
         public string Description =>
             IsRunning ? (!string.IsNullOrEmpty(Version) ? $"Dapr process '{Name}' running, version {Version}" : $"Dapr process '{Name}' running, unverified version") :
