@@ -107,6 +107,34 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(proposedOptions.DaprHttpPort, Is.EqualTo(3000));
                 Assert.That(proposedOptions.MetricsPort, Is.EqualTo(4000));
             }
+
+            [Test]
+            public void Should_use_starting_ports()
+            {
+                var logger = Substitute.For<IDaprLogger>();
+                var checker = Substitute.For<IPortAvailabilityChecker>();
+                var builder = new PortAssignmentBuilder<DaprSidecarOptions>(checker)
+                {
+                    AlwaysUseStartingPort = true
+                };
+
+                builder
+                    .Add(x => x.AppPort, 1000)
+                    .Add(x => x.DaprGrpcPort, 2000)
+                    .Add(x => x.DaprHttpPort, 3000)
+                    .Add(x => x.MetricsPort, 4000);
+
+                var proposedOptions = new DaprSidecarOptions()
+                {
+                    DaprHttpPort = 200 // Overrides previous port
+                };
+
+                builder.Build(proposedOptions, null, logger);
+                Assert.That(proposedOptions.AppPort, Is.EqualTo(1000));
+                Assert.That(proposedOptions.DaprGrpcPort, Is.EqualTo(2000));
+                Assert.That(proposedOptions.DaprHttpPort, Is.EqualTo(200));
+                Assert.That(proposedOptions.MetricsPort, Is.EqualTo(4000));
+            }
         }
     }
 }

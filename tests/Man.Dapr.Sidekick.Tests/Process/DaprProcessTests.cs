@@ -51,10 +51,14 @@ namespace Man.Dapr.Sidekick.Process
                 {
                     try
                     {
+                        // Assert disabled
+                        Assert.That(p.GetProcessInfo().Status, Is.EqualTo(DaprProcessStatus.Disabled));
+
                         // Stop the process and wait for exit
                         var loopCount = 0;
                         do
                         {
+                            p.Stop();
                             var pi = p.GetProcessInfo();
                             if (pi.Id is null)
                             {
@@ -62,12 +66,11 @@ namespace Man.Dapr.Sidekick.Process
                             }
 
                             loopCount++;
-                            p.Stop();
                             System.Threading.Thread.Sleep(100);
                         }
                         while (loopCount < 10); // 1 second
 
-                        // Assert stopped
+                        // Assert still Disabled (i.e. didn't enter the Stopping/Stopped states
                         Assert.That(p.GetProcessInfo().Status, Is.EqualTo(DaprProcessStatus.Disabled));
                     }
                     finally

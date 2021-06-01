@@ -75,7 +75,7 @@ namespace Man.Dapr.Sidekick.Process
         {
             lock (_lock)
             {
-                if (IsRunning || Status != DaprProcessStatus.Stopped)
+                if (IsRunning || (Status != DaprProcessStatus.Stopped && Status != DaprProcessStatus.Disabled))
                 {
                     Logger?.LogInformation("Stopping Process {DaprProcessName} PID:{DaprProcessId}", Name, Id);
                     UpdateStatus(DaprProcessStatus.Stopping);
@@ -227,11 +227,6 @@ namespace Man.Dapr.Sidekick.Process
 
                 Logger.LogInformation("Dapr expected process name set to {DaprProcessName}", proposedOptions.ProcessName);
 
-                // Assign ports, retaining any from last used options if required.
-                var portBuilder = new PortAssignmentBuilder<TOptions>();
-                AssignPorts(portBuilder);
-                portBuilder.Build(proposedOptions, LastSuccessfulOptions, Logger);
-
                 // Check existing processes
                 var attachableProcess = CheckExistingProcesses(proposedOptions);
                 if (attachableProcess != null)
@@ -240,6 +235,11 @@ namespace Man.Dapr.Sidekick.Process
                     _underlyingProcess = AttachExistingProcess(attachableProcess);
                     return;
                 }
+
+                // Assign ports, retaining any from last used options if required.
+                var portBuilder = new PortAssignmentBuilder<TOptions>();
+                AssignPorts(portBuilder);
+                portBuilder.Build(proposedOptions, LastSuccessfulOptions, Logger);
 
                 // Initialize expected locations and directories
                 InitializeDirectories(proposedOptions);
@@ -515,7 +515,17 @@ namespace Man.Dapr.Sidekick.Process
                     }
                     else if (comparison == ProcessComparison.Attachable)
                     {
-                        // Found an attachable process. Use it.
+                        // Found an attachable process. Assign any remaining default ports by forcing use of starting port.
+                        // All other custom ports will come from the command-line args in the attached process.
+                        var portBuilder = new PortAssignmentBuilder<TOptions>
+                        {
+                            AlwaysUseStartingPort = true
+                        };
+
+                        AssignPorts(portBuilder);
+                        portBuilder.Build(existingOptions, proposedOptions, Logger);
+
+                        // Return an attachable process
                         return new AttachableProcess(existingProcess, existingOptions);
                     }
                 }
