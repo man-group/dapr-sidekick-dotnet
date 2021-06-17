@@ -19,6 +19,10 @@ Key features:
 * Compatible with all versions of .NET from .NET Framework 3.5 to .NET 5.0
 * Supports Sidecar, Placement and Sentry processes
 
+## Dapr Community Call
+
+A presentation of Dapr Sidekick for .NET was given to the Dapr community as part of [Community Call 39](https://youtu.be/Cv-8e5wV44g), demonstrating its ability to easily integrate the Dapr sidecar into an ASP.NET Core application and enable seamless debugging sessions with Visual Studio 2019. Watch the [20-minute segment on YouTube](https://youtu.be/Cv-8e5wV44g?t=1758) to get started as quickly as possible.
+
 ## Samples
 
 Visit the [samples folder](./samples) for examples of how you can get up and running with Dapr Sidekick.
