@@ -1,6 +1,6 @@
 # Dapr Sidekick for .NET
 
-[![Build Status](https://github.com/man-group/dapr-sidekick-dotnet/workflows/build/badge.svg?event=push&branch=master)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=build)
+[![Build Status](https://github.com/man-group/dapr-sidekick-dotnet/workflows/build/badge.svg?event=push&branch=main)](https://github.com/man-group/dapr-sidekick-dotnet/actions?workflow=build)
 [![codecov](https://codecov.io/gh/man-group/dapr-sidekick-dotnet/branch/main/graph/badge.svg?token=y7Uq2TIAuI)](https://codecov.io/gh/man-group/dapr-sidekick-dotnet)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0c79d186a9b733579ae8/maintainability)](https://codeclimate.com/github/man-group/dapr-sidekick-dotnet/maintainability)
 [![License: MIT](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
