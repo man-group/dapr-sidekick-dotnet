@@ -52,7 +52,7 @@ jobs:
         run: python ./.github/scripts/get_release_version.py
       - name: Test
         continue-on-error: true # proceed if tests fail, the report step will report the failure with more details.
-        run: dotnet test -c release --no-restore -f ${{ matrix.framework }} ${{ matrix.logger }} -r "${{ github.workspace }}/TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:GITHUB_ACTIONS=false
+        run: dotnet test -c release -f ${{ matrix.framework }} ${{ matrix.logger }} -r "${{ github.workspace }}/TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:GITHUB_ACTIONS=false
       - name: Upload test coverage
         uses: codecov/codecov-action@v1
         with:
