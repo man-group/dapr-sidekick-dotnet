@@ -84,6 +84,13 @@ namespace Man.Dapr.Sidekick.Native
 
         public static int GetCommandLine(System.Diagnostics.Process process, out string commandLine)
         {
+            if (!DaprConstants.IsWindows)
+            {
+                // Return an empty command-line on non-Windows platforms
+                commandLine = string.Empty;
+                return 0;
+            }
+
             var rc = 0;
             commandLine = null;
             var hProcess = OpenProcess(
@@ -174,7 +181,7 @@ namespace Man.Dapr.Sidekick.Native
 
         public static IEnumerable<string> CommandLineToArgs(string commandLine)
         {
-            if (string.IsNullOrEmpty(commandLine))
+            if (string.IsNullOrEmpty(commandLine) || !DaprConstants.IsWindows)
             {
                 return new string[0];
             }
