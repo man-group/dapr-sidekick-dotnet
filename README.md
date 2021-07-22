@@ -106,11 +106,10 @@ Dapr Sidekick also includes a package reference to [Newtonsoft Json.NET](https:/
 
 ## Non-Windows Platforms
 
-On platforms other than Windows (such as Linux and Mac OS) some features of Dapr Sidekick may not be available due to the native API calls not being implemented. These include:
+On platforms other than Windows (such as Linux and Mac OS) some features of Dapr Sidekick may not be available due to the required native API calls not being available. These include:
 
 | Feature                     | Platforms    | Notes                                                             |
 | --------------------------- | ------------ | ----------------------------------------------------------------- |
-| Automatic Port Assignment   | Mac OS       | Non-default ports must be manually assigned via configuration     |
 | Attach to existing instance | Linux/Mac OS | Will not detect existing `daprd` instance for same AppId and Port |
 
 ## Acknowledgements
