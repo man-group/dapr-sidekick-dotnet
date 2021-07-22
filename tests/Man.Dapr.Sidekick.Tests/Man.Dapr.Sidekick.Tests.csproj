@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\src\Man.Dapr.Sidekick\Man.Dapr.Sidekick.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" />
+  </ItemGroup>
+
 </Project>

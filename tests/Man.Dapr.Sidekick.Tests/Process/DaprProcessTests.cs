@@ -1,5 +1,4 @@
-﻿#if NETFRAMEWORK
-using System.Linq;
+﻿using System.Linq;
 using Man.Dapr.Sidekick.Logging;
 using NSubstitute;
 using NUnit.Framework;
@@ -273,4 +272,3 @@ namespace Man.Dapr.Sidekick.Process
         }
     }
 }
-#endif

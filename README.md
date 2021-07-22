@@ -108,6 +108,14 @@ In order to target as many possible .NET platforms as possible with minimal exte
 
 Dapr Sidekick also includes a package reference to [Newtonsoft Json.NET](https://github.com/JamesNK/Newtonsoft.Json) for parsing JSON log messages from Dapr.
 
+## Non-Windows Platforms
+
+On platforms other than Windows (such as Linux and Mac OS) some features of Dapr Sidekick may not be available due to the required native API calls not being available. These include:
+
+| Feature                     | Platforms    | Notes                                                             |
+| --------------------------- | ------------ | ----------------------------------------------------------------- |
+| Attach to existing instance | Linux/Mac OS | Will not detect existing `daprd` instance for same AppId and Port |
+
 ## Acknowledgements
 
 Dapr Sidekick has been under active development at [Man Group](http://www.man.com/) since 2020.
