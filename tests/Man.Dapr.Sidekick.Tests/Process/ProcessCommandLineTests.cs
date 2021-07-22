@@ -15,9 +15,18 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(cmd, Is.Not.Null);
                 Assert.That(cmd.Process, Is.SameAs(process));
 
-                // Command line should always contain process EXE name
-                Assert.That(cmd.CommandLine, Is.Not.Null);
-                Assert.That(cmd.Arguments, Is.Not.Empty);
+                if (DaprConstants.IsWindows)
+                {
+                    // Command line should always contain process EXE name
+                    Assert.That(cmd.CommandLine, Is.Not.Null);
+                    Assert.That(cmd.Arguments, Is.Not.Empty);
+                }
+                else
+                {
+                    // On non-windows platforms everything is empty
+                    Assert.That(cmd.CommandLine, Is.Empty);
+                    Assert.That(cmd.Arguments, Is.Empty);
+                }
 
                 var arguments = cmd.GetArgumentsAsDictionary();
                 Assert.That(arguments, Is.Not.Null);

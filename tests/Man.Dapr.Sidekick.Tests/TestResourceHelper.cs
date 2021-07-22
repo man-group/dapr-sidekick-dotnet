@@ -1,4 +1,8 @@
 ﻿using System.IO;
+#if !NETFRAMEWORK
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+#endif
 
 namespace Man.Dapr.Sidekick
 {
@@ -25,12 +29,17 @@ namespace Man.Dapr.Sidekick
             using var streamReader = new StreamReader(stream);
             return streamReader.ReadToEnd();
         }
-#if NETFRAMEWORK
 
         public static string CompileTestSystemProcessExe()
         {
-            var filename = Path.ChangeExtension(Path.GetTempFileName(), ".exe");
             var source = GetResourceFileText("ProcessProgram.cs");
+            var filename = Path.GetTempFileName();
+            if (DaprConstants.IsWindows)
+            {
+                filename = Path.ChangeExtension(filename, "exe");
+            }
+
+#if NETFRAMEWORK
             var provider = System.CodeDom.Compiler.CodeDomProvider.CreateProvider("CSharp");
             var cp = new System.CodeDom.Compiler.CompilerParameters
             {
@@ -39,10 +48,22 @@ namespace Man.Dapr.Sidekick
                 GenerateInMemory = false
             };
             provider.CompileAssemblyFromSource(cp, source);
+#else
+            var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var compilation = CSharpCompilation
+                .Create(Path.GetFileName(filename))
+                .WithOptions(new CSharpCompilationOptions(OutputKind.ConsoleApplication))
+                .AddReferences(
+                    MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Private.CoreLib.dll")),
+                    MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Console.dll")),
+                    MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll")))
+                .AddSyntaxTrees(syntaxTree);
+            var result = compilation.Emit(filename);
+#endif
 
             return filename;
         }
-#endif
 
         public static void DeleteTestProcess(string filename, int waitMilliseconds = 2000)
         {

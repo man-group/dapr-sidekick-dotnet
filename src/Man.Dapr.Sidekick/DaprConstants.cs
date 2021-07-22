@@ -44,5 +44,7 @@ namespace Man.Dapr.Sidekick
         public const string DaprPlacementProcessName = "placement";
 
         public static bool IsWindows => Environment.OSVersion.Platform == PlatformID.Win32NT;
+
+        public static bool IsMacOs => Environment.OSVersion.Platform == PlatformID.MacOSX;
     }
 }

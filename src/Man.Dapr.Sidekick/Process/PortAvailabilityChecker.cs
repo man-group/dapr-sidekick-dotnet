@@ -14,6 +14,13 @@ namespace Man.Dapr.Sidekick.Process
                 throw new ArgumentException($"Starting Port cannot be greater than {ushort.MaxValue}", nameof(startingPort));
             }
 
+            if (DaprConstants.IsMacOs)
+            {
+                // IPGlobalProperties.GetIPGlobalProperties() is not implemented in Mac OS (throws System.NotImplementedException).
+                // Cannot do automatic port assignment.
+                return startingPort;
+            }
+
             var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
 
             var connectionsEndpoints = ipGlobalProperties.GetActiveTcpConnections().Select(c => c.LocalEndPoint);
