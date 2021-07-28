@@ -87,7 +87,44 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();
                 Assert.That(options.Value.ProcessName, Is.EqualTo("PROCESS_NAME"));
                 Assert.That(provider.GetRequiredService<IDaprProcessFactory>(), Is.Not.Null);
-                configuration.Received(1).GetSection("Dapr");
+                configuration.Received(2).GetSection("DaprSidekick"); // One call to check section existence, another to get values
+            }
+
+            [Test]
+            public void Should_read_config_from_primary_section()
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddCommandLine(new[]
+                    {
+                        "Dapr:Enabled=false",
+                        "DaprSidekick:Enabled=true"
+                    })
+                    .Build();
+                var services = new ServiceCollection();
+                services.AddDaprSidekick(configuration);
+                var provider = services.BuildServiceProvider();
+                var options = provider.GetRequiredService<IOptions<DaprOptions>>();
+
+                // Should read value from "DaprSidekick" section
+                Assert.That(options.Value.Enabled, Is.True);
+            }
+
+            [Test]
+            public void Should_read_config_from_fallback_section()
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddCommandLine(new[]
+                    {
+                        "Dapr:Enabled=true"
+                    })
+                    .Build();
+                var services = new ServiceCollection();
+                services.AddDaprSidekick(configuration);
+                var provider = services.BuildServiceProvider();
+                var options = provider.GetRequiredService<IOptions<DaprOptions>>();
+
+                // Should read value from "Dapr" section
+                Assert.That(options.Value.Enabled, Is.True);
             }
 
             [Test]
