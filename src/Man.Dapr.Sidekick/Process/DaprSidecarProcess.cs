@@ -113,7 +113,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(ModeArgument, source.Mode)
             .Add(PlacementHostAddressArgument, source.PlacementHostAddress)
             .Add(ProfilePortArgument, source.ProfilePort, predicate: () => source.Profiling == true)
-            .Add(SentryAddressArgument, source.SentryAddress)
+            .Add(SentryAddressArgument, source.SentryAddress, predicate: () => !source.SentryAddress.IsNullOrWhiteSpaceEx())
             .Add(ConfigFileArgument, source.ConfigFile, predicate: () => File.Exists(source.ConfigFile))
             .Add(ComponentsPathArgument, source.ComponentsDirectory, predicate: () => Directory.Exists(source.ComponentsDirectory))
             .Add(source.CustomArguments, requiresValue: false);

@@ -12,6 +12,7 @@
         /// <returns><c>true</c> if the value parameter is null or <see cref="string.Empty"/>, or if <paramref name="value"/> consists exclusively of white-space characters.</returns>
         public static bool IsNullOrWhiteSpaceEx(this string value)
         {
+#if NET35
             if (value == null)
             {
                 return true;
@@ -26,6 +27,9 @@
             }
 
             return true;
+#else
+            return string.IsNullOrWhiteSpace(value);
+#endif
         }
     }
 }

@@ -112,6 +112,21 @@ namespace Man.Dapr.Sidekick.Process
             }
 
             [Test]
+            public void Should_not_add_empty_sentry_address()
+            {
+                var p = new MockDaprSidecarProcess();
+                var builder = new CommandLineArgumentBuilder();
+                var options = new DaprSidecarOptions
+                {
+                    SentryAddress = string.Empty
+                };
+
+                p.AddCommandLineArguments(options, builder);
+
+                Assert.That(builder.ToString(), Does.Not.Contain("sentry-address"));
+            }
+
+            [Test]
             public void Should_add_all_arguments()
             {
                 var p = new MockDaprSidecarProcess();
