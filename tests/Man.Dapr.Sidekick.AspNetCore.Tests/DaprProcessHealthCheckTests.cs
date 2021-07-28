@@ -70,7 +70,7 @@ namespace Man.Dapr.Sidekick.AspNetCore
             }
 
             [Test]
-            public async Task Should_return_healthy()
+            public async Task Should_return_healthy_when_running()
             {
                 var cancellationToken = CancellationToken.None;
                 var host = Substitute.For<IDaprProcessHost>();
@@ -86,6 +86,25 @@ namespace Man.Dapr.Sidekick.AspNetCore
                 var result = await hc.CheckHealthAsync(context, cancellationToken);
                 Assert.That(result.Status, Is.EqualTo(HealthStatus.Healthy));
                 Assert.That(result.Description, Is.EqualTo("Dapr process 'P1' running, version 1234"));
+            }
+
+            [Test]
+            public async Task Should_return_healthy_when_attached()
+            {
+                var cancellationToken = CancellationToken.None;
+                var host = Substitute.For<IDaprProcessHost>();
+                var processInfo = new DaprProcessInfo("P1", 100, null, DaprProcessStatus.Stopped, true);
+                host.GetProcessInfo().Returns(processInfo);
+                host.GetHealthAsync(cancellationToken).Returns(Task.FromResult(new DaprHealthResult(System.Net.HttpStatusCode.OK)));
+                var hc = new MockDaprProcessHealthCheck(host);
+                var context = new HealthCheckContext
+                {
+                    Registration = new HealthCheckRegistration("REG1", hc, HealthStatus.Unhealthy, null)
+                };
+
+                var result = await hc.CheckHealthAsync(context, cancellationToken);
+                Assert.That(result.Status, Is.EqualTo(HealthStatus.Healthy));
+                Assert.That(result.Description, Is.EqualTo("Dapr process 'P1' attached, unverified version"));
             }
         }
 

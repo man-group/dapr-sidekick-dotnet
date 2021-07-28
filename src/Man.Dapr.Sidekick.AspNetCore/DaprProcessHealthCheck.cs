@@ -23,8 +23,8 @@ namespace Man.Dapr.Sidekick
                 var processInfo = _daprProcessHost.GetProcessInfo();
                 if (processInfo.Status != DaprProcessStatus.Disabled)
                 {
-                    // Check to see if the process is running
-                    if (!processInfo.IsRunning)
+                    // Check to see if the process is running or attached
+                    if (!processInfo.IsRunning && !processInfo.IsAttached)
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: processInfo.Description);
                     }
