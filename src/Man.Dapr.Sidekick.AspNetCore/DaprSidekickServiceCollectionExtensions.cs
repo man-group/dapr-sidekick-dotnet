@@ -65,7 +65,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var builder = AddCoreServices(services);
 
-            services.Configure<DaprOptions>(configuration.GetSection(name));
+                                            // Create a new configuration based on the initial configuration but with the additional
+            // support for setting/overriding top-level properties using environment variables.
+            var daprConfig = new ConfigurationBuilder()
+                .AddConfiguration(configuration.GetSection(name))
+                .AddEnvironmentVariables(DaprOptions.EnvironmentVariablePrefix)
+                .Build();
+            services.Configure<DaprOptions>(daprConfig);
 
             if (postConfigureAction != null)
             {

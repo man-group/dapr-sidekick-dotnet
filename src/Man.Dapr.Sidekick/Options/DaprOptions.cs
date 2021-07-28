@@ -3,6 +3,7 @@
     public class DaprOptions : Options.DaprProcessOptions
     {
         public const string SectionName = "Dapr";
+        public const string EnvironmentVariablePrefix = "DAPRSIDEKICK_";
 
         public DaprOptions()
         {

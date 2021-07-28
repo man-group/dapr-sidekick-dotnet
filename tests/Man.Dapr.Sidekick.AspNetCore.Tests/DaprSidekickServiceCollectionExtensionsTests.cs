@@ -89,6 +89,32 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 Assert.That(provider.GetRequiredService<IDaprProcessFactory>(), Is.Not.Null);
                 configuration.Received(1).GetSection("Dapr");
             }
+
+            [Test]
+            public void Should_extend_config_with_environmentvars()
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddCommandLine(new[]
+                    {
+                        DaprOptions.SectionName + ":BinDirectory=FROM_ARGS"
+                    })
+                    .Build();
+
+                // First check command
+                var services = new ServiceCollection();
+                services.AddDaprSidekick(configuration);
+                var provider = services.BuildServiceProvider();
+                var options = provider.GetRequiredService<IOptions<DaprOptions>>().Value;
+                Assert.That(options.BinDirectory, Is.EqualTo("FROM_ARGS"));
+
+                // Now add environment variables
+                Environment.SetEnvironmentVariable(DaprOptions.EnvironmentVariablePrefix + "BINDIRECTORY", "FROM_ENV");
+                services = new ServiceCollection();
+                services.AddDaprSidekick(configuration);
+                provider = services.BuildServiceProvider();
+                options = provider.GetRequiredService<IOptions<DaprOptions>>().Value;
+                Assert.That(options.BinDirectory, Is.EqualTo("FROM_ENV"));
+            }
         }
     }
 }
