@@ -96,8 +96,8 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 var configuration = new ConfigurationBuilder()
                     .AddCommandLine(new[]
                     {
-                        "Dapr:Enabled=false",
-                        "DaprSidekick:Enabled=true"
+                        "Dapr:ProcessName=VALUE_FROM_DAPR",
+                        "DaprSidekick:ProcessName=VALUE_FROM_DAPRSIDEKICK"
                     })
                     .Build();
                 var services = new ServiceCollection();
@@ -106,7 +106,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();
 
                 // Should read value from "DaprSidekick" section
-                Assert.That(options.Value.Enabled, Is.True);
+                Assert.That(options.Value.ProcessName, Is.EqualTo("VALUE_FROM_DAPRSIDEKICK"));
             }
 
             [Test]
@@ -115,7 +115,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 var configuration = new ConfigurationBuilder()
                     .AddCommandLine(new[]
                     {
-                        "Dapr:Enabled=true"
+                        "Dapr:ProcessName=VALUE_FROM_DAPR",
                     })
                     .Build();
                 var services = new ServiceCollection();
@@ -124,7 +124,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();
 
                 // Should read value from "Dapr" section
-                Assert.That(options.Value.Enabled, Is.True);
+                Assert.That(options.Value.ProcessName, Is.EqualTo("VALUE_FROM_DAPR"));
             }
 
             [Test]
