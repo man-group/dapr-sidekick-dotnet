@@ -45,8 +45,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="configuration">A <see cref="IConfiguration"/> instance for configuring the component.</param>
         /// <param name="postConfigureAction">An optional action to configure the component after initial configuration is applied.</param>
         /// <returns>A <see cref="IDaprSidekickBuilder"/> for further configuration.</returns>
-        public static IDaprSidekickBuilder AddDaprSidekick(this IServiceCollection services, IConfiguration configuration, Action<DaprOptions> postConfigureAction = null) =>
-            AddDaprSidekick(services, DaprOptions.SectionName, configuration, postConfigureAction);
+        public static IDaprSidekickBuilder AddDaprSidekick(this IServiceCollection services, IConfiguration configuration, Action<DaprOptions> postConfigureAction = null)
+        {
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            // Try to get primary section "DaprSidekick" first (v1.1+ default)
+            // Otherwise fall back to section "Dapr" (v1.0 default)
+            var sectionName = configuration.GetSection(DaprOptions.SectionName).Exists() ? DaprOptions.SectionName : "Dapr";
+            return AddDaprSidekick(services, sectionName, configuration, postConfigureAction);
+        }
 
         /// <summary>
         /// Adds the Dapr Sidecar process to the service container using the configuration section specified by <paramref name="name"/>.
