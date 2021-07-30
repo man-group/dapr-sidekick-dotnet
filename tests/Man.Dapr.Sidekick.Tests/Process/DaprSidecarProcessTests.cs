@@ -42,6 +42,31 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(newOptions.AppId, Is.EqualTo("TEST"));
                 Assert.That(newOptions.Namespace, Is.EqualTo("TESTNS"));
             }
+
+            [Test]
+            public void Should_use_default_placementhost_address()
+            {
+                var p = new MockDaprSidecarProcess();
+                var options = new DaprOptions();
+                var newOptions = p.GetProcessOptions(options);
+                Assert.That(newOptions.PlacementHostAddress, Is.EqualTo("127.0.0.1:6050"));
+            }
+
+            [Test]
+            public void Should_not_use_default_placementhost_address()
+            {
+                var p = new MockDaprSidecarProcess();
+                var options = new DaprOptions
+                {
+                    Sidecar = new DaprSidecarOptions
+                    {
+                        UseDefaultPlacementHostAddress = false
+                    }
+                };
+
+                var newOptions = p.GetProcessOptions(options);
+                Assert.That(newOptions.PlacementHostAddress, Is.Null);
+            }
         }
 
         public class AssignPorts
