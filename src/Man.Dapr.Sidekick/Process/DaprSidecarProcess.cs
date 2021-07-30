@@ -51,7 +51,7 @@ namespace Man.Dapr.Sidekick.Process
             }
 
             // Set local placement information
-            if (string.IsNullOrEmpty(options.PlacementHostAddress))
+            if (string.IsNullOrEmpty(options.PlacementHostAddress) && options.UseDefaultPlacementHostAddress != false)
             {
                 // If we have a local enabled placement running in this solution, then use that port
                 // else use the defaults from the Dapr CLI - 6050 (Windows) or 50005 (Non-Windows)

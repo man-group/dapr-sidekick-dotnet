@@ -161,6 +161,11 @@ namespace Man.Dapr.Sidekick
         public bool? UseDefaultDaprApiToken { get; set; }
 
         /// <summary>
+        /// Gets or sets a value that determines if the default Placement Host address is used when <see cref="PlacementHostAddress"/> is not specified. Defaults to <c>true</c>.
+        /// </summary>
+        public bool? UseDefaultPlacementHostAddress { get; set; }
+
+        /// <summary>
         /// Gets the address of the metdata endpoint, such as http://127.0.0.1:3500/v1.0/metadata.
         /// </summary>
         /// <returns>The metadata endpoint address.</returns>
