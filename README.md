@@ -37,7 +37,7 @@ Once Dapr is installed, Dapr Sidekick can be used to manage the [Dapr Sidecar](h
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.0.0" />
+  <PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.1.0" />
 </ItemGroup>
 ```  
 
