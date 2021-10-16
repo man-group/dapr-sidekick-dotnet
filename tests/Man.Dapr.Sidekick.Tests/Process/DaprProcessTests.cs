@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Man.Dapr.Sidekick.Logging;
 using NSubstitute;
 using NUnit.Framework;
@@ -91,7 +92,12 @@ namespace Man.Dapr.Sidekick.Process
                 };
                 var options = new DaprOptions()
                 {
-                    ProcessFile = filename
+                    ProcessFile = filename,
+                    EnvironmentVariables = new Dictionary<string, string>
+                    {
+                        { "ENVVAR_2", "VALUE_2_OVERRIDE" },
+                        { "ENVVAR_3", "VALUE_3" }
+                    }
                 };
 
                 try
@@ -148,6 +154,12 @@ namespace Man.Dapr.Sidekick.Process
                         TestResourceHelper.DeleteTestProcess(filename);
                     }
                 }
+
+                // Check environment variables
+                Assert.That(p.EnvironmentVariables.Count, Is.EqualTo(3));
+                Assert.That(p.EnvironmentVariables["ENVVAR_1"], Is.EqualTo("VALUE_1"));
+                Assert.That(p.EnvironmentVariables["ENVVAR_2"], Is.EqualTo("VALUE_2_OVERRIDE")); // Overridden
+                Assert.That(p.EnvironmentVariables["ENVVAR_3"], Is.EqualTo("VALUE_3"));
             }
 
             [Test]

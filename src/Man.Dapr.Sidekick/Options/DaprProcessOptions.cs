@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Man.Dapr.Sidekick.Security;
 
 namespace Man.Dapr.Sidekick.Options
@@ -98,6 +100,12 @@ namespace Man.Dapr.Sidekick.Options
         public SensitiveString TrustAnchorsCertificate { get; set; }
 
         /// <summary>
+        /// Gets or sets a set of Environment Variables to be set when the process is started.
+        /// These will override any other environment variables calculated from other configuration settings.
+        /// </summary>
+        public Dictionary<string, string> EnvironmentVariables { get; set; }
+
+        /// <summary>
         /// Creates a deep clone of this instance.
         /// </summary>
         /// <returns>A deep clone of this insteance.</returns>
@@ -135,6 +143,21 @@ namespace Man.Dapr.Sidekick.Options
             TrustAnchorsCertificate ??= source.TrustAnchorsCertificate;
 
             (Metrics ??= new DaprMetricsOptions()).EnrichFrom(source.Metrics);
+
+            // Copy the environment variables - do it the old-fashioned way so we overwrite existing values
+            // without getting key duplication errors.
+            if (source.EnvironmentVariables?.Any() == true)
+            {
+                if (EnvironmentVariables == null)
+                {
+                    EnvironmentVariables = new Dictionary<string, string>();
+                }
+
+                foreach (var entry in source.EnvironmentVariables)
+                {
+                    EnvironmentVariables[entry.Key] = entry.Value;
+                }
+            }
         }
 
         /// <summary>

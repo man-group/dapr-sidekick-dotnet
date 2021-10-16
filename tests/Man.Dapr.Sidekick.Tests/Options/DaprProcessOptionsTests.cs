@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace Man.Dapr.Sidekick.Options
 {
@@ -51,6 +52,38 @@ namespace Man.Dapr.Sidekick.Options
                 var target = new MockDaprProcessOptions();
                 target.EnrichFrom(source);
                 Compare(source, target); // Target should entirely match new values in source
+            }
+
+            [Test]
+            public void Should_enrich_environmentvariables()
+            {
+                var source = new MockDaprProcessOptions();
+                var target = new MockDaprProcessOptions();
+
+                // Both null dictionaries - ensure no exception
+                Assert.DoesNotThrow(() => target.EnrichFrom(source));
+                Assert.That(target.EnvironmentVariables, Is.Null);
+
+                // Target null, source valid - ensure enrichment
+                source.EnvironmentVariables = new Dictionary<string, string>
+                {
+                    { "1", "VALUE_1" },
+                    { "2", "VALUE_2" }
+                };
+                target.EnrichFrom(source);
+                Assert.That(target.EnvironmentVariables, Is.Not.Null);
+                Assert.That(target.EnvironmentVariables, Is.Not.SameAs(source.EnvironmentVariables));
+                Assert.That(target.EnvironmentVariables.Count, Is.EqualTo(2));
+                Assert.That(target.EnvironmentVariables["1"], Is.EqualTo("VALUE_1"));
+                Assert.That(target.EnvironmentVariables["2"], Is.EqualTo("VALUE_2"));
+
+                // Make sure duplicate value doesn't throw error and overrides
+                source.EnvironmentVariables["2"] = "VALUE_2_CHANGED";
+                source.EnvironmentVariables["3"] = "VALUE_3";
+                target.EnrichFrom(source);
+                Assert.That(target.EnvironmentVariables.Count, Is.EqualTo(3));
+                Assert.That(target.EnvironmentVariables["2"], Is.EqualTo("VALUE_2_CHANGED"));
+                Assert.That(target.EnvironmentVariables["3"], Is.EqualTo("VALUE_3"));
             }
         }
 
