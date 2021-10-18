@@ -21,7 +21,7 @@ namespace Man.Dapr.Sidekick.Process
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions, Is.Not.Null);
                 Assert.That(newOptions.AppId, Is.Not.Null);
-                Assert.That(newOptions.Namespace, Is.EqualTo("default"));
+                Assert.That(newOptions.Namespace, Is.Null);
             }
 
             [Test]
@@ -66,6 +66,22 @@ namespace Man.Dapr.Sidekick.Process
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions.PlacementHostAddress, Is.Null);
+            }
+
+            [Test]
+            public void Should_use_default_namespace()
+            {
+                var p = new MockDaprSidecarProcess();
+                var options = new DaprOptions
+                {
+                    Sidecar = new DaprSidecarOptions
+                    {
+                        Mtls = true
+                    }
+                };
+
+                var newOptions = p.GetProcessOptions(options);
+                Assert.That(newOptions.Namespace, Is.EqualTo("default"));
             }
         }
 
@@ -235,8 +251,7 @@ namespace Man.Dapr.Sidekick.Process
                     Profiling = true,
                     ProfilePort = 3456,
                     TrustAnchorsCertificate = "TrustAnchorsCertificate",
-                    Namespace = "Namespace",
-                    Mtls = true
+                    Namespace = "Namespace"
                 };
 
                 p.AddEnvironmentVariables(options, builder);
@@ -260,8 +275,7 @@ namespace Man.Dapr.Sidekick.Process
                 var builder = new EnvironmentVariableBuilder();
                 var options = new DaprSidecarOptions
                 {
-                    ProfilePort = 3456,
-                    Namespace = "Namespace",
+                    ProfilePort = 3456
                 };
 
                 p.AddEnvironmentVariables(options, builder);

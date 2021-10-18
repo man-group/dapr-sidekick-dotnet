@@ -61,7 +61,11 @@ namespace Man.Dapr.Sidekick.Process
             }
 
             // Make sure we have a namespace
-            options.Namespace ??= DaprConstants.DefaultNamespace;
+            if (string.IsNullOrEmpty(options.Namespace) && options.Mtls == true)
+            {
+                // Using mTLS but no Namespace defined. Use the default.
+                options.Namespace = DaprConstants.DefaultNamespace;
+            }
 
             return options;
         }
@@ -127,7 +131,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(DaprConstants.DaprHttpPortEnvironmentVariable, source.DaprHttpPort)
             .Add(DaprConstants.DaprProfilePortEnvironmentVariable, source.ProfilePort, () => source.Profiling == true)
             .Add(DaprConstants.DaprTrustAnchorsEnvironmentVariable, source.TrustAnchorsCertificate)
-            .Add(DaprConstants.NamespaceEnvironmentVariable, source.Namespace, () => source.Mtls == true);
+            .Add(DaprConstants.NamespaceEnvironmentVariable, source.Namespace);
 
         protected override void ParseCommandLineArgument(DaprSidecarOptions target, string name, string value)
         {

@@ -189,6 +189,8 @@ namespace Man.Dapr.Sidekick.Process
 
         protected virtual void OnStopping(DaprCancellationToken cancellationToken) => Stopping?.Invoke(this, new DaprProcessStoppingEventArgs(cancellationToken));
 
+        protected virtual void SetEnvironmentVariable(string key, string value) => Environment.SetEnvironmentVariable(key, value);
+
 #if NET35
         private void BeginInitialize(DaprCancellationToken cancellationToken)
         {
@@ -310,10 +312,21 @@ namespace Man.Dapr.Sidekick.Process
             // Apply environment variables
             var builder = new EnvironmentVariableBuilder();
             AddEnvironmentVariables(options, builder);
+
+            // Add environment variable overrides
+            if (options.EnvironmentVariables?.Any() == true)
+            {
+                foreach (var entry in options.EnvironmentVariables)
+                {
+                    builder.Add(entry.Key, entry.Value);
+                }
+            }
+
+            // Apply the environment variables
             foreach (var entry in builder.ToDictionary())
             {
                 // Set the variable
-                Environment.SetEnvironmentVariable(entry.Key, Convert.ToString(entry.Value.SensitiveValue()));
+                SetEnvironmentVariable(entry.Key, Convert.ToString(entry.Value.SensitiveValue()));
                 Logger.LogInformation("Environment variable {DaprEnvironmentVariableName} set to {DaprEnvironmentVariableValue}", entry.Key, entry.Value);
             }
         }

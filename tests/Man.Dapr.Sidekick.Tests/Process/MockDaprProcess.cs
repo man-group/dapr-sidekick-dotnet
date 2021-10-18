@@ -12,6 +12,7 @@ namespace Man.Dapr.Sidekick.Process
         {
             Options = new MockDaprProcessOptions();
             Arguments = new Dictionary<string, string>();
+            EnvironmentVariables = new Dictionary<string, string>();
         }
 
         public MockDaprProcess(ProcessComparison comparison)
@@ -26,12 +27,16 @@ namespace Man.Dapr.Sidekick.Process
 
         public IDictionary<string, string> Arguments { get; }
 
+        public IDictionary<string, string> EnvironmentVariables { get; }
+
         protected override void AddCommandLineArguments(MockDaprProcessOptions source, CommandLineArgumentBuilder builder)
         {
         }
 
         protected override void AddEnvironmentVariables(MockDaprProcessOptions source, EnvironmentVariableBuilder builder)
         {
+            builder.Add("ENVVAR_1", "VALUE_1");
+            builder.Add("ENVVAR_2", "VALUE_2");
         }
 
         protected override void AssignLocations(MockDaprProcessOptions options, string daprFolder)
@@ -55,6 +60,12 @@ namespace Man.Dapr.Sidekick.Process
             // Make sure argument is in dictionary
             Assert.That(Arguments, Does.ContainKey(name));
             Assert.That(Arguments[name], Is.EqualTo(value));
+        }
+
+        protected override void SetEnvironmentVariable(string key, string value)
+        {
+            EnvironmentVariables.Add(key, value);
+            base.SetEnvironmentVariable(key, value);
         }
     }
 }

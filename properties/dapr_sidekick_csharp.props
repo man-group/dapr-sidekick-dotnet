@@ -7,7 +7,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
-    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+	<!-- OpenAPI Analyzers disabled due to issue : https://github.com/dotnet/aspnetcore/issues/14723 -->
+    <IncludeOpenAPIAnalyzers>false</IncludeOpenAPIAnalyzers>
     <MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion>1.0.2</MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion>
   </PropertyGroup>
 
