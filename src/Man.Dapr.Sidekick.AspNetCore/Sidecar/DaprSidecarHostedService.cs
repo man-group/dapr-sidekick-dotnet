@@ -4,6 +4,8 @@ using System.Threading;
 using Man.Dapr.Sidekick.AspNetCore.Metrics;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
@@ -23,6 +25,14 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
 
         protected override void OnStarting(DaprOptions options, CancellationToken cancellationToken)
         {
+            WaitForApplicationStart(cancellationToken);
+
+            // If cancelled then exit
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             // Assign metrics
             options.Sidecar ??= new DaprSidecarOptions();
             options.Sidecar.Metrics ??= new DaprMetricsOptions();
@@ -79,6 +89,54 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                     }
                 }
             }
+        }
+
+        protected void WaitForApplicationStart(CancellationToken cancellationToken, ILogger logger = null)
+        {
+#if NETCOREAPP3_0_OR_GREATER
+            var applicationLifetime = _serviceProvider?.GetService<IHostApplicationLifetime>();
+#else
+            var applicationLifetime = _serviceProvider?.GetService<IApplicationLifetime>();
+#endif
+            if (applicationLifetime == null)
+            {
+                // Not yet started, log out a waiting message
+                logger?.LogInformation("Host application lifetime tracking not available, starting Dapr process");
+
+                // Either no lifetime tracker, or no service provider so cannot wait for startup
+                return;
+            }
+
+            // Trigger the wait handle when the application has started to release Dapr startup process.
+            var waitForApplicationStart = new ManualResetEventSlim();
+            applicationLifetime.ApplicationStarted.Register(() => waitForApplicationStart.Set());
+            if (applicationLifetime.ApplicationStarted.IsCancellationRequested)
+            {
+                logger?.LogInformation("Host application ready, starting Dapr process");
+
+                // Started token has already triggered. No need to wait.
+                return;
+            }
+
+            // Assign a default logger if none passed in
+            logger ??= _serviceProvider.GetService<ILogger<DaprSidecarHostedService>>();
+
+            // Ensure the host has started
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                // Not yet started, log out a waiting message
+                logger?.LogInformation("Host application is initializing, waiting to start Dapr process...");
+
+                // Wait for the host to start so all configurations, environment variables
+                // and ports are fully initialized.
+                if (waitForApplicationStart.Wait(TimeSpan.FromSeconds(1), cancellationToken))
+                {
+                    break;
+                }
+            }
+
+            // Not yet started, log out a waiting message
+            logger?.LogInformation("Host application ready, starting Dapr process");
         }
     }
 }
