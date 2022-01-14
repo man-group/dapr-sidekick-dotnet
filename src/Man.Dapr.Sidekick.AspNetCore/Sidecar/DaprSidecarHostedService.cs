@@ -91,8 +91,9 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
             }
         }
 
-        protected void WaitForApplicationStart(CancellationToken cancellationToken, ILogger logger = null)
+        protected void WaitForApplicationStart(CancellationToken cancellationToken)
         {
+            var logger = _serviceProvider?.GetService<ILogger<DaprSidecarHostedService>>();
 #if NETCOREAPP3_0_OR_GREATER
             var applicationLifetime = _serviceProvider?.GetService<IHostApplicationLifetime>();
 #else
