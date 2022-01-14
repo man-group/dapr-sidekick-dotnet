@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Man.Dapr.Sidekick.Threading;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NUnit.Framework;
@@ -238,6 +239,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
 
                 // Start a timer to cancel the process
                 var timer = new System.Timers.Timer(20);
+                timer.AutoReset = false;
                 timer.Elapsed += (sender, args) =>
                 {
                     cts.Cancel();
@@ -250,6 +252,52 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 Assert.That(options.Sidecar, Is.Not.Null);
                 Assert.That(options.Sidecar.AppPort, Is.Null);
             }
+        }
+
+        [Test]
+        public async Task Should_wait_for_hosting()
+        {
+            var options = new DaprOptions
+            {
+                Sidecar = new DaprSidecarOptions
+                {
+                    AppId = "TEST_APP"
+                }
+            };
+
+            var optionsAccessor = Substitute.For<IOptionsMonitor<DaprOptions>>();
+            optionsAccessor.CurrentValue.Returns(options);
+            var host = Substitute.For<IDaprSidecarHost>();
+            var ctsApplication = new CancellationTokenSource();
+            var applicationLifetime = Substitute.For<IHostApplicationLifetime>();
+            applicationLifetime.ApplicationStarted.Returns(ctsApplication.Token);
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(IHostApplicationLifetime)).Returns(applicationLifetime);
+            var hostedService = new DaprSidecarHostedService(host, optionsAccessor, serviceProvider);
+            var cts = new CancellationTokenSource();
+
+            host.When(x => x.Start(Arg.Any<Func<DaprOptions>>(), Arg.Any<DaprCancellationToken>())).Do(ci =>
+            {
+                // Execute the accessor
+                var accessor = (Func<DaprOptions>)ci[0];
+                var newOptions = accessor();
+            });
+
+            // Start a timer to trigger the process
+            var timer = new System.Timers.Timer(20);
+            timer.AutoReset = false;
+            timer.Elapsed += (sender, args) =>
+            {
+                // Signal completed hosting startup
+                ctsApplication.Cancel();
+            };
+
+            timer.Start();
+            await hostedService.StartAsync(cts.Token);
+
+            // Sidecar should not be null (so accessor was invoked) and AppPort not set
+            Assert.That(options.Sidecar, Is.Not.Null);
+            Assert.That(options.Sidecar.AppPort, Is.Null);
         }
     }
 }
