@@ -119,9 +119,6 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                 return;
             }
 
-            // Assign a default logger if none passed in
-            logger ??= _serviceProvider.GetService<ILogger<DaprSidecarHostedService>>();
-
             // Ensure the host has started
             while (!cancellationToken.IsCancellationRequested)
             {
