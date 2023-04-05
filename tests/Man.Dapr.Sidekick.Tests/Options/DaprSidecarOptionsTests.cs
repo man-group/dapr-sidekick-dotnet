@@ -129,6 +129,7 @@ namespace Man.Dapr.Sidekick.Options
             Assert.That(target.AppPort, Is.EqualTo(source.AppPort));
             Assert.That(target.AppProtocol, Is.EqualTo(source.AppProtocol));
             Assert.That(target.AppSsl, Is.EqualTo(source.AppSsl));
+            Assert.That(target.ResourcesDirectory, Is.EqualTo(source.ResourcesDirectory));
             Assert.That(target.ComponentsDirectory, Is.EqualTo(source.ComponentsDirectory));
             Assert.That(target.ConfigFile, Is.EqualTo(source.ConfigFile));
             Assert.That(target.ControlPlaneAddress, Is.EqualTo(source.ControlPlaneAddress));
@@ -160,6 +161,7 @@ namespace Man.Dapr.Sidekick.Options
             AppPort = 200,
             AppProtocol = "AppProtocol",
             AppSsl = true,
+            ResourcesDirectory = "ResourcesDirectory",
             ComponentsDirectory = "ComponentsDirectory",
             ConfigFile = "ConfigFile",
             ControlPlaneAddress = "ControlPlaneAddress",

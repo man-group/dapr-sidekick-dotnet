@@ -51,8 +51,16 @@ namespace Man.Dapr.Sidekick
         /// <summary>
         /// Gets or sets the path to the Dapr Components directory containing component configurations.
         /// If not specified this will default to a directory called "components" under the current dapr folder.
+        /// <br/>
+        /// <b>Deprecated</b> in favor of ResourcesDirectory.
         /// </summary>
         public string ComponentsDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to the Dapr Resources directory containing component configurations.
+        /// If not specified this will default to a directory called "components" under the current dapr folder.
+        /// </summary>
+        public string ResourcesDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the path to the Dapr configuration file. If a filename is not specified the default value "config.yaml" will be used.
