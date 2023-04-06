@@ -116,6 +116,7 @@ namespace Man.Dapr.Sidekick.Process
 
                 p.AssignLocations(options, folder);
 
+                Assert.That(options.ResourcesDirectory, Is.EqualTo(Path.Combine(folder, "components")));
                 Assert.That(options.ComponentsDirectory, Is.EqualTo(Path.Combine(folder, "components")));
                 Assert.That(options.ConfigFile, Is.EqualTo(Path.Combine(folder, "config.yaml")));
             }
@@ -127,12 +128,14 @@ namespace Man.Dapr.Sidekick.Process
                 var folder = Path.GetTempPath();
                 var options = new DaprSidecarOptions
                 {
+                    ResourcesDirectory = folder + "comps",
                     ComponentsDirectory = folder + "comps",
                     ConfigFile = folder + "config.txt"
                 };
 
                 p.AssignLocations(options, folder);
 
+                Assert.That(options.ResourcesDirectory, Is.EqualTo(Path.Combine(folder, "comps")));
                 Assert.That(options.ComponentsDirectory, Is.EqualTo(Path.Combine(folder, "comps")));
                 Assert.That(options.ConfigFile, Is.EqualTo(Path.Combine(folder, "config.txt")));
             }
@@ -182,6 +185,7 @@ namespace Man.Dapr.Sidekick.Process
                     AppPort = 1234,
                     AppProtocol = "AppProtocol",
                     AppSsl = true,
+                    ResourcesDirectory = componentsPath, // Must exist
                     ComponentsDirectory = componentsPath, // Must exist
                     ConfigFile = configFile, // Must exist
                     ControlPlaneAddress = "ControlPlaneAddress",
@@ -226,6 +230,7 @@ namespace Man.Dapr.Sidekick.Process
                     "--profile-port 6789 " +
                     "--sentry-address SentryAddress " +
                     "--config " + configFile + " " +
+                    "--resources-path " + componentsPath + " " +
                     "--components-path " + componentsPath + " " +
                     "--arg1 val1"));
 
@@ -299,6 +304,7 @@ namespace Man.Dapr.Sidekick.Process
                 p.ParseCommandLineArgument(options, "app-port", "1234");
                 p.ParseCommandLineArgument(options, "app-protocol", "AppProtocol");
                 p.ParseCommandLineArgument(options, "app-ssl", null);
+                p.ParseCommandLineArgument(options, "resources-path", "ResourcesPath");
                 p.ParseCommandLineArgument(options, "components-path", "ComponentsPath");
                 p.ParseCommandLineArgument(options, "config", "ConfigFile");
                 p.ParseCommandLineArgument(options, "control-plane-address", "ControlPlaneAddress");
@@ -321,6 +327,7 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(options.AppPort, Is.EqualTo(1234));
                 Assert.That(options.AppProtocol, Is.EqualTo("AppProtocol"));
                 Assert.That(options.AppSsl, Is.True);
+                Assert.That(options.ResourcesDirectory, Is.EqualTo("ResourcesPath"));
                 Assert.That(options.ComponentsDirectory, Is.EqualTo("ComponentsPath"));
                 Assert.That(options.ConfigFile, Is.EqualTo("ConfigFile"));
                 Assert.That(options.ControlPlaneAddress, Is.EqualTo("ControlPlaneAddress"));

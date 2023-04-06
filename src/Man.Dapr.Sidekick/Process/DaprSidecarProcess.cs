@@ -13,6 +13,7 @@ namespace Man.Dapr.Sidekick.Process
         private const string AppProtocolArgument = "app-protocol";
         private const string AppSslArgument = "app-ssl";
         private const string ComponentsPathArgument = "components-path";
+        private const string ResourcesPathArgument = "resources-path";
         private const string ConfigFileArgument = "config";
         private const string ControlPlaneAddressArgument = "control-plane-address";
         private const string DaprGrpcPortArgument = "dapr-grpc-port";
@@ -80,6 +81,11 @@ namespace Man.Dapr.Sidekick.Process
 
         protected override void AssignLocations(DaprSidecarOptions options, string daprFolder)
         {
+            // Resources directory - defaults to <daprFolder>\components
+            var resourcesDirectory = string.IsNullOrEmpty(options.ResourcesDirectory) ?
+                Path.Combine(daprFolder, DaprConstants.DaprComponentsDirectory) :
+                Path.GetFullPath(options.ResourcesDirectory);
+
             // Components directory - defaults to <daprFolder>\components
             var componentsDirectory = string.IsNullOrEmpty(options.ComponentsDirectory) ?
                 Path.Combine(daprFolder, DaprConstants.DaprComponentsDirectory) :
@@ -92,6 +98,7 @@ namespace Man.Dapr.Sidekick.Process
                 Path.GetFullPath(options.ConfigFile);
 
             // Update the values
+            options.ResourcesDirectory = resourcesDirectory;
             options.ComponentsDirectory = componentsDirectory;
             options.ConfigFile = configFile;
         }
@@ -119,6 +126,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(ProfilePortArgument, source.ProfilePort, predicate: () => source.Profiling == true)
             .Add(SentryAddressArgument, source.SentryAddress, predicate: () => !source.SentryAddress.IsNullOrWhiteSpaceEx())
             .Add(ConfigFileArgument, source.ConfigFile, predicate: () => File.Exists(source.ConfigFile))
+            .Add(ResourcesPathArgument, source.ResourcesDirectory, predicate: () => Directory.Exists(source.ResourcesDirectory))
             .Add(ComponentsPathArgument, source.ComponentsDirectory, predicate: () => Directory.Exists(source.ComponentsDirectory))
             .Add(source.CustomArguments, requiresValue: false);
 
@@ -159,6 +167,10 @@ namespace Man.Dapr.Sidekick.Process
 
                 case AppProtocolArgument:
                     target.AppProtocol = value;
+                    break;
+
+                case ResourcesPathArgument:
+                    target.ResourcesDirectory = value;
                     break;
 
                 case ComponentsPathArgument:
