@@ -20,6 +20,7 @@ namespace Man.Dapr.Sidekick.Process
         private const string DaprHttpMaxRequestSizeArgument = "dapr-http-max-request-size";
         private const string DaprHttpPortArgument = "dapr-http-port";
         private const string DaprInternalGrpcPortArgument = "dapr-internal-grpc-port";
+        private const string EnableMetricsArgument = "enable-metrics";
         private const string EnableMtlsArgument = "enable-mtls";
         private const string EnableProfilingArgument = "enable-profiling";
         private const string KubeConfigArgument = "kubeconfig";
@@ -115,6 +116,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(DaprHttpMaxRequestSizeArgument, source.DaprHttpMaxRequestSize)
             .Add(DaprHttpPortArgument, source.DaprHttpPort)
             .Add(DaprInternalGrpcPortArgument, source.DaprInternalGrpcPort)
+            .Add(EnableMetricsArgument, source.EnableMetrics)
             .Add(EnableMtlsArgument, source.Mtls)
             .Add(EnableProfilingArgument, source.Profiling)
             .Add(KubeConfigArgument, source.KubeConfig)
@@ -137,6 +139,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(DaprConstants.DaprCertKeyEnvironmentVariable, source.IssuerKey)
             .Add(DaprConstants.DaprGrpcPortEnvironmentVariable, source.DaprGrpcPort)
             .Add(DaprConstants.DaprHttpPortEnvironmentVariable, source.DaprHttpPort)
+            .Add(DaprConstants.DaprMetricsPortEnvironmentVariable, source.MetricsPort, () => source.EnableMetrics != false)
             .Add(DaprConstants.DaprProfilePortEnvironmentVariable, source.ProfilePort, () => source.Profiling == true)
             .Add(DaprConstants.DaprTrustAnchorsEnvironmentVariable, source.TrustAnchorsCertificate)
             .Add(DaprConstants.NamespaceEnvironmentVariable, source.Namespace);
@@ -199,6 +202,10 @@ namespace Man.Dapr.Sidekick.Process
 
                 case DaprInternalGrpcPortArgument:
                     target.DaprInternalGrpcPort = int.TryParse(value, out var daprInternalGrpcPort) ? (int?)daprInternalGrpcPort : null;
+                    break;
+
+                case EnableMetricsArgument:
+                    target.EnableMetrics = !bool.TryParse(value, out var enableMetrics) || enableMetrics;
                     break;
 
                 case EnableMtlsArgument:

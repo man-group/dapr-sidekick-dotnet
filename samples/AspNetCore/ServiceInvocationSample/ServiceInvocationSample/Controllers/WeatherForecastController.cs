@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Dapr.Client;
 using Man.Dapr.Sidekick;
 using Man.Dapr.Sidekick.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -72,5 +74,9 @@ namespace ServiceInvocationSample.Controllers
             // Deserialize and return the result
             return JsonConvert.DeserializeObject<IEnumerable<WeatherForecast>>(result);
         }
+
+        [HttpGet("daprHealth")]
+        public async Task<bool> CheckDaprHealth([FromServices] DaprClient daprClient, CancellationToken cancellationToken) =>
+            await daprClient.CheckHealthAsync(cancellationToken);
     }
 }

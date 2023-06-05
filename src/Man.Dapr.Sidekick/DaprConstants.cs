@@ -27,6 +27,7 @@ namespace Man.Dapr.Sidekick
         public const string DaprCertKeyEnvironmentVariable = "DAPR_CERT_KEY";
         public const string DaprGrpcPortEnvironmentVariable = "DAPR_GRPC_PORT";
         public const string DaprHttpPortEnvironmentVariable = "DAPR_HTTP_PORT";
+        public const string DaprMetricsPortEnvironmentVariable = "DAPR_METRICS_PORT";
         public const string DaprPlacementHealthPortEnvironmentVariable = "DAPR_PLACEMENT_HEALTH_PORT";
         public const string DaprPlacementMetricsPortEnvironmentVariable = "DAPR_PLACEMENT_METRICS_PORT";
         public const string DaprPlacementPortEnvironmentVariable = "DAPR_PLACEMENT_PORT";

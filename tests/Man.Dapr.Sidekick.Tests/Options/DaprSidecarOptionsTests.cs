@@ -139,6 +139,7 @@ namespace Man.Dapr.Sidekick.Options
             Assert.That(target.DaprHttpMaxRequestSize, Is.EqualTo(source.DaprHttpMaxRequestSize));
             Assert.That(target.DaprHttpPort, Is.EqualTo(source.DaprHttpPort));
             Assert.That(target.DaprInternalGrpcPort, Is.EqualTo(source.DaprInternalGrpcPort));
+            Assert.That(target.EnableMetrics, Is.EqualTo(source.EnableMetrics));
             Assert.That(target.KubeConfig, Is.EqualTo(source.KubeConfig));
             Assert.That(target.MetricsPort, Is.EqualTo(source.MetricsPort));
             Assert.That(target.Mode, Is.EqualTo(source.Mode));
@@ -171,6 +172,7 @@ namespace Man.Dapr.Sidekick.Options
             DaprHttpMaxRequestSize = 400,
             DaprHttpPort = 500,
             DaprInternalGrpcPort = 600,
+            EnableMetrics = true,
             KubeConfig = "KubeConfig",
             MetricsPort = 700,
             Mode = "Mode",

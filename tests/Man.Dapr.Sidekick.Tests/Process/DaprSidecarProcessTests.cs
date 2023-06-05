@@ -193,6 +193,7 @@ namespace Man.Dapr.Sidekick.Process
                     DaprHttpMaxRequestSize = 200,
                     DaprHttpPort = 3456,
                     DaprInternalGrpcPort = 4567,
+                    EnableMetrics = false,
                     Mtls = true,
                     Profiling = true,
                     KubeConfig = "KubeConfig",
@@ -219,6 +220,7 @@ namespace Man.Dapr.Sidekick.Process
                     "--dapr-http-max-request-size 200 " +
                     "--dapr-http-port 3456 " +
                     "--dapr-internal-grpc-port 4567 " +
+                    "--enable-metrics " +
                     "--enable-mtls " +
                     "--enable-profiling " +
                     "--kubeconfig KubeConfig " +
@@ -253,6 +255,7 @@ namespace Man.Dapr.Sidekick.Process
                     IssuerKey = "IssuerKey",
                     DaprGrpcPort = 1234,
                     DaprHttpPort = 2345,
+                    MetricsPort = 4567,
                     Profiling = true,
                     ProfilePort = 3456,
                     TrustAnchorsCertificate = "TrustAnchorsCertificate",
@@ -269,6 +272,7 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(((SensitiveString)values["DAPR_TRUST_ANCHORS"]).Value, Is.EqualTo("TrustAnchorsCertificate"));
                 Assert.That(values["DAPR_GRPC_PORT"], Is.EqualTo(1234));
                 Assert.That(values["DAPR_HTTP_PORT"], Is.EqualTo(2345));
+                Assert.That(values["DAPR_METRICS_PORT"], Is.EqualTo(4567));
                 Assert.That(values["DAPR_PROFILE_PORT"], Is.EqualTo(3456));
                 Assert.That(values["NAMESPACE"], Is.EqualTo("Namespace"));
             }
@@ -312,6 +316,7 @@ namespace Man.Dapr.Sidekick.Process
                 p.ParseCommandLineArgument(options, "dapr-http-max-request-size", "200");
                 p.ParseCommandLineArgument(options, "dapr-http-port", "3456");
                 p.ParseCommandLineArgument(options, "dapr-internal-grpc-port", "4567");
+                p.ParseCommandLineArgument(options, "enable-metrics", null);
                 p.ParseCommandLineArgument(options, "enable-mtls", null);
                 p.ParseCommandLineArgument(options, "kubeconfig", "KubeConfig");
                 p.ParseCommandLineArgument(options, "log-level", "LogLevel");
@@ -335,6 +340,7 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(options.DaprHttpMaxRequestSize, Is.EqualTo(200));
                 Assert.That(options.DaprHttpPort, Is.EqualTo(3456));
                 Assert.That(options.DaprInternalGrpcPort, Is.EqualTo(4567));
+                Assert.That(options.EnableMetrics, Is.True);
                 Assert.That(options.Mtls, Is.True);
                 Assert.That(options.KubeConfig, Is.EqualTo("KubeConfig"));
                 Assert.That(options.LogLevel, Is.EqualTo("LogLevel"));

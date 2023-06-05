@@ -111,6 +111,11 @@ namespace Man.Dapr.Sidekick
         public string KubeConfig { get; set; }
 
         /// <summary>
+        /// Gets or sets a value that determines if Prometheus metrics are enabled in the service (default true).
+        /// </summary>
+        public bool? EnableMetrics { get; set; }
+
+        /// <summary>
         /// Gets or sets the port for the metrics server (default "9090").
         /// </summary>
         public int? MetricsPort { get; set; }
@@ -205,7 +210,7 @@ namespace Man.Dapr.Sidekick
 
         protected override bool AddMetricsUri(UriBuilder builder)
         {
-            if (!MetricsPort.HasValue)
+            if (!MetricsPort.HasValue || EnableMetrics == false)
             {
                 return false;
             }
