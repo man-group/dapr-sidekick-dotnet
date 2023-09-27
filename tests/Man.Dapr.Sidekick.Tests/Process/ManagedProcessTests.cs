@@ -73,7 +73,7 @@ namespace Man.Dapr.Sidekick.Process
                     }
                 };
 
-                mp.Start(ProcessFilename, "ARG1=VAL1", logger);
+                mp.Start(ProcessFilename, null, "ARG1=VAL1", logger);
                 Assert.That(p, Is.Not.Null);
 
                 var psi = p.StartInfo;
