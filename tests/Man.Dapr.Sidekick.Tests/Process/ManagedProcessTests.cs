@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO;
 #if NETFRAMEWORK
 using System.Linq;
 #endif
@@ -86,6 +87,50 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(psi.RedirectStandardInput, Is.True);
                 Assert.That(psi.WorkingDirectory, Is.Not.Empty);
                 Assert.That(p.EnableRaisingEvents, Is.True);
+                Assert.That(psi.WorkingDirectory, Is.EqualTo(Path.GetDirectoryName(ProcessFilename)));
+
+                var loggerCalls = logger.ReceivedLoggerCalls();
+                Assert.That(loggerCalls.Length, Is.EqualTo(2));
+                Assert.That(loggerCalls[0].Message, Is.EqualTo($"Starting Process {ProcessFilename} with arguments 'ARG1=VAL1'"));
+                Assert.That(loggerCalls[0].LogLevel, Is.EqualTo(DaprLogLevel.Information));
+                Assert.That(loggerCalls.Length, Is.EqualTo(2));
+                Assert.That(loggerCalls[1].Message, Is.EqualTo("Process (null) PID:(null) started successfully"));
+                Assert.That(loggerCalls[1].LogLevel, Is.EqualTo(DaprLogLevel.Information));
+            }
+
+            [Test]
+            public void Should_start_process_with_working_directory()
+            {
+                var controller = Substitute.For<ISystemProcessController>();
+                var logger = Substitute.For<IDaprLogger>();
+                SystemProcess sp = null;
+                System.Diagnostics.Process p = null;
+                var mp = new ManagedProcess
+                {
+                    CreateSystemProcess = process =>
+                    {
+                        p = process;
+                        sp = new SystemProcess(null, logger, controller);
+                        return sp;
+                    }
+                };
+
+                var workingDirectory = Path.GetPathRoot(ProcessFilename);
+
+                mp.Start(ProcessFilename, workingDirectory, "ARG1=VAL1", logger);
+                Assert.That(p, Is.Not.Null);
+
+                var psi = p.StartInfo;
+                Assert.That(psi.FileName, Is.EqualTo(ProcessFilename));
+                Assert.That(psi.Arguments, Is.EqualTo("ARG1=VAL1"));
+                Assert.That(psi.UseShellExecute, Is.False);
+                Assert.That(psi.CreateNoWindow, Is.True);
+                Assert.That(psi.RedirectStandardOutput, Is.True);
+                Assert.That(psi.RedirectStandardError, Is.True);
+                Assert.That(psi.RedirectStandardInput, Is.True);
+                Assert.That(psi.WorkingDirectory, Is.Not.Empty);
+                Assert.That(p.EnableRaisingEvents, Is.True);
+                Assert.That(psi.WorkingDirectory, Is.EqualTo(workingDirectory));
 
                 var loggerCalls = logger.ReceivedLoggerCalls();
                 Assert.That(loggerCalls.Length, Is.EqualTo(2));
