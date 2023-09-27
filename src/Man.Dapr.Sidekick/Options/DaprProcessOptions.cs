@@ -38,6 +38,13 @@ namespace Man.Dapr.Sidekick.Options
         public string InitialDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets a working directory to be used by the managed process.
+        /// This is required by some components that use relevant directory paths to load local files from the project folders.
+        /// Defaults to %USERPROFILE%/.dapr ($HOME/.dapr on Linux) if not specified.
+        /// </summary>
+        public string WorkingDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the issuer certificate used for mTLS encryption.
         /// </summary>
         public SensitiveString IssuerCertificate { get; set; }

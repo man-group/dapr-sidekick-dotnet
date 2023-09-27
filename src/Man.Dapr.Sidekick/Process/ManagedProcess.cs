@@ -31,12 +31,14 @@ namespace Man.Dapr.Sidekick.Process
         /// Starts a system process for a Dapr process binary.
         /// </summary>
         /// <param name="filename">The full path to the system process.</param>
+        /// <param name="workingDirectory">The working directory used by the process.</param>
         /// <param name="arguments">The optional command-line process arguments.</param>
         /// <param name="logger">An optional <see cref="IDaprLogger"/> instance for receiving stdout log messages from the process.</param>
         /// <param name="configureEnvironmentVariables">An optional action for configuring any environment variables for the process.</param>
         /// <param name="cancellationToken">A <see cref="DaprCancellationToken"/> for aborting the process startup operation.</param>
         public void Start(
             string filename,
+            string workingDirectory = null,
             string arguments = null,
             IDaprLogger logger = null,
             Action<StringDictionary> configureEnvironmentVariables = null,
@@ -55,6 +57,11 @@ namespace Man.Dapr.Sidekick.Process
                     throw new InvalidOperationException($"Unable to start process, file '{filename}' does not exist");
                 }
 
+                if (!string.IsNullOrEmpty(workingDirectory) && !Directory.Exists(workingDirectory))
+                {
+                    throw new InvalidOperationException($"Unable to start process, working directory '{workingDirectory}' does not exist");
+                }
+
                 try
                 {
                     // Initialize the process start info
@@ -67,7 +74,7 @@ namespace Man.Dapr.Sidekick.Process
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         RedirectStandardInput = true,
-                        WorkingDirectory = Path.GetDirectoryName(filename)
+                        WorkingDirectory = workingDirectory ?? Path.GetDirectoryName(filename)
                     };
 
                     // Add environment variables
