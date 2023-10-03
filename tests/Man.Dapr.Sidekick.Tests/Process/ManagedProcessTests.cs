@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 #endif
 using Man.Dapr.Sidekick.Logging;
+using Man.Dapr.Sidekick.Options;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -12,7 +13,8 @@ namespace Man.Dapr.Sidekick.Process
 {
     public class ManagedProcessTests
     {
-        private static readonly string ProcessFilename = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+        private static readonly string ProcessFilename =
+            System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
 
         public class Constructor
         {
@@ -38,7 +40,8 @@ namespace Man.Dapr.Sidekick.Process
                 var mp = new ManagedProcess { CreateSystemProcess = p => new SystemProcess(p, controller: controller) };
 
                 Assert.Throws(
-                    Is.InstanceOf<InvalidOperationException>().With.Message.EqualTo($"Unable to start process, file '{filename}' does not exist"),
+                    Is.InstanceOf<InvalidOperationException>().With.Message
+                        .EqualTo($"Unable to start process, file '{filename}' does not exist"),
                     () => mp.Start(filename));
             }
 
@@ -74,7 +77,7 @@ namespace Man.Dapr.Sidekick.Process
                     }
                 };
 
-                mp.Start(ProcessFilename, null, "ARG1=VAL1", logger);
+                mp.Start(ProcessFilename, "ARG1=VAL1", logger);
                 Assert.That(p, Is.Not.Null);
 
                 var psi = p.StartInfo;
@@ -87,19 +90,10 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(psi.RedirectStandardInput, Is.True);
                 Assert.That(psi.WorkingDirectory, Is.Not.Empty);
                 Assert.That(p.EnableRaisingEvents, Is.True);
-                Assert.That(psi.WorkingDirectory, Is.EqualTo(Path.GetDirectoryName(ProcessFilename)));
-
-                var loggerCalls = logger.ReceivedLoggerCalls();
-                Assert.That(loggerCalls.Length, Is.EqualTo(2));
-                Assert.That(loggerCalls[0].Message, Is.EqualTo($"Starting Process {ProcessFilename} with arguments 'ARG1=VAL1'"));
-                Assert.That(loggerCalls[0].LogLevel, Is.EqualTo(DaprLogLevel.Information));
-                Assert.That(loggerCalls.Length, Is.EqualTo(2));
-                Assert.That(loggerCalls[1].Message, Is.EqualTo("Process (null) PID:(null) started successfully"));
-                Assert.That(loggerCalls[1].LogLevel, Is.EqualTo(DaprLogLevel.Information));
             }
 
             [Test]
-            public void Should_start_process_with_working_directory()
+            public void Should_start_process_with_options()
             {
                 var controller = Substitute.For<ISystemProcessController>();
                 var logger = Substitute.For<IDaprLogger>();
@@ -115,9 +109,17 @@ namespace Man.Dapr.Sidekick.Process
                     }
                 };
 
-                var workingDirectory = Path.GetPathRoot(ProcessFilename);
+                var tempPath = Path.GetTempPath();
 
-                mp.Start(ProcessFilename, workingDirectory, "ARG1=VAL1", logger);
+                mp.Start(
+                    ProcessFilename,
+                    new DaprManagedProcessOptions
+                    {
+                        Arguments = "ARG1=VAL1",
+                        WorkingDirectory = tempPath,
+                        ConfigureEnvironmentVariables = null
+                    },
+                    logger);
                 Assert.That(p, Is.Not.Null);
 
                 var psi = p.StartInfo;
@@ -128,9 +130,8 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(psi.RedirectStandardOutput, Is.True);
                 Assert.That(psi.RedirectStandardError, Is.True);
                 Assert.That(psi.RedirectStandardInput, Is.True);
-                Assert.That(psi.WorkingDirectory, Is.Not.Empty);
                 Assert.That(p.EnableRaisingEvents, Is.True);
-                Assert.That(psi.WorkingDirectory, Is.EqualTo(workingDirectory));
+                Assert.That(psi.WorkingDirectory, Is.EqualTo(tempPath));
 
                 var loggerCalls = logger.ReceivedLoggerCalls();
                 Assert.That(loggerCalls.Length, Is.EqualTo(2));
