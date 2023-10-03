@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Man.Dapr.Sidekick.Logging;
+using Man.Dapr.Sidekick.Options;
 using Man.Dapr.Sidekick.Security;
 using Man.Dapr.Sidekick.Threading;
 
@@ -341,7 +342,15 @@ namespace Man.Dapr.Sidekick.Process
             process.OutputDataReceived += (sender, args) => _daprLogger?.LogData(args.Data);
 
             // Start the managed dapr process
-            process.Start(proposedOptions.ProcessFile, arguments, Logger, cancellationToken: cancellationToken);
+            process.Start(
+                proposedOptions.ProcessFile,
+                new DaprManagedProcessOptions
+                {
+                    Arguments = arguments,
+                    WorkingDirectory = proposedOptions.WorkingDirectory
+                },
+                Logger,
+                cancellationToken: cancellationToken);
 
             // Handle unplanned exit
             process.UnplannedExit += (sender, args) =>
