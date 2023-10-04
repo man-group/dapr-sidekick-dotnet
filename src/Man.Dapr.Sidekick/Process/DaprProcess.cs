@@ -342,14 +342,7 @@ namespace Man.Dapr.Sidekick.Process
             process.OutputDataReceived += (sender, args) => _daprLogger?.LogData(args.Data);
 
             // Start the managed dapr process
-            process.Start(new DaprManagedProcessOptions
-            {
-                Filename = proposedOptions.ProcessFile,
-                Arguments = arguments,
-                WorkingDirectory = proposedOptions.WorkingDirectory,
-                Logger = Logger,
-                CancellationToken = cancellationToken
-            });
+            process.Start(proposedOptions.ProcessFile, arguments, Logger, cancellationToken: cancellationToken);
 
             // Handle unplanned exit
             process.UnplannedExit += (sender, args) =>
