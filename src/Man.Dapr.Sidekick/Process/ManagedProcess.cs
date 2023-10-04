@@ -31,15 +31,8 @@ namespace Man.Dapr.Sidekick.Process
         /// <summary>
         /// Starts a system process for a Dapr process binary.
         /// </summary>
-        /// <param name="filename">The full path to the system process.</param>
-        /// <param name="managedProcessOptions">Options used by the process.</param>
-        /// <param name="logger">An optional <see cref="IDaprLogger"/> instance for receiving stdout log messages from the process.</param>
-        /// <param name="cancellationToken">A <see cref="DaprCancellationToken"/> for aborting the process startup operation.</param>
-        public void Start(
-            string filename,
-            DaprManagedProcessOptions managedProcessOptions,
-            IDaprLogger logger = null,
-            DaprCancellationToken cancellationToken = default)
+        /// <param name="options">Options used by the process.</param>
+        public void Start(DaprManagedProcessOptions options)
         {
             lock (_processLock)
             {
@@ -49,17 +42,15 @@ namespace Man.Dapr.Sidekick.Process
                 }
 
                 // If filename does not exist, cannot start
-                if (string.IsNullOrEmpty(filename) || !File.Exists(filename))
+                if (string.IsNullOrEmpty(options.Filename) || !File.Exists(options.Filename))
                 {
-                    throw new InvalidOperationException($"Unable to start process, file '{filename}' does not exist");
+                    throw new InvalidOperationException($"Unable to start process, file '{options.Filename}' does not exist");
                 }
 
-                if (managedProcessOptions != null
-                    && !string.IsNullOrEmpty(managedProcessOptions.WorkingDirectory)
-                    && !Directory.Exists(managedProcessOptions.WorkingDirectory))
+                if (!string.IsNullOrEmpty(options.WorkingDirectory) && !Directory.Exists(options.WorkingDirectory))
                 {
                     throw new InvalidOperationException(
-                        $"Unable to start process, working directory '{managedProcessOptions.WorkingDirectory}' does not exist");
+                        $"Unable to start process, working directory '{options.WorkingDirectory}' does not exist");
                 }
 
                 try
@@ -67,22 +58,22 @@ namespace Man.Dapr.Sidekick.Process
                     // Initialize the process start info
                     var processStartInfo = new System.Diagnostics.ProcessStartInfo
                     {
-                        FileName = filename,
-                        Arguments = managedProcessOptions?.Arguments,
+                        FileName = options.Filename,
+                        Arguments = options?.Arguments,
                         UseShellExecute = false,
                         CreateNoWindow =
                             true, // Ensures CTRL-C and keystrokes in Console mode is intercepted only by hosting window
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         RedirectStandardInput = true,
-                        WorkingDirectory = managedProcessOptions?.WorkingDirectory ?? Path.GetDirectoryName(filename)
+                        WorkingDirectory = options.WorkingDirectory ?? Path.GetDirectoryName(options.Filename)
                     };
 
                     // Add environment variables
-                    managedProcessOptions?.ConfigureEnvironmentVariables?.Invoke(processStartInfo.EnvironmentVariables);
+                    options?.ConfigureEnvironmentVariables?.Invoke(processStartInfo.EnvironmentVariables);
 
                     // Last chance for cancellation
-                    if (cancellationToken.IsCancellationRequested)
+                    if (options.CancellationToken.IsCancellationRequested)
                     {
                         return;
                     }
@@ -98,14 +89,14 @@ namespace Man.Dapr.Sidekick.Process
                     {
                         if (!_stopping && _systemProcess != null)
                         {
-                            Stop(null, cancellationToken);
+                            Stop(null, options.CancellationToken);
                             OnUnplannedExit();
                         }
                     };
 
                     // Store the logger and start the process.
-                    _logger = logger;
-                    _logger?.LogInformation("Starting Process {ProcessFilename} with arguments '{ProcessArguments}'", filename, managedProcessOptions?.Arguments);
+                    _logger = options.Logger;
+                    _logger?.LogInformation("Starting Process {ProcessFilename} with arguments '{ProcessArguments}'", options.Filename, options?.Arguments);
                     _systemProcess = CreateSystemProcess(process);
                     _systemProcess.Start();
 
@@ -116,14 +107,14 @@ namespace Man.Dapr.Sidekick.Process
                         process.BeginErrorReadLine();
                     }
 
-                    logger?.LogInformation("Process {ProcessName} PID:{ProcessId} started successfully", _systemProcess.Name, _systemProcess.Id);
+                    options.Logger?.LogInformation("Process {ProcessName} PID:{ProcessId} started successfully", _systemProcess.Name, _systemProcess.Id);
                 }
                 catch (Exception ex)
                 {
-                    logger?.LogError(ex, "Error starting process {ProcessFilename}", filename);
+                    options.Logger?.LogError(ex, "Error starting process {ProcessFilename}", options.Filename);
 
                     // Do a full cleanup
-                    Stop(null, cancellationToken);
+                    Stop(null, options.CancellationToken);
                 }
             }
         }
@@ -141,86 +132,14 @@ namespace Man.Dapr.Sidekick.Process
             string arguments = null,
             IDaprLogger logger = null,
             Action<StringDictionary> configureEnvironmentVariables = null,
-            DaprCancellationToken cancellationToken = default)
+            DaprCancellationToken cancellationToken = default) => Start(new DaprManagedProcessOptions
         {
-            lock (_processLock)
-            {
-                if (IsRunning)
-                {
-                    return;
-                }
-
-                // If filename does not exist, cannot start
-                if (string.IsNullOrEmpty(filename) || !File.Exists(filename))
-                {
-                    throw new InvalidOperationException($"Unable to start process, file '{filename}' does not exist");
-                }
-
-                try
-                {
-                    // Initialize the process start info
-                    var processStartInfo = new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = filename,
-                        Arguments = arguments,
-                        UseShellExecute = false,
-                        CreateNoWindow =
-                            true, // Ensures CTRL-C and keystrokes in Console mode is intercepted only by hosting window
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        RedirectStandardInput = true,
-                        WorkingDirectory = Path.GetDirectoryName(filename)
-                    };
-
-                    // Add environment variables
-                    configureEnvironmentVariables?.Invoke(processStartInfo.EnvironmentVariables);
-
-                    // Last chance for cancellation
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return;
-                    }
-
-                    // Initialize process
-                    var process = new System.Diagnostics.Process
-                    {
-                        EnableRaisingEvents = true, StartInfo = processStartInfo
-                    };
-                    process.OutputDataReceived += (sender, args) => OnOutputDataReceived(args);
-                    process.ErrorDataReceived += (sender, args) => OnOutputDataReceived(args);
-                    process.Exited += (sender, args) =>
-                    {
-                        if (!_stopping && _systemProcess != null)
-                        {
-                            Stop(null, cancellationToken);
-                            OnUnplannedExit();
-                        }
-                    };
-
-                    // Store the logger and start the process.
-                    _logger = logger;
-                    _logger?.LogInformation("Starting Process {ProcessFilename} with arguments '{ProcessArguments}'", filename, arguments);
-                    _systemProcess = CreateSystemProcess(process);
-                    _systemProcess.Start();
-
-                    // If the process has an ID then it really has started so hook it up
-                    if (_systemProcess.Id > 0)
-                    {
-                        process.BeginOutputReadLine();
-                        process.BeginErrorReadLine();
-                    }
-
-                    logger?.LogInformation("Process {ProcessName} PID:{ProcessId} started successfully", _systemProcess.Name, _systemProcess.Id);
-                }
-                catch (Exception ex)
-                {
-                    logger?.LogError(ex, "Error starting process {ProcessFilename}", filename);
-
-                    // Do a full cleanup
-                    Stop(null, cancellationToken);
-                }
-            }
-        }
+            Filename = filename,
+            Arguments = arguments,
+            Logger = logger,
+            ConfigureEnvironmentVariables = configureEnvironmentVariables,
+            CancellationToken = cancellationToken
+        });
 
         public void Stop(int? waitForShutdownSeconds = null, DaprCancellationToken cancellationToken = default)
         {

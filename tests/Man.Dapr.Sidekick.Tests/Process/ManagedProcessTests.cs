@@ -111,15 +111,14 @@ namespace Man.Dapr.Sidekick.Process
 
                 var tempPath = Path.GetTempPath();
 
-                mp.Start(
-                    ProcessFilename,
-                    new DaprManagedProcessOptions
+                mp.Start(new DaprManagedProcessOptions
                     {
+                        Filename = ProcessFilename,
                         Arguments = "ARG1=VAL1",
                         WorkingDirectory = tempPath,
-                        ConfigureEnvironmentVariables = null
-                    },
-                    logger);
+                        ConfigureEnvironmentVariables = null,
+                        Logger = logger
+                    });
                 Assert.That(p, Is.Not.Null);
 
                 var psi = p.StartInfo;
