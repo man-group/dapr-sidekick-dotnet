@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Man.Dapr.Sidekick.Logging;
+using Man.Dapr.Sidekick.Options;
 using Man.Dapr.Sidekick.Security;
 using Man.Dapr.Sidekick.Threading;
 
@@ -12,7 +13,6 @@ namespace Man.Dapr.Sidekick.Process
     {
         private readonly object _lock = new object();
         private readonly string _defaultProcessName;
-        private readonly string _defaultExeName;
         private Func<DaprOptions> _startOptionsAccessor; // Returns latest startup options
         private TOptions _pendingOptions; // Options used to start process, stored temporarily until startup complete.
         private DaprProcessLogger _daprLogger;
@@ -28,7 +28,6 @@ namespace Man.Dapr.Sidekick.Process
         protected DaprProcess(string defaultProcessName)
         {
             _defaultProcessName = defaultProcessName;
-            _defaultExeName = _defaultProcessName + ".exe";
         }
 
         public TOptions LastSuccessfulOptions { get; private set; }
@@ -343,7 +342,14 @@ namespace Man.Dapr.Sidekick.Process
             process.OutputDataReceived += (sender, args) => _daprLogger?.LogData(args.Data);
 
             // Start the managed dapr process
-            process.Start(proposedOptions.ProcessFile, arguments, Logger, cancellationToken: cancellationToken);
+            process.Start(new DaprManagedProcessOptions
+            {
+                Filename = proposedOptions.ProcessFile,
+                Arguments = arguments,
+                Logger = Logger,
+                CancellationToken = cancellationToken,
+                WorkingDirectory = proposedOptions.WorkingDirectory
+            });
 
             // Handle unplanned exit
             process.UnplannedExit += (sender, args) =>
