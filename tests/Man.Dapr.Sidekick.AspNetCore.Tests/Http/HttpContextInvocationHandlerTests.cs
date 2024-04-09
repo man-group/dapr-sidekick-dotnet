@@ -38,7 +38,7 @@ namespace Man.Dapr.Sidekick.Http
                 httpContextAccessor.HttpContext.Returns(httpContext);
                 var handler = new MockHttpContextInvocationHandler(httpContextAccessor);
 
-                httpRequest.Headers.Add("Authorization", "AUTH1");
+                httpRequest.Headers.Append("Authorization", "AUTH1");
                 var request = new HttpRequestMessage();
                 var cancellationToken = CancellationToken.None;
 
@@ -57,7 +57,7 @@ namespace Man.Dapr.Sidekick.Http
                 var handler = new MockHttpContextInvocationHandler(httpContextAccessor);
 
                 var values = new StringValues(new[] { "AUTH1", "AUTH2" });
-                httpRequest.Headers.Add("Authorization", values);
+                httpRequest.Headers.Append("Authorization", values);
                 var request = new HttpRequestMessage();
                 var cancellationToken = CancellationToken.None;
 
@@ -94,7 +94,7 @@ namespace Man.Dapr.Sidekick.Http
                     httpContextAccessor.HttpContext.Returns(httpContext);
                     var handler = new MockHttpContextInvocationHandler(httpContextAccessor);
 
-                    httpRequest.Headers.Add("Authorization", "AUTH1");
+                    httpRequest.Headers.Append("Authorization", "AUTH1");
                     var request = new HttpRequestMessage();
                     request.Headers.Add("Authorization", "AUTH1");
                     var cancellationToken = CancellationToken.None;

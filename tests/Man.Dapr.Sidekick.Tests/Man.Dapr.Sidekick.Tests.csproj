@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net48;net5.0</TargetFrameworks>
+    <TargetFrameworks>net35;net48;net8.0</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <IsPackable>false</IsPackable>
     <RootNamespace>Man.Dapr.Sidekick</RootNamespace>
@@ -23,7 +23,7 @@
     <ProjectReference Include="..\..\src\Man.Dapr.Sidekick\Man.Dapr.Sidekick.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" />
   </ItemGroup>
 

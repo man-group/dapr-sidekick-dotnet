@@ -9,7 +9,7 @@
     <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
 	<!-- OpenAPI Analyzers disabled due to issue : https://github.com/dotnet/aspnetcore/issues/14723 -->
     <IncludeOpenAPIAnalyzers>false</IncludeOpenAPIAnalyzers>
-    <MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion>1.0.2</MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion>
+    <MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion>1.0.3</MicrosoftNETFrameworkReferenceAssembliesLatestPackageVersion>
   </PropertyGroup>
 
   <!-- Cls Compliant -->
@@ -42,7 +42,7 @@
 
   <!-- Asset Packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
