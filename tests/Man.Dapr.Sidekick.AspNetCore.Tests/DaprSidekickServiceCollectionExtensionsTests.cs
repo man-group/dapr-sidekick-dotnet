@@ -55,7 +55,8 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                     services.AddDaprSidekick(options =>
                     {
                         options.ProcessName = "PROCESS_NAME";
-                    }), Is.InstanceOf<IDaprSidekickBuilder>());
+                    }),
+                    Is.InstanceOf<IDaprSidekickBuilder>());
 
                 var provider = services.BuildServiceProvider();
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();
@@ -81,7 +82,8 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sidecar
                     services.AddDaprSidekick(configuration, options =>
                     {
                         options.ProcessName = "PROCESS_NAME";
-                    }), Is.InstanceOf<IDaprSidekickBuilder>());
+                    }),
+                    Is.InstanceOf<IDaprSidekickBuilder>());
 
                 var provider = services.BuildServiceProvider();
                 var options = provider.GetRequiredService<IOptions<DaprOptions>>();

@@ -135,6 +135,16 @@ namespace Man.Dapr.Sidekick.Process
             {
                 // Dapr Sentry
                 // "sentry certificate authority is running, protecting ya'll"
+                // Removed in v1.12 by this commit:
+                // https://github.com/dapr/dapr/commit/c5857298afb76a8391af661c60f871f619f5e802#diff-3632294a2f84c023f9eb91f36196518238d6c2c1497167573b10ea986f128203L106
+                _processUpdater.UpdateStatus(DaprProcessStatus.Started);
+            }
+            else if (Regex.Match(message, "([Rr]unning [Gg][Rr][Pp][Cc]) server").Success)
+            {
+                // Dapr Sentry
+                // "running grpc server on port 50001"
+                // Added in v1.12 by this commit:
+                // https://github.com/dapr/dapr/commit/c5857298afb76a8391af661c60f871f619f5e802#diff-5a930421edf435ae1ca5033ee89f375cd66781a7fd90f7c99db494242eda0eb1R83
                 _processUpdater.UpdateStatus(DaprProcessStatus.Started);
             }
             else if (Regex.Match(message, "([Ss]top).+([Ss]hutting).+([Dd]own)").Success)

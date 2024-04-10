@@ -31,7 +31,8 @@ namespace Man.Dapr.Sidekick.AspNetCore
                     var options = _optionsAccessor.CurrentValue;
                     OnStarting(options, cancellationToken);
                     return options;
-                }, new DaprCancellationToken(cancellationToken));
+                },
+                new DaprCancellationToken(cancellationToken));
             return Task.CompletedTask;
         }
 

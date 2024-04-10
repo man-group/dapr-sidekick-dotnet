@@ -60,6 +60,7 @@ namespace Man.Dapr.Sidekick.Process
             [TestCase("placement service started on port 50005", DaprProcessStatus.Started)]
             [TestCase("some placement service Started on port 54321!", DaprProcessStatus.Started)]
             [TestCase("sentry certificate authority is running, protecting ya'll", DaprProcessStatus.Started)]
+            [TestCase("Running gRPC server on port 50001", DaprProcessStatus.Started)]
             [TestCase("your Sentry service is now Running and protecting everything", DaprProcessStatus.Started)]
             [TestCase("stop command issued. Shutting down all operations", DaprProcessStatus.Stopping)]
             [TestCase("stop shutting down", DaprProcessStatus.Stopping)]

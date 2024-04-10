@@ -76,7 +76,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Metrics
             }
         }
 
-        private (LineType lineType, string name) IdentifyLine(string line)
+        private (LineType LineType, string Name) IdentifyLine(string line)
         {
             if (string.IsNullOrEmpty(line))
             {

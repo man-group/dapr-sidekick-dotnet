@@ -46,7 +46,8 @@ namespace Man.Dapr.Sidekick.AspNetCore.Sentry
 
                         processInfo = _daprSentryHost.GetProcessInfo();
                     }
-                }, cancellationToken)
+                },
+                cancellationToken)
                 .ContinueWith(_ => base.StartAsync(cancellationToken));
         }
     }

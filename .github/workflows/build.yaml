@@ -32,7 +32,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        dotnet-version: ['net35', 'net48', 'net50']
+        dotnet-version: ['net35', 'net48', 'net80']
         include:
         - dotnet-version: 'net35'
           display-name: '.NET Framework 3.5'
@@ -43,8 +43,8 @@ jobs:
           framework: 'net48'
           logger: '--logger="GitHubActions;report-warnings=false" --logger="trx"'
         - dotnet-version: 'net50'
-          display-name: '.NET 5.0'
-          framework: 'net5.0'
+          display-name: '.NET 8.0'
+          framework: 'net8.0'
           logger: '--logger="GitHubActions;report-warnings=false" --logger="trx"'
     steps:
       - uses: actions/checkout@v2
