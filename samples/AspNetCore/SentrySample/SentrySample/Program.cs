@@ -9,11 +9,6 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 // Add Dapr Sidekick with Sentry
 builder.Services.AddDaprSidekick(builder.Configuration)
     .AddSentry();
@@ -33,19 +28,6 @@ builder.Services.PostConfigure<DaprOptions>(options =>
 builder.Host.UseSerilog();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.MapGet("/status", (IDaprSidecarHost sidecarHost, IDaprSentryHost sentryHost) => Results.Ok(new
 {

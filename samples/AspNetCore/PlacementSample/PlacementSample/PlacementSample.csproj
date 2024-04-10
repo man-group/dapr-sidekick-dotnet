@@ -18,7 +18,7 @@
     <None Update="dapr\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="sentry\**\*.*">
+    <None Update="placement\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

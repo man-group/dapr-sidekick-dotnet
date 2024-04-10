@@ -82,6 +82,7 @@ namespace Man.Dapr.Sidekick.Options
             Assert.That(target.Port, Is.EqualTo(source.Port));
             Assert.That(target.RaftLogstorePath, Is.EqualTo(source.RaftLogstorePath));
             Assert.That(target.ReplicationFactor, Is.EqualTo(source.ReplicationFactor));
+            Assert.That(target.TrustAnchorsFile, Is.EqualTo(source.TrustAnchorsFile));
         }
 
         private static DaprPlacementOptions InitValue() => new DaprPlacementOptions
@@ -97,7 +98,8 @@ namespace Man.Dapr.Sidekick.Options
             Mtls = true,
             Port = 300,
             RaftLogstorePath = "RaftLogstorePath",
-            ReplicationFactor = 400
+            ReplicationFactor = 400,
+            TrustAnchorsFile = "TrustAnchorsFile"
         };
     }
 }

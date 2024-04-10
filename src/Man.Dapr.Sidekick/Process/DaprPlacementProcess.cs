@@ -18,6 +18,8 @@ namespace Man.Dapr.Sidekick.Process
         private const string RaftLogstorePathArgument = "raft-logstore-path";
         private const string ReplicationFactorArgument = "replicationfactor";
         private const string TlsEnabledArgument = "tls-enabled";
+        private const string TrustAnchorsFileArgument = "trust-anchors-file";
+        private const string TrustDomainArgument = "trust-domain";
 
         public DaprPlacementProcess()
             : base(DaprConstants.DaprPlacementProcessName)
@@ -54,8 +56,16 @@ namespace Man.Dapr.Sidekick.Process
             // Write any defined certificate options
             WriteDefaultCertificates(certsDirectory, options);
 
-            // Update the values
-            options.CertsDirectory = certsDirectory;
+            if (options.IsRuntimeVersionEarlierThan("1.12.0"))
+            {
+                // < 1.12.0 : Pass the certs directory to placement
+                options.CertsDirectory ??= certsDirectory;
+            }
+            else
+            {
+                // >= 1.12.0 : Pass the trust anchors file to placement
+                options.TrustAnchorsFile ??= Path.Combine(certsDirectory, DaprConstants.TrustAnchorsCertificateFilename);
+            }
         }
 
         protected override void AddCommandLineArguments(DaprPlacementOptions source, CommandLineArgumentBuilder builder) => builder
@@ -72,6 +82,8 @@ namespace Man.Dapr.Sidekick.Process
             .Add(RaftLogstorePathArgument, source.RaftLogstorePath)
             .Add(ReplicationFactorArgument, source.ReplicationFactor)
             .Add(TlsEnabledArgument, source.Mtls)
+            .Add(TrustAnchorsFileArgument, source.TrustAnchorsFile)
+            .Add(TrustDomainArgument, source.TrustDomain)
             .Add(source.CustomArguments, requiresValue: false);
 
         protected override void AddEnvironmentVariables(DaprPlacementOptions source, EnvironmentVariableBuilder builder) => builder

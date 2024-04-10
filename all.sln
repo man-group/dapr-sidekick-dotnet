@@ -88,8 +88,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppConfigurationSample", "A
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SentrySample", "SentrySample", "{7F6A5D8C-9780-4824-8284-CC3149683C70}"
+	ProjectSection(SolutionItems) = preProject
+		samples\AspNetCore\SentrySample\README.md = samples\AspNetCore\SentrySample\README.md
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentrySample", "samples\AspNetCore\SentrySample\SentrySample\SentrySample.csproj", "{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentrySample", "samples\AspNetCore\SentrySample\SentrySample\SentrySample.csproj", "{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlacementSample", "PlacementSample", "{AE430C04-78BD-4CAE-86D7-EBC599774D9C}"
+	ProjectSection(SolutionItems) = preProject
+		samples\AspNetCore\PlacementSample\README.md = samples\AspNetCore\PlacementSample\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlacementSample", "samples\AspNetCore\PlacementSample\PlacementSample\PlacementSample.csproj", "{2FC86574-6A81-4E2B-A0D4-78D46528A917}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -293,6 +303,18 @@ Global
 		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x64.Build.0 = Release|Any CPU
 		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x86.ActiveCfg = Release|Any CPU
 		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x86.Build.0 = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x64.Build.0 = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -324,6 +346,8 @@ Global
 		{3AD6FEBE-37E9-436E-BE86-29668A9DDB3E} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
 		{7F6A5D8C-9780-4824-8284-CC3149683C70} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
 		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A} = {7F6A5D8C-9780-4824-8284-CC3149683C70}
+		{AE430C04-78BD-4CAE-86D7-EBC599774D9C} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917} = {AE430C04-78BD-4CAE-86D7-EBC599774D9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E906E97D-7D56-4E02-A13F-1C48AEB47A88}
