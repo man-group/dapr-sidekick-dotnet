@@ -7,6 +7,7 @@ namespace Man.Dapr.Sidekick
         /// <summary>
         /// Gets or sets the path to the credentials directory holding the issuer data.
         /// If not specified this will default to a directory called "certs" under the runtime folder.
+        /// Deprecated since 1.12.0.
         /// </summary>
         public string CertsDirectory { get; set; }
 
@@ -64,6 +65,18 @@ namespace Man.Dapr.Sidekick
         /// Gets or sets the replication factor for actor distribution on vnodes (default 100).
         /// </summary>
         public int? ReplicationFactor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filepath to the trust anchors for the Dapr control plane (default "/var/run/secrets/dapr.io/tls/ca.crt").
+        /// Available since 1.12.0.
+        /// </summary>
+        public string TrustAnchorsFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the trust domain for the Dapr control plane (default "localhost").
+        /// Available since 1.12.0.
+        /// </summary>
+        public string TrustDomain { get; set; }
 
         /// <summary>
         /// Creates a deep clone of this instance.

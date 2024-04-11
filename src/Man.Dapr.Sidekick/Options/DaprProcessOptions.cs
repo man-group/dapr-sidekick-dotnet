@@ -113,6 +113,13 @@ namespace Man.Dapr.Sidekick.Options
         public Dictionary<string, string> EnvironmentVariables { get; set; }
 
         /// <summary>
+        /// Gets or sets the minimum version of the Dapr runtime being used with Sidekick.
+        /// Certain features/behaviour will be configured based on this value.
+        /// Defaults to latest known version.
+        /// </summary>
+        public Version RuntimeVersion { get; set; }
+
+        /// <summary>
         /// Creates a deep clone of this instance.
         /// </summary>
         /// <returns>A deep clone of this insteance.</returns>
@@ -146,6 +153,7 @@ namespace Man.Dapr.Sidekick.Options
             RestartAfterMillseconds ??= source.RestartAfterMillseconds;
             RetainPortsOnRestart ??= source.RetainPortsOnRestart;
             RuntimeDirectory ??= source.RuntimeDirectory;
+            RuntimeVersion ??= (Version)source.RuntimeVersion?.Clone();
             WaitForShutdownSeconds ??= source.WaitForShutdownSeconds;
             TrustAnchorsCertificate ??= source.TrustAnchorsCertificate;
 
@@ -178,6 +186,28 @@ namespace Man.Dapr.Sidekick.Options
         /// </summary>
         /// <returns>The metrics endpoint address.</returns>
         public Uri GetMetricsUri() => GetLocalUri(builder => AddMetricsUri(builder));
+
+        internal bool IsRuntimeVersionEarlierThan(string version)
+        {
+            if (RuntimeVersion == null)
+            {
+                // Assume latest
+                return false;
+            }
+#if NET35
+            try
+            {
+                return RuntimeVersion < new Version(version);
+            }
+            catch
+            {
+                // Cannot parse
+                return false;
+            }
+#else
+            return Version.TryParse(version, out var v) && RuntimeVersion < v;
+#endif
+        }
 
         protected virtual bool AddHealthUri(UriBuilder builder) => false;
 

@@ -46,7 +46,8 @@ namespace Man.Dapr.Sidekick.AspNetCore.Placement
 
                         processInfo = _daprPlacementHost.GetProcessInfo();
                     }
-                }, cancellationToken)
+                },
+                cancellationToken)
                 .ContinueWith(_ => base.StartAsync(cancellationToken));
         }
     }

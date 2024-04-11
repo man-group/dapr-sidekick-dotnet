@@ -1,6 +1,6 @@
 # Consul Sample
 
-This example is based on the standard ASP.NET Core 5.0 Web API WeatherForecast template and demonstrates the Service Discovery and Invocation feature of standalone Dapr using Hashicorp Consul as a service discovery provider. While this sample runs on a single machine, it would work exactly the same way if the two services were on different machines with a central Consul cluster.
+This example is based on the standard ASP.NET Core Web API WeatherForecast template and demonstrates the Service Discovery and Invocation feature of standalone Dapr using Hashicorp Consul as a service discovery provider. While this sample runs on a single machine, it would work exactly the same way if the two services were on different machines with a central Consul cluster.
 
 ## Features
 

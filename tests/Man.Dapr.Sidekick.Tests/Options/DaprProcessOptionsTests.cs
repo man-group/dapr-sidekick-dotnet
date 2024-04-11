@@ -141,6 +141,25 @@ namespace Man.Dapr.Sidekick.Options
             }
         }
 
+        public class IsRuntimeVersionEarlierThan
+        {
+            [TestCase(null, null, false)]
+            [TestCase(null, "0.0.0", false)]
+            [TestCase("0.0.0", "0.0.0", false)]
+            [TestCase("1.0.0", "0.1.1", false)]
+            [TestCase("1.2.3", "1.2.3", false)]
+            [TestCase("1.0.0", "1.0.1", true)]
+            public void Should_compare_versions(string runtimeVersion, string inputVersion, bool expected)
+            {
+                var source = new MockDaprProcessOptions
+                {
+                    RuntimeVersion = runtimeVersion != null ? new System.Version(runtimeVersion) : null
+                };
+
+                Assert.That(source.IsRuntimeVersionEarlierThan(inputVersion), Is.EqualTo(expected));
+            }
+        }
+
         private static void Compare(DaprProcessOptions source, DaprProcessOptions target, bool sameInstances = false)
         {
             if (!sameInstances)
@@ -162,6 +181,7 @@ namespace Man.Dapr.Sidekick.Options
             Assert.That(target.RestartAfterMillseconds, Is.EqualTo(source.RestartAfterMillseconds));
             Assert.That(target.RetainPortsOnRestart, Is.EqualTo(source.RetainPortsOnRestart));
             Assert.That(target.RuntimeDirectory, Is.EqualTo(source.RuntimeDirectory));
+            Assert.That(target.RuntimeVersion, Is.EqualTo(source.RuntimeVersion));
             Assert.That(target.WaitForShutdownSeconds, Is.EqualTo(source.WaitForShutdownSeconds));
             Assert.That(target.TrustAnchorsCertificate, Is.EqualTo(source.TrustAnchorsCertificate));
         }
@@ -184,6 +204,7 @@ namespace Man.Dapr.Sidekick.Options
             RestartAfterMillseconds = 100,
             RetainPortsOnRestart = true,
             RuntimeDirectory = "RuntimeDirectory",
+            RuntimeVersion = new System.Version("1.2.3.4"),
             WaitForShutdownSeconds = 200,
             TrustAnchorsCertificate = "TrustAnchorsCertificate"
         };

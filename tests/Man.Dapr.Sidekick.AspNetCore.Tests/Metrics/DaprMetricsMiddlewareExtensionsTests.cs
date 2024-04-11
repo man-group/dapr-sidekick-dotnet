@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -51,7 +53,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Metrics
             {
                 var builder = Substitute.For<IApplicationBuilder>();
                 builder.UseDaprMetricsServer(null);
-                builder.Received(1).UseMiddleware(typeof(DaprMetricsServerMiddleware));
+                builder.Received(1).Use(Arg.Any<Func<RequestDelegate, RequestDelegate>>());
             }
         }
     }

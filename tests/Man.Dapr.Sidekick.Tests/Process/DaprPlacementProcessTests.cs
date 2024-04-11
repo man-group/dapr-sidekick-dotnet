@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Man.Dapr.Sidekick.Logging;
 using NSubstitute;
 using NUnit.Framework;
@@ -65,12 +66,23 @@ namespace Man.Dapr.Sidekick.Process
             public void Should_assign_default_paths()
             {
                 var p = new MockDaprPlacementProcess();
-                var options = new DaprPlacementOptions();
                 var folder = Path.GetTempPath();
+                var options_1_11_2 = new DaprPlacementOptions
+                {
+                    RuntimeVersion = new Version("1.11.2")
+                };
+                var options_1_12_0 = new DaprPlacementOptions
+                {
+                    RuntimeVersion = new Version("1.12.0")
+                };
 
-                p.AssignLocations(options, folder);
+                p.AssignLocations(options_1_11_2, folder);
+                Assert.That(options_1_11_2.CertsDirectory, Is.EqualTo(Path.Combine(folder, DaprConstants.DaprCertsDirectory)));
+                Assert.That(options_1_11_2.TrustAnchorsFile, Is.Null);
 
-                Assert.That(options.CertsDirectory, Is.EqualTo(Path.Combine(folder, "certs")));
+                p.AssignLocations(options_1_12_0, folder);
+                Assert.That(options_1_12_0.CertsDirectory, Is.Null);
+                Assert.That(options_1_12_0.TrustAnchorsFile, Is.EqualTo(Path.Combine(folder, Path.Combine(DaprConstants.DaprCertsDirectory, DaprConstants.TrustAnchorsCertificateFilename))));
             }
 
             [Test]

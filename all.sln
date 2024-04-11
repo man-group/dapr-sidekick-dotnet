@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.6.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34707.107
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A985DBAA-87F6-4860-A5D3-96376165BE17}"
 	ProjectSection(SolutionItems) = preProject
@@ -80,12 +80,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ControllerSample", "Control
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerSample", "samples\AspNetCore\ControllerSample\ControllerSample\ControllerSample.csproj", "{FE082318-2993-42A3-B2DB-28EDA77F7136}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppConfigurationSample", "samples\AspNetCore\AppConfigurationSample\AppConfigurationSample\AppConfigurationSample.csproj", "{C6911A37-51F3-4E29-8E67-39B460EE7ABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppConfigurationSample", "samples\AspNetCore\AppConfigurationSample\AppConfigurationSample\AppConfigurationSample.csproj", "{C6911A37-51F3-4E29-8E67-39B460EE7ABA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppConfigurationSample", "AppConfigurationSample", "{3AD6FEBE-37E9-436E-BE86-29668A9DDB3E}"
 	ProjectSection(SolutionItems) = preProject
 		samples\AspNetCore\AppConfigurationSample\README.md = samples\AspNetCore\AppConfigurationSample\README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SentrySample", "SentrySample", "{7F6A5D8C-9780-4824-8284-CC3149683C70}"
+	ProjectSection(SolutionItems) = preProject
+		samples\AspNetCore\SentrySample\README.md = samples\AspNetCore\SentrySample\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentrySample", "samples\AspNetCore\SentrySample\SentrySample\SentrySample.csproj", "{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlacementSample", "PlacementSample", "{AE430C04-78BD-4CAE-86D7-EBC599774D9C}"
+	ProjectSection(SolutionItems) = preProject
+		samples\AspNetCore\PlacementSample\README.md = samples\AspNetCore\PlacementSample\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlacementSample", "samples\AspNetCore\PlacementSample\PlacementSample\PlacementSample.csproj", "{2FC86574-6A81-4E2B-A0D4-78D46528A917}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -277,6 +291,30 @@ Global
 		{C6911A37-51F3-4E29-8E67-39B460EE7ABA}.Release|x64.Build.0 = Release|Any CPU
 		{C6911A37-51F3-4E29-8E67-39B460EE7ABA}.Release|x86.ActiveCfg = Release|Any CPU
 		{C6911A37-51F3-4E29-8E67-39B460EE7ABA}.Release|x86.Build.0 = Release|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Debug|x64.Build.0 = Debug|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Debug|x86.Build.0 = Debug|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x64.ActiveCfg = Release|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x64.Build.0 = Release|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x86.ActiveCfg = Release|Any CPU
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A}.Release|x86.Build.0 = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x64.Build.0 = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -304,8 +342,12 @@ Global
 		{A3C52771-3B41-43F6-A4DD-7B3F7BAA598D} = {D625B898-1677-4DCA-B067-C7BFB07F1314}
 		{C5B72F44-C52D-471D-BE29-DB1C34699220} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
 		{FE082318-2993-42A3-B2DB-28EDA77F7136} = {C5B72F44-C52D-471D-BE29-DB1C34699220}
-		{3AD6FEBE-37E9-436E-BE86-29668A9DDB3E} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
 		{C6911A37-51F3-4E29-8E67-39B460EE7ABA} = {3AD6FEBE-37E9-436E-BE86-29668A9DDB3E}
+		{3AD6FEBE-37E9-436E-BE86-29668A9DDB3E} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
+		{7F6A5D8C-9780-4824-8284-CC3149683C70} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
+		{9F4DA8E9-F253-4312-A0BB-E2873A21C41A} = {7F6A5D8C-9780-4824-8284-CC3149683C70}
+		{AE430C04-78BD-4CAE-86D7-EBC599774D9C} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
+		{2FC86574-6A81-4E2B-A0D4-78D46528A917} = {AE430C04-78BD-4CAE-86D7-EBC599774D9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E906E97D-7D56-4E02-A13F-1C48AEB47A88}

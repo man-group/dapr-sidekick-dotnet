@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "PlacementSample": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "status",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}
