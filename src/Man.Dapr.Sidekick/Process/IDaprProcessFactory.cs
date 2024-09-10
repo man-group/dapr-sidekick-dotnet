@@ -6,6 +6,8 @@
 
         IDaprPlacementProcess CreateDaprPlacementProcess();
 
+        IDaprSchedulerProcess CreateDaprSchedulerProcess();
+
         IDaprSentryProcess CreateDaprSentryProcess();
     }
 }

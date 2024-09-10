@@ -7,6 +7,7 @@
     <AutoEnable>True</AutoEnable>
     <CurrentEngineMode>Run Solution Unit Tests automatically [SnapshotShared]</CurrentEngineMode>
     <InstrumentationMode>Optimised</InstrumentationMode>
+    <RdiConfigured>True</RdiConfigured>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
   <EngineModes>

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Man.Dapr.Sidekick.AspNetCore.Metrics;
 using Man.Dapr.Sidekick.AspNetCore.Placement;
+using Man.Dapr.Sidekick.AspNetCore.Scheduler;
 using Man.Dapr.Sidekick.AspNetCore.Sentry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -29,6 +30,22 @@ namespace Man.Dapr.Sidekick.AspNetCore
 
             // Override the default sidecar hosted service, to one that only starts when the Placement service is available.
             ReplaceSidecarHostedService<DaprPlacementSidecarHostedService>();
+
+            return this;
+        }
+
+        public IDaprSidekickBuilder AddScheduler()
+        {
+            // Add the scheduler host
+            _services.TryAddSingleton<IDaprSchedulerHost, DaprSchedulerHost>();
+            _services.TryAddHostedService<DaprSchedulerHostedService>();
+
+            // Add the health checks and metrics
+            _services.AddHealthChecks().AddDaprScheduler();
+            _services.AddSingleton<IPrometheusCollector, DaprSchedulerMetricsCollector>();
+
+            // Override the default sidecar hosted service, to one that only starts when the Scheduler service is available.
+            ReplaceSidecarHostedService<DaprSchedulerSidecarHostedService>();
 
             return this;
         }

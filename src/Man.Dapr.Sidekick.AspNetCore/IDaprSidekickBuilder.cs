@@ -12,6 +12,12 @@
         public IDaprSidekickBuilder AddPlacement();
 
         /// <summary>
+        /// Adds the Dapr Scheduler service.
+        /// </summary>
+        /// <returns>This instance to allow calls to be chained.</returns>
+        public IDaprSidekickBuilder AddScheduler();
+
+        /// <summary>
         /// Adds the Dapr Sentry service.
         /// </summary>
         /// <returns>This instance to allow calls to be chained.</returns>
