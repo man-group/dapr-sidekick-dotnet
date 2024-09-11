@@ -147,6 +147,7 @@ namespace Man.Dapr.Sidekick.Options
             Assert.That(target.PlacementHostAddress, Is.EqualTo(source.PlacementHostAddress));
             Assert.That(target.ProfilePort, Is.EqualTo(source.ProfilePort));
             Assert.That(target.Profiling, Is.EqualTo(source.Profiling));
+            Assert.That(target.SchedulerHostAddress, Is.EqualTo(source.SchedulerHostAddress));
             Assert.That(target.SentryAddress, Is.EqualTo(source.SentryAddress));
             Assert.That(target.UseDefaultAppApiToken, Is.EqualTo(source.UseDefaultAppApiToken));
             Assert.That(target.UseDefaultDaprApiToken, Is.EqualTo(source.UseDefaultDaprApiToken));
@@ -179,6 +180,7 @@ namespace Man.Dapr.Sidekick.Options
             PlacementHostAddress = "PlacementHostAddress",
             ProfilePort = 800,
             Profiling = true,
+            SchedulerHostAddress = "SchedulerHostAddress",
             SentryAddress = "SentryAddress",
             UseDefaultAppApiToken = true,
             UseDefaultDaprApiToken = true
