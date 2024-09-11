@@ -22,6 +22,11 @@ namespace Man.Dapr.Sidekick
         public bool? EnableMetrics { get; set; }
 
         /// <summary>
+        /// Gets or sets the listening address for the healthz server.
+        /// </summary>
+        public string HealthListenAddress { get; set; }
+
+        /// <summary>
         /// Gets or sets the HTTP port for the health server (default 8081).
         /// </summary>
         public int? HealthPort { get; set; }
@@ -42,9 +47,29 @@ namespace Man.Dapr.Sidekick
         public bool? InmemStoreEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the address for the placenment server to listen on.
+        /// </summary>
+        public string ListenAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that determines if the placement tables are exposed on the healthz server (default false).
+        /// </summary>
+        public bool? MetadataEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address for the metrics server (default "0.0.0.0").
+        /// </summary>
+        public string MetricsListenAddress { get; set; }
+
+        /// <summary>
         /// Gets or sets the port for the metrics server (default 9091).
         /// </summary>
         public int? MetricsPort { get; set; }
+
+        /// <summary>
+        /// Gets or sets the runtime mode for the placement service (default "standalone").
+        /// </summary>
+        public string Mode { get; set; }
 
         /// <summary>
         /// Gets or sets a value that determines if TLS should be enabled for the placement gRPC server.
@@ -65,6 +90,11 @@ namespace Man.Dapr.Sidekick
         /// Gets or sets the replication factor for actor distribution on vnodes (default 100).
         /// </summary>
         public int? ReplicationFactor { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that determines if TLS should be enabled for the placement gRPC server.
+        /// </summary>
+        public bool? TlsEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets the filepath to the trust anchors for the Dapr control plane (default "/var/run/secrets/dapr.io/tls/ca.crt").

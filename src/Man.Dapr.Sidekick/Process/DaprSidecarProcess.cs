@@ -29,6 +29,7 @@ namespace Man.Dapr.Sidekick.Process
         private const string ModeArgument = "mode";
         private const string PlacementHostAddressArgument = "placement-host-address";
         private const string ProfilePortArgument = "profile-port";
+        private const string SchedulerHostAddressArgument = "scheduler-host-address";
         private const string SentryAddressArgument = "sentry-address";
 
         public DaprSidecarProcess()
@@ -59,6 +60,16 @@ namespace Man.Dapr.Sidekick.Process
                 var port = daprOptions.Placement?.Enabled != false && daprOptions.Placement?.Port != null ? daprOptions.Placement?.Port.Value :
                     DaprConstants.IsWindows ? 6050 : 50005;
                 options.PlacementHostAddress = $"{DaprConstants.LocalhostAddress}:{port}";
+            }
+
+            // Set local scheduler information
+            if (string.IsNullOrEmpty(options.SchedulerHostAddress) && options.UseDefaultSchedulerHostAddress != false)
+            {
+                // If we have a local enabled scheduler running in this solution, then use that port
+                // else use the defaults from the Dapr CLI - 6060 (Windows) or 50006 (Non-Windows)
+                var port = daprOptions.Scheduler?.Enabled != false && daprOptions.Scheduler?.Port != null ? daprOptions.Scheduler?.Port.Value :
+                    DaprConstants.IsWindows ? 6060 : 50006;
+                options.SchedulerHostAddress = $"{DaprConstants.LocalhostAddress}:{port}";
             }
 
             // Make sure we have a namespace
@@ -124,6 +135,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(ModeArgument, source.Mode)
             .Add(PlacementHostAddressArgument, source.PlacementHostAddress)
             .Add(ProfilePortArgument, source.ProfilePort, predicate: () => source.Profiling == true)
+            .Add(SchedulerHostAddressArgument, source.SchedulerHostAddress)
             .Add(SentryAddressArgument, source.SentryAddress, predicate: () => !source.SentryAddress.IsNullOrWhiteSpaceEx())
             .Add(ConfigFileArgument, source.ConfigFile, predicate: () => File.Exists(source.ConfigFile))
             .Add(ResourcesPathArgument, source.ResourcesDirectory, predicate: () => Directory.Exists(source.ResourcesDirectory))
@@ -227,6 +239,10 @@ namespace Man.Dapr.Sidekick.Process
 
                 case ProfilePortArgument:
                     target.ProfilePort = int.TryParse(value, out var profilePort) ? (int?)profilePort : null;
+                    break;
+
+                case SchedulerHostAddressArgument:
+                    target.SchedulerHostAddress = value;
                     break;
 
                 case SentryAddressArgument:

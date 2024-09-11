@@ -14,7 +14,7 @@ builder.Services.AddDaprSidekick(builder.Configuration)
     .AddPlacement();
 ```
 
-Typically when installing Dapr in self-hosted mode, a Placement service container is added to Docker exposing the default port 6500. If this samle is run
+Typically when installing Dapr in self-hosted mode, a Placement service container is added to Docker exposing the default port 6050. If this same is run
 while that container is up it will be unable to start due to a port conflict. Instead a different port 6501 is assigned to Placement in configuration:
 
 ```json5
@@ -30,7 +30,7 @@ unless a specific remote address is defined. For example the following specifies
 
 ```json5
 "Sidecar": {
-  "PlacementHostAddress": "remote-host-1:6050,remote-host-2:6050,remote-host-3:6050"
+  "PlacementHostAddress": "remote-host-1:50005,remote-host-2:50005,remote-host-3:50005"
 }
 ```
 

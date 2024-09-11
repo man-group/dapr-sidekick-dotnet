@@ -154,6 +154,11 @@ namespace Man.Dapr.Sidekick
         public bool? Profiling { get; set; }
 
         /// <summary>
+        /// Gets or sets the scheduler service host address. This is typically a comma-separated list of host:port endpoints.
+        /// </summary>
+        public string SchedulerHostAddress { get; set; }
+
+        /// <summary>
         /// Gets or sets the address for the Sentry CA service.
         /// </summary>
         public string SentryAddress { get; set; }
@@ -172,6 +177,11 @@ namespace Man.Dapr.Sidekick
         /// Gets or sets a value that determines if the default Placement Host address is used when <see cref="PlacementHostAddress"/> is not specified. Defaults to <c>true</c>.
         /// </summary>
         public bool? UseDefaultPlacementHostAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value that determines if the default Scheduler Host address is used when <see cref="SchedulerHostAddress"/> is not specified. Defaults to <c>true</c>.
+        /// </summary>
+        public bool? UseDefaultSchedulerHostAddress { get; set; }
 
         /// <summary>
         /// Gets the address of the metdata endpoint, such as http://127.0.0.1:3500/v1.0/metadata.

@@ -15,6 +15,8 @@
 
         public DaprPlacementOptions Placement { get; set; }
 
+        public DaprSchedulerOptions Scheduler { get; set; }
+
         public DaprSentryOptions Sentry { get; set; }
 
         /// <summary>
@@ -26,6 +28,7 @@
             var clone = (DaprOptions)base.Clone();
             clone.Sidecar = Sidecar?.Clone();
             clone.Placement = Placement?.Clone();
+            clone.Scheduler = Scheduler?.Clone();
             clone.Sentry = Sentry?.Clone();
             return clone;
         }

@@ -31,6 +31,9 @@ namespace Man.Dapr.Sidekick
         public const string DaprPlacementMetricsPortEnvironmentVariable = "DAPR_PLACEMENT_METRICS_PORT";
         public const string DaprPlacementPortEnvironmentVariable = "DAPR_PLACEMENT_PORT";
         public const string DaprProfilePortEnvironmentVariable = "DAPR_PROFILE_PORT";
+        public const string DaprSchedulerHealthPortEnvironmentVariable = "DAPR_SCHEDULER_HEALTH_PORT";
+        public const string DaprSchedulerMetricsPortEnvironmentVariable = "DAPR_SCHEDULER_METRICS_PORT";
+        public const string DaprSchedulerPortEnvironmentVariable = "DAPR_SCHEDULER_PORT";
         public const string DaprSentryMetricsPortEnvironmentVariable = "DAPR_SENTRY_METRICS_PORT";
         public const string DaprTrustAnchorsEnvironmentVariable = "DAPR_TRUST_ANCHORS";
         public const string NamespaceEnvironmentVariable = "NAMESPACE";
@@ -40,6 +43,7 @@ namespace Man.Dapr.Sidekick
 
         // Processes
         public const string DaprSidecarProcessName = "daprd";
+        public const string DaprSchedulerProcessName = "scheduler";
         public const string DaprSentryProcessName = "sentry";
         public const string DaprPlacementProcessName = "placement";
 

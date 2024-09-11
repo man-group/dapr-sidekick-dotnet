@@ -1,34 +1,33 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Man.Dapr.Sidekick.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
 namespace Man.Dapr.Sidekick.Process
 {
-    public class DaprPlacementProcessTests
+    public class DaprSchedulerProcessTests
     {
         public class GetProcessOptions
         {
             [Test]
-            public void Should_create_placement_section_if_null()
+            public void Should_create_scheduler_section_if_null()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var options = new DaprOptions();
 
-                Assert.That(options.Placement, Is.Null);
+                Assert.That(options.Scheduler, Is.Null);
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions, Is.Not.Null);
             }
 
             [Test]
-            public void Should_use_existing_placement_section()
+            public void Should_use_existing_scheduler_section()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var options = new DaprOptions
                 {
-                    Placement = new DaprPlacementOptions
+                    Scheduler = new DaprSchedulerOptions
                     {
                         Id = "TEST",
                         RetainPortsOnRestart = false
@@ -47,16 +46,16 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_assign_expected_values()
             {
-                var p = new MockDaprPlacementProcess();
-                var builder = new PortAssignmentBuilder<DaprPlacementOptions>(new MockPortAvailabilityChecker());
-                var options = new DaprPlacementOptions();
+                var p = new MockDaprSchedulerProcess();
+                var builder = new PortAssignmentBuilder<DaprSchedulerOptions>(new MockPortAvailabilityChecker());
+                var options = new DaprSchedulerOptions();
                 var logger = Substitute.For<IDaprLogger>();
 
                 p.AssignPorts(builder);
-                builder.Build(options, new DaprPlacementOptions(), logger);
-                Assert.That(options.HealthPort, Is.EqualTo(8081));
-                Assert.That(options.MetricsPort, Is.EqualTo(9091));
-                Assert.That(options.Port, Is.EqualTo(DaprConstants.IsWindows ? 6050 : 50005));
+                builder.Build(options, new DaprSchedulerOptions(), logger);
+                Assert.That(options.HealthPort, Is.EqualTo(8082));
+                Assert.That(options.MetricsPort, Is.EqualTo(9093));
+                Assert.That(options.Port, Is.EqualTo(DaprConstants.IsWindows ? 6060 : 50006));
             }
         }
 
@@ -65,32 +64,21 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_assign_default_paths()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var folder = Path.GetTempPath();
-                var options_1_11_2 = new DaprPlacementOptions
-                {
-                    RuntimeVersion = new Version("1.11.2")
-                };
-                var options_1_12_0 = new DaprPlacementOptions
-                {
-                    RuntimeVersion = new Version("1.12.0")
-                };
+                var options = new DaprSchedulerOptions();
 
-                p.AssignLocations(options_1_11_2, folder);
-                Assert.That(options_1_11_2.CertsDirectory, Is.EqualTo(Path.Combine(folder, DaprConstants.DaprCertsDirectory)));
-                Assert.That(options_1_11_2.TrustAnchorsFile, Is.Null);
-
-                p.AssignLocations(options_1_12_0, folder);
-                Assert.That(options_1_12_0.CertsDirectory, Is.Null);
-                Assert.That(options_1_12_0.TrustAnchorsFile, Is.EqualTo(Path.Combine(folder, Path.Combine(DaprConstants.DaprCertsDirectory, DaprConstants.TrustAnchorsCertificateFilename))));
+                p.AssignLocations(options, folder);
+                Assert.That(options.CertsDirectory, Is.Null);
+                Assert.That(options.TrustAnchorsFile, Is.EqualTo(Path.Combine(folder, Path.Combine(DaprConstants.DaprCertsDirectory, DaprConstants.TrustAnchorsCertificateFilename))));
             }
 
             [Test]
             public void Should_assign_specified_paths()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var folder = Path.GetTempPath();
-                var options = new DaprPlacementOptions
+                var options = new DaprSchedulerOptions
                 {
                     CertsDirectory = folder + @"relative\path\cert.txt"
                 };
@@ -106,9 +94,9 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_add_default_arguments()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var builder = new CommandLineArgumentBuilder();
-                var options = new DaprPlacementOptions();
+                var options = new DaprSchedulerOptions();
 
                 p.AddCommandLineArguments(options, builder);
 
@@ -118,25 +106,29 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_add_all_arguments()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var builder = new CommandLineArgumentBuilder();
-                var options = new DaprPlacementOptions
+                var options = new DaprSchedulerOptions
                 {
                     CertsDirectory = "CertsDirectory",
                     EnableMetrics = true,
+                    EtcdClientHttpPorts = "EtcdClientHttpPorts",
+                    EtcdClientPorts = "EtcdClientPorts",
+                    EtcdCompactionMode = "EtcdCompactionMode",
+                    EtcdCompactionRetention = "EtcdCompactionRetention",
+                    EtcdDataDir = "EtcdDataDir",
+                    EtcdSpaceQuota = 9876,
                     HealthListenAddress = "HealthzListenAddress",
                     HealthPort = 1234,
                     Id = "Id",
                     InitialCluster = "InitialCluster",
-                    InmemStoreEnabled = true,
+                    ListenAddress = "ListenAddress",
                     LogLevel = "LogLevel",
-                    MetadataEnabled = true,
                     MetricsListenAddress = "MetricsListenAddress",
                     MetricsPort = 2345,
                     Mode = "Mode",
                     Port = 3456,
-                    RaftLogstorePath = "RaftLogstorePath",
-                    ReplicationFactor = 100,
+                    ReplicaCount = 5,
                     TlsEnabled = true,
                     TrustAnchorsFile = "TrustAnchorsFile",
                     TrustDomain = "TrustDomain",
@@ -146,22 +138,25 @@ namespace Man.Dapr.Sidekick.Process
                 p.AddCommandLineArguments(options, builder);
 
                 Assert.That(builder.ToString(), Is.EqualTo(
-                    "--certchain CertsDirectory " +
                     "--enable-metrics " +
+                    "--etcd-client-http-ports EtcdClientHttpPorts " +
+                    "--etcd-client-ports EtcdClientPorts " +
+                    "--etcd-compaction-mode EtcdCompactionMode " +
+                    "--etcd-compaction-retention EtcdCompactionRetention " +
+                    "--etcd-data-dir EtcdDataDir " +
+                    "--etcd-space-quota 9876 " +
                     "--healthz-listen-address HealthzListenAddress " +
                     "--healthz-port 1234 " +
                     "--id Id " +
                     "--initial-cluster InitialCluster " +
-                    "--inmem-store-enabled " +
+                    "--listen-address ListenAddress " +
                     "--log-as-json " +
                     "--log-level LogLevel " +
-                    "--metadata-enabled " +
                     "--metrics-listen-address MetricsListenAddress " +
                     "--metrics-port 2345 " +
                     "--mode Mode " +
                     "--port 3456 " +
-                    "--raft-logstore-path RaftLogstorePath " +
-                    "--replicationfactor 100 " +
+                    "--replica-count 5 " +
                     "--tls-enabled " +
                     "--trust-anchors-file TrustAnchorsFile " +
                     "--trust-domain TrustDomain " +
@@ -174,9 +169,9 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_add_expected_values()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var builder = new EnvironmentVariableBuilder();
-                var options = new DaprPlacementOptions
+                var options = new DaprSchedulerOptions
                 {
                     HealthPort = 1234,
                     MetricsPort = 2345,
@@ -186,9 +181,9 @@ namespace Man.Dapr.Sidekick.Process
                 p.AddEnvironmentVariables(options, builder);
 
                 var values = builder.ToDictionary();
-                Assert.That(values["DAPR_PLACEMENT_HEALTH_PORT"], Is.EqualTo(1234));
-                Assert.That(values["DAPR_PLACEMENT_METRICS_PORT"], Is.EqualTo(2345));
-                Assert.That(values["DAPR_PLACEMENT_PORT"], Is.EqualTo(3456));
+                Assert.That(values["DAPR_SCHEDULER_HEALTH_PORT"], Is.EqualTo(1234));
+                Assert.That(values["DAPR_SCHEDULER_METRICS_PORT"], Is.EqualTo(2345));
+                Assert.That(values["DAPR_SCHEDULER_PORT"], Is.EqualTo(3456));
             }
         }
 
@@ -197,46 +192,50 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_parse_all_arguments()
             {
-                var p = new MockDaprPlacementProcess();
-                var options = new DaprPlacementOptions();
+                var p = new MockDaprSchedulerProcess();
+                var options = new DaprSchedulerOptions();
 
-                p.ParseCommandLineArgument(options, "certchain", "CertsDirectory");
                 p.ParseCommandLineArgument(options, "enable-metrics", null);
+                p.ParseCommandLineArgument(options, "etcd-client-http-ports", "EtcdClientHttpPorts");
+                p.ParseCommandLineArgument(options, "etcd-client-ports", "EtcdClientPorts");
+                p.ParseCommandLineArgument(options, "etcd-compaction-mode", "EtcdCompactionMode");
+                p.ParseCommandLineArgument(options, "etcd-compaction-retention", "EtcdCompactionRetention");
+                p.ParseCommandLineArgument(options, "etcd-data-dir", "EtcdDataDir");
+                p.ParseCommandLineArgument(options, "etcd-space-quota", "9876");
                 p.ParseCommandLineArgument(options, "healthz-listen-address", "HealthzListenAddress");
                 p.ParseCommandLineArgument(options, "healthz-port", "1234");
                 p.ParseCommandLineArgument(options, "id", "Id");
                 p.ParseCommandLineArgument(options, "initial-cluster", "InitialCluster");
-                p.ParseCommandLineArgument(options, "inmem-store-enabled", null);
                 p.ParseCommandLineArgument(options, "listen-address", "ListenAddress");
                 p.ParseCommandLineArgument(options, "log-level", "LogLevel");
-                p.ParseCommandLineArgument(options, "metadata-enabled", null);
                 p.ParseCommandLineArgument(options, "metrics-listen-address", "MetricsListenAddress");
                 p.ParseCommandLineArgument(options, "metrics-port", "2345");
                 p.ParseCommandLineArgument(options, "mode", "Mode");
                 p.ParseCommandLineArgument(options, "port", "3456");
-                p.ParseCommandLineArgument(options, "raft-logstore-path", "RaftLogstorePath");
-                p.ParseCommandLineArgument(options, "replicationfactor", "100");
+                p.ParseCommandLineArgument(options, "port", "3456");
+                p.ParseCommandLineArgument(options, "replica-count", "5");
                 p.ParseCommandLineArgument(options, "tls-enabled", null);
                 p.ParseCommandLineArgument(options, "trust-anchors-file", "TrustAnchorsFile");
                 p.ParseCommandLineArgument(options, "trust-domain", "TrustDomain");
 
-                Assert.That(options.CertsDirectory, Is.EqualTo("CertsDirectory"));
                 Assert.That(options.EnableMetrics, Is.True);
+                Assert.That(options.EtcdClientHttpPorts, Is.EqualTo("EtcdClientHttpPorts"));
+                Assert.That(options.EtcdClientPorts, Is.EqualTo("EtcdClientPorts"));
+                Assert.That(options.EtcdCompactionMode, Is.EqualTo("EtcdCompactionMode"));
+                Assert.That(options.EtcdCompactionRetention, Is.EqualTo("EtcdCompactionRetention"));
+                Assert.That(options.EtcdDataDir, Is.EqualTo("EtcdDataDir"));
+                Assert.That(options.EtcdSpaceQuota, Is.EqualTo(9876));
                 Assert.That(options.HealthListenAddress, Is.EqualTo("HealthzListenAddress"));
                 Assert.That(options.HealthPort, Is.EqualTo(1234));
                 Assert.That(options.Id, Is.EqualTo("Id"));
                 Assert.That(options.InitialCluster, Is.EqualTo("InitialCluster"));
-                Assert.That(options.InmemStoreEnabled, Is.True);
                 Assert.That(options.ListenAddress, Is.EqualTo("ListenAddress"));
                 Assert.That(options.LogLevel, Is.EqualTo("LogLevel"));
-                Assert.That(options.MetadataEnabled, Is.True);
                 Assert.That(options.MetricsListenAddress, Is.EqualTo("MetricsListenAddress"));
                 Assert.That(options.MetricsPort, Is.EqualTo(2345));
-                Assert.That(options.Mtls, Is.Null);
                 Assert.That(options.Mode, Is.EqualTo("Mode"));
                 Assert.That(options.Port, Is.EqualTo(3456));
-                Assert.That(options.RaftLogstorePath, Is.EqualTo("RaftLogstorePath"));
-                Assert.That(options.ReplicationFactor, Is.EqualTo(100));
+                Assert.That(options.ReplicaCount, Is.EqualTo(5));
                 Assert.That(options.TlsEnabled, Is.True);
                 Assert.That(options.TrustAnchorsFile, Is.EqualTo("TrustAnchorsFile"));
                 Assert.That(options.TrustDomain, Is.EqualTo("TrustDomain"));
@@ -248,14 +247,14 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_return_none()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var process = Substitute.For<IProcess>();
-                var o1 = new DaprPlacementOptions
+                var o1 = new DaprSchedulerOptions
                 {
                     Id = "P1"
                 };
 
-                var o2 = new DaprPlacementOptions
+                var o2 = new DaprSchedulerOptions
                 {
                     Id = "P2"
                 };
@@ -266,15 +265,15 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_return_duplicate()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var process = Substitute.For<IProcess>();
-                var o1 = new DaprPlacementOptions
+                var o1 = new DaprSchedulerOptions
                 {
                     Id = "P1",
                     Port = 1234
                 };
 
-                var o2 = new DaprPlacementOptions
+                var o2 = new DaprSchedulerOptions
                 {
                     Id = "P1",
                     Port = 2345
@@ -286,15 +285,15 @@ namespace Man.Dapr.Sidekick.Process
             [Test]
             public void Should_return_attachable()
             {
-                var p = new MockDaprPlacementProcess();
+                var p = new MockDaprSchedulerProcess();
                 var process = Substitute.For<IProcess>();
-                var o1 = new DaprPlacementOptions
+                var o1 = new DaprSchedulerOptions
                 {
                     Id = "P1",
                     Port = 1234
                 };
 
-                var o2 = new DaprPlacementOptions
+                var o2 = new DaprSchedulerOptions
                 {
                     Id = "P1",
                     Port = 1234
@@ -304,21 +303,21 @@ namespace Man.Dapr.Sidekick.Process
             }
         }
 
-        private class MockDaprPlacementProcess : DaprPlacementProcess
+        private class MockDaprSchedulerProcess : DaprSchedulerProcess
         {
-            public new DaprPlacementOptions GetProcessOptions(DaprOptions daprOptions) => base.GetProcessOptions(daprOptions);
+            public new DaprSchedulerOptions GetProcessOptions(DaprOptions daprOptions) => base.GetProcessOptions(daprOptions);
 
-            public new void AssignPorts(PortAssignmentBuilder<DaprPlacementOptions> builder) => base.AssignPorts(builder);
+            public new void AssignPorts(PortAssignmentBuilder<DaprSchedulerOptions> builder) => base.AssignPorts(builder);
 
-            public new void AssignLocations(DaprPlacementOptions options, string daprFolder) => base.AssignLocations(options, daprFolder);
+            public new void AssignLocations(DaprSchedulerOptions options, string daprFolder) => base.AssignLocations(options, daprFolder);
 
-            public new void AddCommandLineArguments(DaprPlacementOptions source, CommandLineArgumentBuilder builder) => base.AddCommandLineArguments(source, builder);
+            public new void AddCommandLineArguments(DaprSchedulerOptions source, CommandLineArgumentBuilder builder) => base.AddCommandLineArguments(source, builder);
 
-            public new void AddEnvironmentVariables(DaprPlacementOptions source, EnvironmentVariableBuilder builder) => base.AddEnvironmentVariables(source, builder);
+            public new void AddEnvironmentVariables(DaprSchedulerOptions source, EnvironmentVariableBuilder builder) => base.AddEnvironmentVariables(source, builder);
 
-            public new void ParseCommandLineArgument(DaprPlacementOptions target, string name, string value) => base.ParseCommandLineArgument(target, name, value);
+            public new void ParseCommandLineArgument(DaprSchedulerOptions target, string name, string value) => base.ParseCommandLineArgument(target, name, value);
 
-            public new ProcessComparison CompareProcessOptions(DaprPlacementOptions proposedProcessOptions, DaprPlacementOptions existingProcessOptions, IProcess existingProcess) => base.CompareProcessOptions(proposedProcessOptions, existingProcessOptions, existingProcess);
+            public new ProcessComparison CompareProcessOptions(DaprSchedulerOptions proposedProcessOptions, DaprSchedulerOptions existingProcessOptions, IProcess existingProcess) => base.CompareProcessOptions(proposedProcessOptions, existingProcessOptions, existingProcess);
         }
     }
 }

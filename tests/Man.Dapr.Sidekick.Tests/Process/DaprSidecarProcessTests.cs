@@ -53,6 +53,15 @@ namespace Man.Dapr.Sidekick.Process
             }
 
             [Test]
+            public void Should_use_default_schedulerhost_address()
+            {
+                var p = new MockDaprSidecarProcess();
+                var options = new DaprOptions();
+                var newOptions = p.GetProcessOptions(options);
+                Assert.That(newOptions.SchedulerHostAddress, Is.EqualTo("127.0.0.1:6060"));
+            }
+
+            [Test]
             public void Should_not_use_default_placementhost_address()
             {
                 var p = new MockDaprSidecarProcess();
@@ -66,6 +75,22 @@ namespace Man.Dapr.Sidekick.Process
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions.PlacementHostAddress, Is.Null);
+            }
+
+            [Test]
+            public void Should_not_use_default_schedulerhost_address()
+            {
+                var p = new MockDaprSidecarProcess();
+                var options = new DaprOptions
+                {
+                    Sidecar = new DaprSidecarOptions
+                    {
+                        UseDefaultSchedulerHostAddress = false
+                    }
+                };
+
+                var newOptions = p.GetProcessOptions(options);
+                Assert.That(newOptions.SchedulerHostAddress, Is.Null);
             }
 
             [Test]
@@ -201,6 +226,7 @@ namespace Man.Dapr.Sidekick.Process
                     Mode = "Mode",
                     PlacementHostAddress = "PlacementHostAddress",
                     ProfilePort = 6789,
+                    SchedulerHostAddress = "SchedulerHostAddress",
                     SentryAddress = "SentryAddress",
                     CustomArguments = "arg1 val1"
                 };
@@ -228,6 +254,7 @@ namespace Man.Dapr.Sidekick.Process
                     "--mode Mode " +
                     "--placement-host-address PlacementHostAddress " +
                     "--profile-port 6789 " +
+                    "--scheduler-host-address SchedulerHostAddress " +
                     "--sentry-address SentryAddress " +
                     "--config " + configFile + " " +
                     "--resources-path " + componentsPath + " " +
@@ -319,6 +346,7 @@ namespace Man.Dapr.Sidekick.Process
                 p.ParseCommandLineArgument(options, "mode", "Mode");
                 p.ParseCommandLineArgument(options, "placement-host-address", "PlacementHostAddress");
                 p.ParseCommandLineArgument(options, "profile-port", "6789");
+                p.ParseCommandLineArgument(options, "scheduler-host-address", "SchedulerHostAddress");
                 p.ParseCommandLineArgument(options, "sentry-address", "SentryAddress");
 
                 Assert.That(options.AllowedOrigins, Is.EqualTo("AllowedOrigins"));
@@ -342,6 +370,7 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(options.Mode, Is.EqualTo("Mode"));
                 Assert.That(options.PlacementHostAddress, Is.EqualTo("PlacementHostAddress"));
                 Assert.That(options.ProfilePort, Is.EqualTo(6789));
+                Assert.That(options.SchedulerHostAddress, Is.EqualTo("SchedulerHostAddress"));
                 Assert.That(options.SentryAddress, Is.EqualTo("SentryAddress"));
             }
         }

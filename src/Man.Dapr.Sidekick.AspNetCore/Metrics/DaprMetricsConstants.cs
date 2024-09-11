@@ -13,6 +13,7 @@ namespace Man.Dapr.Sidekick.AspNetCore.Metrics
 
         public static readonly string DaprSidecarLabel = "dapr-sidecar";
         public static readonly string DaprPlacementLabel = "dapr-placement";
+        public static readonly string DaprSchedulerLabel = "dapr-scheduler";
         public static readonly string DaprSentryLabel = "dapr-sentry";
 
         public static readonly string ExporterContentType = "text/plain; charset=utf-8";
