@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Man.Dapr.Sidekick.Logging;
 using Man.Dapr.Sidekick.Security;
 using NSubstitute;
@@ -263,7 +264,25 @@ namespace Man.Dapr.Sidekick.Process
 
                 File.Delete(configFile);
             }
-        }
+
+            [TestCase("1.13.2", false)]
+            [TestCase("1.14.0", true)]
+            public void Should_add_schedulerhostaddress_by_runtimeversion(string version, bool containsValue)
+            {
+                var p = new MockDaprSidecarProcess();
+                var builder = new CommandLineArgumentBuilder();
+                var options = new DaprSidecarOptions
+                {
+                    SchedulerHostAddress = "SchedulerHostAddress",
+                    RuntimeVersion = new Version(version)
+                };
+
+                p.AddCommandLineArguments(options, builder);
+
+                var expected = containsValue ? " --scheduler-host-address SchedulerHostAddress" : string.Empty;
+                Assert.That(builder.ToString(), Does.EndWith(expected));
+           }
+       }
 
         public class AddEnvironmentVariables
         {

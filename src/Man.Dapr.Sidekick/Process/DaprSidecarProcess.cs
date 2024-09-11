@@ -135,7 +135,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(ModeArgument, source.Mode)
             .Add(PlacementHostAddressArgument, source.PlacementHostAddress)
             .Add(ProfilePortArgument, source.ProfilePort, predicate: () => source.Profiling == true)
-            .Add(SchedulerHostAddressArgument, source.SchedulerHostAddress)
+            .Add(SchedulerHostAddressArgument, source.SchedulerHostAddress, predicate: () => !source.IsRuntimeVersionEarlierThan("1.14.0"))
             .Add(SentryAddressArgument, source.SentryAddress, predicate: () => !source.SentryAddress.IsNullOrWhiteSpaceEx())
             .Add(ConfigFileArgument, source.ConfigFile, predicate: () => File.Exists(source.ConfigFile))
             .Add(ResourcesPathArgument, source.ResourcesDirectory, predicate: () => Directory.Exists(source.ResourcesDirectory))
