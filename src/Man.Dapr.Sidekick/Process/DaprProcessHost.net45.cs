@@ -8,6 +8,12 @@ namespace Man.Dapr.Sidekick.Process
 {
     public partial class DaprProcessHost<TOptions>
     {
+        public async Task<bool> CheckHealthAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await GetHealthAsync(cancellationToken);
+            return result.IsHealthy;
+        }
+
         public async Task<DaprHealthResult> GetHealthAsync(CancellationToken cancellationToken)
         {
             var client = DaprHttpClientFactory.CreateDaprHttpClient();

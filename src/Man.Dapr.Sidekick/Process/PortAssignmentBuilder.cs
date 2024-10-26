@@ -9,17 +9,13 @@ namespace Man.Dapr.Sidekick.Process
     internal class PortAssignmentBuilder<TOptions>
         where TOptions : Options.DaprProcessOptions
     {
-        private class PortInfo
+        private class PortInfo(Expression<Func<TOptions, int?>> property, int startingPort, string environmentVariable)
         {
-            public PortInfo(Expression<Func<TOptions, int?>> property, int startingPort)
-            {
-                Property = property;
-                StartingPort = startingPort;
-            }
+            public Expression<Func<TOptions, int?>> Property { get; } = property;
 
-            public Expression<Func<TOptions, int?>> Property { get; }
+            public int StartingPort { get; } = startingPort;
 
-            public int StartingPort { get; }
+            public string EnvironmentVariable { get; } = environmentVariable;
         }
 
         private readonly List<PortInfo> _ports = new List<PortInfo>();
@@ -44,9 +40,9 @@ namespace Man.Dapr.Sidekick.Process
         // For testing
         internal IPortAvailabilityChecker PortAvailabilityChecker { get; }
 
-        public PortAssignmentBuilder<TOptions> Add(Expression<Func<TOptions, int?>> property, int startingPort)
+        public PortAssignmentBuilder<TOptions> Add(Expression<Func<TOptions, int?>> property, int startingPort, string environmentVariable = null)
         {
-            _ports.Add(new PortInfo(property, startingPort));
+            _ports.Add(new PortInfo(property, startingPort, environmentVariable ?? string.Empty));
             return this;
         }
 
@@ -79,6 +75,21 @@ namespace Man.Dapr.Sidekick.Process
                 {
                     logger.LogDebug("Assigning preferred port {DaprPortNumber} for option {DaprPortName}", proposedValue, propertyName);
                     reservedPorts.Add(proposedValue.Value);
+                    continue;
+                }
+
+                // If we have an environment variable defined attempt to get the port from it
+                if (!string.IsNullOrEmpty(port.EnvironmentVariable) &&
+                    int.TryParse(Environment.GetEnvironmentVariable(port.EnvironmentVariable), out var environmentPort) &&
+                    environmentPort > 0)
+                {
+                    logger.LogDebug(
+                        "Assigning environment variable {DaprPortEnvironmentVariable} port {DaprPortNumber} for option {DaprPortName}",
+                        port.EnvironmentVariable,
+                        environmentPort,
+                        propertyName);
+                    reservedPorts.Add(environmentPort);
+                    propertyInfo.SetValue(proposedOptions, environmentPort, null);
                     continue;
                 }
 
