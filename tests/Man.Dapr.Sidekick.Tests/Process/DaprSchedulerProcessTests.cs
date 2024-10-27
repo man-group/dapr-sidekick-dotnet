@@ -15,7 +15,7 @@ namespace Man.Dapr.Sidekick.Process
                 var p = new MockDaprSchedulerProcess();
                 var options = new DaprOptions();
 
-                Assert.That(options.Scheduler, Is.Null);
+                Assert.That(options.Scheduler, Is.Not.Null);
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions, Is.Not.Null);

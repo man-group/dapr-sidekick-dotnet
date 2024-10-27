@@ -17,7 +17,7 @@ namespace Man.Dapr.Sidekick.Process
                 var p = new MockDaprSidecarProcess();
                 var options = new DaprOptions();
 
-                Assert.That(options.Sidecar, Is.Null);
+                Assert.That(options.Sidecar, Is.Not.Null);
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions, Is.Not.Null);

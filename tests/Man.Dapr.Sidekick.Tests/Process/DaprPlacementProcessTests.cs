@@ -16,7 +16,7 @@ namespace Man.Dapr.Sidekick.Process
                 var p = new MockDaprPlacementProcess();
                 var options = new DaprOptions();
 
-                Assert.That(options.Placement, Is.Null);
+                Assert.That(options.Placement, Is.Not.Null);
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions, Is.Not.Null);
