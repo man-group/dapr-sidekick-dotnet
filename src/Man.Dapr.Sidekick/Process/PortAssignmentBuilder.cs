@@ -70,15 +70,8 @@ namespace Man.Dapr.Sidekick.Process
                     continue;
                 }
 
-                // If port is already defined, then use it
-                if (proposedValue.HasValue)
-                {
-                    logger.LogDebug("Assigning preferred port {DaprPortNumber} for option {DaprPortName}", proposedValue, propertyName);
-                    reservedPorts.Add(proposedValue.Value);
-                    continue;
-                }
-
-                // If we have an environment variable defined attempt to get the port from it
+                // If we have an environment variable defined attempt to get the port from it.
+                // This overrides default/proposed configuration values.
                 if (!string.IsNullOrEmpty(port.EnvironmentVariable) &&
                     int.TryParse(Environment.GetEnvironmentVariable(port.EnvironmentVariable), out var environmentPort) &&
                     environmentPort > 0)
@@ -90,6 +83,14 @@ namespace Man.Dapr.Sidekick.Process
                         propertyName);
                     reservedPorts.Add(environmentPort);
                     propertyInfo.SetValue(proposedOptions, environmentPort, null);
+                    continue;
+                }
+
+                // If port is already defined, then use it
+                if (proposedValue.HasValue)
+                {
+                    logger.LogDebug("Assigning preferred port {DaprPortNumber} for option {DaprPortName}", proposedValue, propertyName);
+                    reservedPorts.Add(proposedValue.Value);
                     continue;
                 }
 
