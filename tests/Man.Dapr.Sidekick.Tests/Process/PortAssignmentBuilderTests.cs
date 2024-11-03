@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Man.Dapr.Sidekick.Logging;
 using NSubstitute;
 using NUnit.Framework;
@@ -133,6 +134,32 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(proposedOptions.AppPort, Is.EqualTo(1000));
                 Assert.That(proposedOptions.DaprGrpcPort, Is.EqualTo(2000));
                 Assert.That(proposedOptions.DaprHttpPort, Is.EqualTo(200));
+                Assert.That(proposedOptions.MetricsPort, Is.EqualTo(4000));
+            }
+
+            [Test]
+            public void Should_use_environment_variable_ports()
+            {
+                var logger = Substitute.For<IDaprLogger>();
+                var checker = Substitute.For<IPortAvailabilityChecker>();
+                var builder = new PortAssignmentBuilder<DaprSidecarOptions>(checker);
+
+                Environment.SetEnvironmentVariable("DAPRSIDEKICK_TESTS_VALID_PORT", "1234");
+                Environment.SetEnvironmentVariable("DAPRSIDEKICK_TESTS_INVALID_PORT", "Not_A_Number");
+
+                builder
+                    .Add(x => x.DaprGrpcPort, 2000, "DAPRSIDEKICK_TESTS_VALID_PORT")
+                    .Add(x => x.DaprHttpPort, 3000, "DAPRSIDEKICK_TESTS_INVALID_PORT")
+                    .Add(x => x.MetricsPort, 4000, "DAPRSIDEKICK_TESTS_MISSING_PORT");
+
+                checker.GetAvailablePort(3000, Arg.Any<IEnumerable<int>>()).Returns(3000);
+                checker.GetAvailablePort(4000, Arg.Any<IEnumerable<int>>()).Returns(4000);
+
+                var proposedOptions = new DaprSidecarOptions();
+
+                builder.Build(proposedOptions, null, logger);
+                Assert.That(proposedOptions.DaprGrpcPort, Is.EqualTo(1234));
+                Assert.That(proposedOptions.DaprHttpPort, Is.EqualTo(3000));
                 Assert.That(proposedOptions.MetricsPort, Is.EqualTo(4000));
             }
         }

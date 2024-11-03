@@ -23,6 +23,7 @@ namespace Man.Dapr.Sidekick
         // Environment Variables
         public const string AppApiTokenEnvironmentVariable = "APP_API_TOKEN";
         public const string DaprApiTokenEnvironmentVariable = "DAPR_API_TOKEN";
+        public const string DaprAppPortEnvironmentVariable = "DAPR_APP_PORT";
         public const string DaprCertChainEnvironmentVariable = "DAPR_CERT_CHAIN";
         public const string DaprCertKeyEnvironmentVariable = "DAPR_CERT_KEY";
         public const string DaprGrpcPortEnvironmentVariable = "DAPR_GRPC_PORT";

@@ -17,7 +17,7 @@ namespace Man.Dapr.Sidekick.Process
                 var p = new MockDaprSidecarProcess();
                 var options = new DaprOptions();
 
-                Assert.That(options.Sidecar, Is.Null);
+                Assert.That(options.Sidecar, Is.Not.Null);
 
                 var newOptions = p.GetProcessOptions(options);
                 Assert.That(newOptions, Is.Not.Null);
@@ -129,6 +129,64 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(options.MetricsPort, Is.EqualTo(9090));
                 Assert.That(options.ProfilePort, Is.EqualTo(7777));
             }
+
+            [TestCase(false)]
+            [TestCase(true)]
+            public void Should_assign_environment_variable_overrides(bool useEnvironmentVariables)
+            {
+                var p = new MockDaprSidecarProcess();
+                var builder = new PortAssignmentBuilder<DaprSidecarOptions>(new MockPortAvailabilityChecker());
+                var options = new DaprSidecarOptions
+                {
+                    AppPort = 2000,
+                    DaprGrpcPort = 3000,
+                    DaprHttpPort = 4000
+                };
+
+                var logger = Substitute.For<IDaprLogger>();
+
+                var existingAppPort = Environment.GetEnvironmentVariable(DaprConstants.DaprAppPortEnvironmentVariable);
+                var existingGrpcPort = Environment.GetEnvironmentVariable(DaprConstants.DaprGrpcPortEnvironmentVariable);
+                var existingHttpPort = Environment.GetEnvironmentVariable(DaprConstants.DaprHttpPortEnvironmentVariable);
+
+                try
+                {
+                    if (useEnvironmentVariables)
+                    {
+                        Environment.SetEnvironmentVariable(DaprConstants.DaprAppPortEnvironmentVariable, "1234");
+                        Environment.SetEnvironmentVariable(DaprConstants.DaprGrpcPortEnvironmentVariable, "98765");
+                        Environment.SetEnvironmentVariable(DaprConstants.DaprHttpPortEnvironmentVariable, "7345");
+                    }
+
+                    p.AssignPorts(builder);
+                    builder.Build(options, new DaprSidecarOptions(), logger);
+
+                    // Should respect environment variables
+                    if (useEnvironmentVariables)
+                    {
+                        // Should use environment variable values
+                        Assert.That(options.AppPort, Is.EqualTo(1234));
+                        Assert.That(options.DaprGrpcPort, Is.EqualTo(98765));
+                        Assert.That(options.DaprHttpPort, Is.EqualTo(7345));
+                    }
+                    else
+                    {
+                        // Should use options values
+                        Assert.That(options.AppPort, Is.EqualTo(2000));
+                        Assert.That(options.DaprGrpcPort, Is.EqualTo(3000));
+                        Assert.That(options.DaprHttpPort, Is.EqualTo(4000));
+                    }
+                }
+                finally
+                {
+                    if (useEnvironmentVariables)
+                    {
+                        Environment.SetEnvironmentVariable(DaprConstants.DaprAppPortEnvironmentVariable, existingAppPort);
+                        Environment.SetEnvironmentVariable(DaprConstants.DaprGrpcPortEnvironmentVariable, existingGrpcPort);
+                        Environment.SetEnvironmentVariable(DaprConstants.DaprHttpPortEnvironmentVariable, existingHttpPort);
+                    }
+                }
+            }
         }
 
         public class AssignLocations
@@ -194,6 +252,31 @@ namespace Man.Dapr.Sidekick.Process
                 p.AddCommandLineArguments(options, builder);
 
                 Assert.That(builder.ToString(), Does.Not.Contain("sentry-address"));
+            }
+
+            [TestCase(null)]
+            [TestCase(false)]
+            [TestCase(true)]
+            public void Should_suppress_appport(bool? hasAppPort)
+            {
+                var p = new MockDaprSidecarProcess();
+                var builder = new CommandLineArgumentBuilder();
+                var options = new DaprSidecarOptions
+                {
+                    HasAppPort = hasAppPort,
+                    AppPort = 1234
+                };
+
+                p.AddCommandLineArguments(options, builder);
+
+                if (hasAppPort == false)
+                {
+                    Assert.That(builder.ToString(), Does.Not.Contain("app-port"));
+                }
+                else
+                {
+                    Assert.That(builder.ToString(), Does.Contain("app-port"));
+                }
             }
 
             [Test]

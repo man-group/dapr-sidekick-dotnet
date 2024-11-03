@@ -40,6 +40,12 @@
     <Authors>Man Group</Authors>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- Disable package vulnerability warnings - not much choice as many packages required for legacy builds are old -->
+    <NuGetAudit>false</NuGetAudit>
+    <WarningsNotAsErrors>NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+  </PropertyGroup>
+
   <!-- Asset Packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">

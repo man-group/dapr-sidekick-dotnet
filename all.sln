@@ -26,6 +26,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Man.Dapr.Sidekick.AspNetCore.Tests", "tests\Man.Dapr.Sidekick.AspNetCore.Tests\Man.Dapr.Sidekick.AspNetCore.Tests.csproj", "{F513F641-20E2-4C47-8F57-95664383004E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6481CB38-F5E9-4CB4-8E5D-AB3114186E7D}"
+	ProjectSection(SolutionItems) = preProject
+		samples\Directory.Build.props = samples\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCore", "AspNetCore", "{DA3D8137-F2DD-465D-81AA-3CA5C75087D2}"
 EndProject
@@ -107,6 +110,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SchedulerSample", "Schedule
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerSample", "samples\AspNetCore\SchedulerSample\SchedulerSample\SchedulerSample.csproj", "{C0B2943F-3EA8-43A9-8714-7D6B84AD788E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflow", "Workflow", "{2D362BDC-794A-4B1B-B20A-3E4A7214CADC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleSample", "ConsoleSample", "{E20CFEC4-3F3F-4BA6-B796-363B76FA5B53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowConsoleApp", "samples\Workflow\ConsoleSample\WorkflowConsoleApp\WorkflowConsoleApp.csproj", "{56EFBE8B-485A-48A7-8239-24709774E4FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -334,6 +343,18 @@ Global
 		{C0B2943F-3EA8-43A9-8714-7D6B84AD788E}.Release|x64.Build.0 = Release|Any CPU
 		{C0B2943F-3EA8-43A9-8714-7D6B84AD788E}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0B2943F-3EA8-43A9-8714-7D6B84AD788E}.Release|x86.Build.0 = Release|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Release|x64.Build.0 = Release|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{56EFBE8B-485A-48A7-8239-24709774E4FE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -369,6 +390,9 @@ Global
 		{2FC86574-6A81-4E2B-A0D4-78D46528A917} = {AE430C04-78BD-4CAE-86D7-EBC599774D9C}
 		{8FD8AFF0-A56A-4BDC-B40E-F498AA147790} = {DA3D8137-F2DD-465D-81AA-3CA5C75087D2}
 		{C0B2943F-3EA8-43A9-8714-7D6B84AD788E} = {8FD8AFF0-A56A-4BDC-B40E-F498AA147790}
+		{2D362BDC-794A-4B1B-B20A-3E4A7214CADC} = {6481CB38-F5E9-4CB4-8E5D-AB3114186E7D}
+		{E20CFEC4-3F3F-4BA6-B796-363B76FA5B53} = {2D362BDC-794A-4B1B-B20A-3E4A7214CADC}
+		{56EFBE8B-485A-48A7-8239-24709774E4FE} = {E20CFEC4-3F3F-4BA6-B796-363B76FA5B53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E906E97D-7D56-4E02-A13F-1C48AEB47A88}

@@ -11,13 +11,13 @@
             LogLevel = Process.DaprProcessLogger.DebugLevel;
         }
 
-        public DaprSidecarOptions Sidecar { get; set; }
+        public DaprSidecarOptions Sidecar { get; set; } = new();
 
-        public DaprPlacementOptions Placement { get; set; }
+        public DaprPlacementOptions Placement { get; set; } = new();
 
-        public DaprSchedulerOptions Scheduler { get; set; }
+        public DaprSchedulerOptions Scheduler { get; set; } = new();
 
-        public DaprSentryOptions Sentry { get; set; }
+        public DaprSentryOptions Sentry { get; set; } = new();
 
         /// <summary>
         /// Creates a deep clone of this instance.

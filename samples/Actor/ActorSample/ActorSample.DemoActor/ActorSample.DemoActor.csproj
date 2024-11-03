@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapr.Actors" Version="1.13.0" />
-    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.13.0" />
+    <PackageReference Include="Dapr.Actors" Version="1.14.0" />
+    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.14.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
   </ItemGroup>
 

@@ -84,9 +84,9 @@ namespace Man.Dapr.Sidekick.Process
 
         protected override void AssignPorts(PortAssignmentBuilder<DaprSidecarOptions> builder) =>
             builder
-                .Add(x => x.AppPort, 8500)
-                .Add(x => x.DaprGrpcPort, 50001)
-                .Add(x => x.DaprHttpPort, 3500)
+                .Add(x => x.AppPort, 8500, DaprConstants.DaprAppPortEnvironmentVariable)
+                .Add(x => x.DaprGrpcPort, 50001, DaprConstants.DaprGrpcPortEnvironmentVariable)
+                .Add(x => x.DaprHttpPort, 3500, DaprConstants.DaprHttpPortEnvironmentVariable)
                 .Add(x => x.MetricsPort, 9090)
                 .Add(x => x.ProfilePort, 7777);
 
@@ -118,7 +118,7 @@ namespace Man.Dapr.Sidekick.Process
             .Add(AllowedOriginsArgument, source.AllowedOrigins)
             .Add(AppIdArgument, source.AppId)
             .Add(AppMaxConcurrencyArgument, source.AppMaxConcurrency)
-            .Add(AppPortArgument, source.AppPort)
+            .Add(AppPortArgument, source.AppPort, predicate: () => source.HasAppPort != false)
             .Add(AppProtocolArgument, source.AppProtocol)
             .Add(AppSslArgument, source.AppSsl)
             .Add(ControlPlaneAddressArgument, source.ControlPlaneAddress)
@@ -145,6 +145,7 @@ namespace Man.Dapr.Sidekick.Process
         protected override void AddEnvironmentVariables(DaprSidecarOptions source, EnvironmentVariableBuilder builder) => builder
             .Add(DaprConstants.AppApiTokenEnvironmentVariable, source.AppApiToken)
             .Add(DaprConstants.DaprApiTokenEnvironmentVariable, source.DaprApiToken)
+            .Add(DaprConstants.DaprAppPortEnvironmentVariable, source.AppPort, () => source.HasAppPort != false)
             .Add(DaprConstants.DaprCertChainEnvironmentVariable, source.IssuerCertificate)
             .Add(DaprConstants.DaprCertKeyEnvironmentVariable, source.IssuerKey)
             .Add(DaprConstants.DaprGrpcPortEnvironmentVariable, source.DaprGrpcPort)

@@ -106,6 +106,19 @@ namespace Man.Dapr.Sidekick
         public int? DaprInternalGrpcPort { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the application opens the <see cref="AppPort"/>.
+        /// Defaults to <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// Most applications integrate with Dapr by listening on a port for building block integrations
+        /// such as pub/sub and service discovery. However some building blocks such as Workflows do not
+        /// need this integration and rely on the pure gRPC streaming protocol initiated by Dapr
+        /// itself over <see cref="DaprGrpcPort"/>. For these applications an <see cref="AppPort"/>
+        /// value should not be passed to Dapr else it will wait indefinitely for the port to be opened.
+        /// </remarks>
+        public bool? HasAppPort { get; set; }
+
+        /// <summary>
         /// Gets or sets the absolute path to the kubeconfig file (default %USERPROFILE%/.kube/config).
         /// </summary>
         public string KubeConfig { get; set; }
