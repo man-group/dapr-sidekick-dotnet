@@ -87,8 +87,8 @@ namespace Man.Dapr.Sidekick.Process
                 .Add(x => x.AppPort, 8500, DaprConstants.DaprAppPortEnvironmentVariable)
                 .Add(x => x.DaprGrpcPort, 50001, DaprConstants.DaprGrpcPortEnvironmentVariable)
                 .Add(x => x.DaprHttpPort, 3500, DaprConstants.DaprHttpPortEnvironmentVariable)
-                .Add(x => x.MetricsPort, 9090, DaprConstants.DaprMetricsPortEnvironmentVariable)
-                .Add(x => x.ProfilePort, 7777, DaprConstants.DaprProfilePortEnvironmentVariable);
+                .Add(x => x.MetricsPort, 9090)
+                .Add(x => x.ProfilePort, 7777);
 
         protected override void AssignLocations(DaprSidecarOptions options, string daprFolder)
         {
@@ -145,12 +145,11 @@ namespace Man.Dapr.Sidekick.Process
         protected override void AddEnvironmentVariables(DaprSidecarOptions source, EnvironmentVariableBuilder builder) => builder
             .Add(DaprConstants.AppApiTokenEnvironmentVariable, source.AppApiToken)
             .Add(DaprConstants.DaprApiTokenEnvironmentVariable, source.DaprApiToken)
-            .Add(DaprConstants.DaprAppPortEnvironmentVariable, source.AppPort)
+            .Add(DaprConstants.DaprAppPortEnvironmentVariable, source.AppPort, () => source.HasAppPort != false)
             .Add(DaprConstants.DaprCertChainEnvironmentVariable, source.IssuerCertificate)
             .Add(DaprConstants.DaprCertKeyEnvironmentVariable, source.IssuerKey)
             .Add(DaprConstants.DaprGrpcPortEnvironmentVariable, source.DaprGrpcPort)
             .Add(DaprConstants.DaprHttpPortEnvironmentVariable, source.DaprHttpPort)
-            .Add(DaprConstants.DaprMetricsPortEnvironmentVariable, source.MetricsPort)
             .Add(DaprConstants.DaprProfilePortEnvironmentVariable, source.ProfilePort, () => source.Profiling == true)
             .Add(DaprConstants.DaprTrustAnchorsEnvironmentVariable, source.TrustAnchorsCertificate)
             .Add(DaprConstants.NamespaceEnvironmentVariable, source.Namespace);

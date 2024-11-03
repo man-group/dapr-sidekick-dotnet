@@ -39,6 +39,8 @@ var builder = Host.CreateDefaultBuilder(args).ConfigureServices((context, servic
 
 // Dapr uses a random port for gRPC by default. If we don't know what that port
 // is (because this app was started separate from dapr), then assume 4001.
+// For Workflows we need to use the Environment Variable rather than a Sidekick appsettings.json entry
+// because the Workflow client can be initialized before Sidekick has started.
 if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DAPR_GRPC_PORT")))
 {
     Environment.SetEnvironmentVariable("DAPR_GRPC_PORT", "4001");

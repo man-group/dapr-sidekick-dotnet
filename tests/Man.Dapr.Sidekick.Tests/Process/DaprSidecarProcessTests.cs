@@ -196,6 +196,31 @@ namespace Man.Dapr.Sidekick.Process
                 Assert.That(builder.ToString(), Does.Not.Contain("sentry-address"));
             }
 
+            [TestCase(null)]
+            [TestCase(false)]
+            [TestCase(true)]
+            public void Should_suppress_appport(bool? hasAppPort)
+            {
+                var p = new MockDaprSidecarProcess();
+                var builder = new CommandLineArgumentBuilder();
+                var options = new DaprSidecarOptions
+                {
+                    HasAppPort = hasAppPort,
+                    AppPort = 1234
+                };
+
+                p.AddCommandLineArguments(options, builder);
+
+                if (hasAppPort == false)
+                {
+                    Assert.That(builder.ToString(), Does.Not.Contain("app-port"));
+                }
+                else
+                {
+                    Assert.That(builder.ToString(), Does.Contain("app-port"));
+                }
+            }
+
             [Test]
             public void Should_add_all_arguments()
             {
